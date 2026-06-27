@@ -44,19 +44,28 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
     setServerError(null);
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: values.email,
       password: values.password,
     });
 
-    if (error) {
+    if (error || !data.user) {
       setServerError("Email atau password salah. Coba lagi.");
       return;
     }
 
-    // Refresh to trigger middleware role resolution
+    // Resolve role from Supabase user metadata for redirect (DASH-002)
+    const role = data.user.user_metadata?.role as string | undefined;
+    const roleDestinations: Record<string, string> = {
+      CHILD: "/play/home",
+      TEACHER: "/teacher/dashboard",
+      PARENT: "/parent/dashboard",
+      ADMIN: "/admin",
+    };
+    const destination = redirectTo ?? roleDestinations[role ?? ""] ?? "/";
+
     router.refresh();
-    router.push(redirectTo ?? "/");
+    router.push(destination);
   }
 
   return (

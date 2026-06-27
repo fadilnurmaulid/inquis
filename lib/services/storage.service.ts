@@ -3,7 +3,7 @@
  * Manages access to Supabase Storage assets (audio, illustrations, activity assets).
  */
 
-import { publicEnv } from "@/lib/env";
+import { publicEnv } from "@/lib/env.public";
 
 const STORAGE_BASE = `${publicEnv.supabaseUrl}/storage/v1/object/public`;
 
