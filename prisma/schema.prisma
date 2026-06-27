@@ -1,0 +1,234 @@
+// Prisma schema for INQUIS
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────
+
+enum Role {
+  CHILD
+  TEACHER
+  PARENT
+  ADMIN
+}
+
+enum WorldStatus {
+  LOCKED
+  UNLOCKED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ActivityStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ScaffoldLevel {
+  NONE
+  HINT_1
+  HINT_2
+  HINT_3
+  ANSWER_REVEAL
+}
+
+// ─────────────────────────────────────────────
+// Core User entities
+// ─────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  supabaseId String  @unique @map("supabase_id")
+  email     String   @unique
+  role      Role
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  teacher Teacher?
+  parent  Parent?
+  child   Child?
+
+  @@map("users")
+}
+
+model Teacher {
+  id        String   @id @default(cuid())
+  userId    String   @unique @map("user_id")
+  name      String
+  school    String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  classrooms Classroom[]
+
+  @@map("teachers")
+}
+
+model Parent {
+  id        String   @id @default(cuid())
+  userId    String   @unique @map("user_id")
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  children ParentChild[]
+
+  @@map("parents")
+}
+
+model Child {
+  id          String   @id @default(cuid())
+  userId      String   @unique @map("user_id")
+  name        String
+  displayName String   @map("display_name")
+  avatarUrl   String?  @map("avatar_url")
+  pin         String?  // hashed PIN for simplified child login
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parents          ParentChild[]
+  classEnrollments ClassEnrollment[]
+  worldProgress    WorldProgress[]
+  activitySessions ActivitySession[]
+  assessments      Assessment[]
+
+  @@map("children")
+}
+
+// ─────────────────────────────────────────────
+// Classroom
+// ─────────────────────────────────────────────
+
+model Classroom {
+  id        String   @id @default(cuid())
+  teacherId String   @map("teacher_id")
+  name      String
+  code      String   @unique // invite code for linking children
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  teacher     Teacher           @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  enrollments ClassEnrollment[]
+
+  @@map("classrooms")
+}
+
+model ClassEnrollment {
+  id          String   @id @default(cuid())
+  classroomId String   @map("classroom_id")
+  childId     String   @map("child_id")
+  enrolledAt  DateTime @default(now()) @map("enrolled_at")
+
+  classroom Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  child     Child     @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([classroomId, childId])
+  @@map("class_enrollments")
+}
+
+model ParentChild {
+  id       String @id @default(cuid())
+  parentId String @map("parent_id")
+  childId  String @map("child_id")
+
+  parent Parent @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  child  Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([parentId, childId])
+  @@map("parent_children")
+}
+
+// ─────────────────────────────────────────────
+// Learning Progress
+// ─────────────────────────────────────────────
+
+model WorldProgress {
+  id          String      @id @default(cuid())
+  childId     String      @map("child_id")
+  worldId     String      @map("world_id") // e.g. "world-1", "world-2"
+  worldNumber Int         @map("world_number")
+  status      WorldStatus @default(LOCKED)
+  unlockedAt  DateTime?   @map("unlocked_at")
+  completedAt DateTime?   @map("completed_at")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, worldId])
+  @@map("world_progress")
+}
+
+model ActivitySession {
+  id             String         @id @default(cuid())
+  childId        String         @map("child_id")
+  activityId     String         @map("activity_id") // e.g. "activity-1-1"
+  worldId        String         @map("world_id")
+  worldNumber    Int            @map("world_number")
+  activityNumber Int            @map("activity_number")
+  status         ActivityStatus @default(NOT_STARTED)
+  attemptNumber  Int            @default(1) @map("attempt_number") // replay tracking
+  isFirstAttempt Boolean        @default(true) @map("is_first_attempt")
+  startedAt      DateTime?      @map("started_at")
+  completedAt    DateTime?      @map("completed_at")
+  durationSeconds Int?          @map("duration_seconds")
+
+  // Scaffold tracking (Independence Index)
+  maxScaffoldReached ScaffoldLevel @default(NONE) @map("max_scaffold_reached")
+  scaffoldEvents     Int           @default(0) @map("scaffold_events")
+
+  // Reflection
+  reflectionCompleted Boolean @default(false) @map("reflection_completed")
+  reflectionResponse  String? @map("reflection_response")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  child       Child        @relation(fields: [childId], references: [id], onDelete: Cascade)
+  assessments Assessment[]
+
+  @@map("activity_sessions")
+}
+
+// ─────────────────────────────────────────────
+// Assessment — scientific thinking skill scores
+// ─────────────────────────────────────────────
+
+model Assessment {
+  id        String @id @default(cuid())
+  childId   String @map("child_id")
+  sessionId String @map("session_id")
+
+  // Five scientific thinking skills from learning-framework.md
+  observeScore  Int @default(0) @map("observe_score")  // 0–100
+  questionScore Int @default(0) @map("question_score")
+  predictScore  Int @default(0) @map("predict_score")
+  exploreScore  Int @default(0) @map("explore_score")
+  concludeScore Int @default(0) @map("conclude_score")
+
+  // Independence Index (lower scaffold = higher independence)
+  independenceIndex Float @default(0) @map("independence_index")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  child   Child           @relation(fields: [childId], references: [id], onDelete: Cascade)
+  session ActivitySession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, sessionId])
+  @@map("assessments")
+}

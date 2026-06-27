@@ -1,0 +1,35 @@
+/**
+ * Supabase middleware client — for use in Next.js middleware.ts
+ * Updates session cookies on every request to keep them fresh
+ */
+
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
+import { publicEnv } from "@/lib/env";
+
+export async function updateSession(request: NextRequest) {
+  let supabaseResponse = NextResponse.next({ request });
+
+  const supabase = createServerClient(publicEnv.supabaseUrl, publicEnv.supabaseAnonKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
+      },
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+        supabaseResponse = NextResponse.next({ request });
+        cookiesToSet.forEach(({ name, value, options }) =>
+          supabaseResponse.cookies.set(name, value, options)
+        );
+      },
+    },
+  });
+
+  // Refresh session — must not use getUser() result for authorization here
+  // Do that in Server Components/Actions where the cookie is already fresh
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  return { supabaseResponse, user };
+}
