@@ -134,7 +134,7 @@ async function main() {
     raraWorlds.map((w) =>
       prisma.worldProgress.upsert({
         where: { childId_worldId: { childId: raraChild.id, worldId: w.worldId } },
-        update: {},
+        update: { status: w.status },
         create: {
           childId: raraChild.id,
           worldId: w.worldId,
@@ -161,53 +161,127 @@ async function main() {
   ];
 
   for (const a of raraActivities) {
-    const session = await prisma.activitySession.upsert({
-      where: {
-        id: `seed-${raraChild.id}-${a.activityId}`,
-      },
-      update: {},
-      create: {
-        id: `seed-${raraChild.id}-${a.activityId}`,
-        childId: raraChild.id,
-        activityId: a.activityId,
-        worldId: a.worldId,
-        worldNumber: a.worldNumber,
-        activityNumber: a.activityNumber,
-        status: a.status,
-        isFirstAttempt: true,
-        startedAt: new Date(),
-        completedAt: a.status === ActivityStatus.COMPLETED ? new Date() : undefined,
-        durationSeconds: a.status === ActivityStatus.COMPLETED ? 180 + Math.floor(Math.random() * 120) : undefined,
-        maxScaffoldReached: a.scaffoldLevel,
-        reflectionCompleted: a.status === ActivityStatus.COMPLETED,
-        reflectionResponse: a.status === ActivityStatus.COMPLETED ? "Saya menemukan polanya!" : undefined,
-      },
-    });
+    await seedActivity(raraChild.id, a);
+  }
 
-    // Assessment for completed sessions
-    if (a.status === ActivityStatus.COMPLETED) {
-      await prisma.assessment.upsert({
-        where: { childId_sessionId: { childId: raraChild.id, sessionId: session.id } },
-        update: {},
-        create: {
-          childId: raraChild.id,
-          sessionId: session.id,
-          observeScore: 70 + Math.floor(Math.random() * 30),
-          questionScore: 60 + Math.floor(Math.random() * 40),
-          predictScore: 65 + Math.floor(Math.random() * 35),
-          exploreScore: 75 + Math.floor(Math.random() * 25),
-          concludeScore: 60 + Math.floor(Math.random() * 40),
-          independenceIndex: a.scaffoldLevel === ScaffoldLevel.NONE ? 1.0 : 0.7,
-        },
-      });
-    }
+  // ── Bima: fresh learner (world 1 unlocked only) ───────────────────────────
+  const bimaChild = children[1].child!;
+  await seedWorldProgress(bimaChild.id, [
+    { worldId: "world-1", worldNumber: 1, status: WorldStatus.UNLOCKED },
+    { worldId: "world-2", worldNumber: 2, status: WorldStatus.LOCKED },
+    { worldId: "world-3", worldNumber: 3, status: WorldStatus.LOCKED },
+    { worldId: "world-4", worldNumber: 4, status: WorldStatus.LOCKED },
+  ]);
+
+  // ── Siti: W1 partial (2/5 activities) ─────────────────────────────────────
+  const sitiChild = children[2].child!;
+  await seedWorldProgress(sitiChild.id, [
+    { worldId: "world-1", worldNumber: 1, status: WorldStatus.IN_PROGRESS },
+    { worldId: "world-2", worldNumber: 2, status: WorldStatus.LOCKED },
+    { worldId: "world-3", worldNumber: 3, status: WorldStatus.LOCKED },
+    { worldId: "world-4", worldNumber: 4, status: WorldStatus.LOCKED },
+  ]);
+  await seedActivity(sitiChild.id, {
+    activityId: "activity-1-1", worldId: "world-1", worldNumber: 1, activityNumber: 1,
+    status: ActivityStatus.COMPLETED, scaffoldLevel: ScaffoldLevel.NONE,
+  });
+  await seedActivity(sitiChild.id, {
+    activityId: "activity-1-2", worldId: "world-1", worldNumber: 1, activityNumber: 2,
+    status: ActivityStatus.COMPLETED, scaffoldLevel: ScaffoldLevel.HINT_1,
+  });
+
+  // ── Andi: W1 complete ───────────────────────────────────────────────────────
+  const andiChild = children[3].child!;
+  await seedWorldProgress(andiChild.id, [
+    { worldId: "world-1", worldNumber: 1, status: WorldStatus.COMPLETED },
+    { worldId: "world-2", worldNumber: 2, status: WorldStatus.UNLOCKED },
+    { worldId: "world-3", worldNumber: 3, status: WorldStatus.LOCKED },
+    { worldId: "world-4", worldNumber: 4, status: WorldStatus.LOCKED },
+  ]);
+  for (let i = 1; i <= 5; i++) {
+    await seedActivity(andiChild.id, {
+      activityId: `activity-1-${i}`, worldId: "world-1", worldNumber: 1, activityNumber: i,
+      status: ActivityStatus.COMPLETED, scaffoldLevel: ScaffoldLevel.NONE,
+    });
   }
 
   console.warn("✅ Seed complete.");
-  console.warn("   Demo accounts:");
+  console.warn("   Demo accounts (password: Demo2026!):");
   console.warn("   • Teacher: demo.teacher@inquis.app");
   console.warn("   • Parent:  demo.parent@inquis.app");
-  console.warn("   • Children: rara@inquis.app, bima@inquis.app, siti@inquis.app, andi@inquis.app");
+  console.warn("   • Children: rara@ (advanced), bima@ (fresh), siti@ (partial), andi@ (W1 done)");
+  console.warn("   Run: npm run demo:sync  — to create Supabase auth users");
+}
+
+type ActivitySeed = {
+  activityId: string;
+  worldId: string;
+  worldNumber: number;
+  activityNumber: number;
+  status: ActivityStatus;
+  scaffoldLevel: ScaffoldLevel;
+};
+
+async function seedWorldProgress(
+  childId: string,
+  worlds: { worldId: string; worldNumber: number; status: WorldStatus }[]
+) {
+  await Promise.all(
+    worlds.map((w) =>
+      prisma.worldProgress.upsert({
+        where: { childId_worldId: { childId, worldId: w.worldId } },
+        update: { status: w.status },
+        create: {
+          childId,
+          worldId: w.worldId,
+          worldNumber: w.worldNumber,
+          status: w.status,
+          unlockedAt: w.status !== WorldStatus.LOCKED ? new Date() : undefined,
+          completedAt: w.status === WorldStatus.COMPLETED ? new Date() : undefined,
+        },
+      })
+    )
+  );
+}
+
+async function seedActivity(childId: string, a: ActivitySeed) {
+  const session = await prisma.activitySession.upsert({
+    where: { id: `seed-${childId}-${a.activityId}` },
+    update: {},
+    create: {
+      id: `seed-${childId}-${a.activityId}`,
+      childId,
+      activityId: a.activityId,
+      worldId: a.worldId,
+      worldNumber: a.worldNumber,
+      activityNumber: a.activityNumber,
+      status: a.status,
+      isFirstAttempt: true,
+      startedAt: new Date(),
+      completedAt: a.status === ActivityStatus.COMPLETED ? new Date() : undefined,
+      durationSeconds: a.status === ActivityStatus.COMPLETED ? 180 + Math.floor(Math.random() * 120) : undefined,
+      maxScaffoldReached: a.scaffoldLevel,
+      reflectionCompleted: a.status === ActivityStatus.COMPLETED,
+      reflectionResponse: a.status === ActivityStatus.COMPLETED ? "Saya menemukan polanya!" : undefined,
+    },
+  });
+
+  if (a.status === ActivityStatus.COMPLETED) {
+    await prisma.assessment.upsert({
+      where: { childId_sessionId: { childId, sessionId: session.id } },
+      update: {},
+      create: {
+        childId,
+        sessionId: session.id,
+        observeScore: 70 + Math.floor(Math.random() * 30),
+        questionScore: 60 + Math.floor(Math.random() * 40),
+        predictScore: 65 + Math.floor(Math.random() * 35),
+        exploreScore: 75 + Math.floor(Math.random() * 25),
+        concludeScore: 60 + Math.floor(Math.random() * 40),
+        independenceIndex: a.scaffoldLevel === ScaffoldLevel.NONE ? 1.0 : 0.7,
+      },
+    });
+  }
 }
 
 main()

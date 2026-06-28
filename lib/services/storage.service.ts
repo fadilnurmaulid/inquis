@@ -7,15 +7,7 @@ import { publicEnv } from "@/lib/env.public";
 
 const STORAGE_BASE = `${publicEnv.supabaseUrl}/storage/v1/object/public`;
 
-// Bucket names
-const BUCKETS = {
-  audio: "audio",
-  illustrations: "illustrations",
-  activities: "activities",
-  certificates: "certificates",
-} as const;
-
-type Bucket = (typeof BUCKETS)[keyof typeof BUCKETS];
+type Bucket = "audio" | "illustrations" | "activities" | "certificates";
 
 function getPublicUrl(bucket: Bucket, path: string): string {
   return `${STORAGE_BASE}/${bucket}/${path}`;

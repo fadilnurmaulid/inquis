@@ -6,6 +6,7 @@
  */
 
 import { useEffect } from "react";
+import Link from "next/link";
 import { AlertCircle } from "lucide-react";
 
 interface ErrorProps {
@@ -43,12 +44,12 @@ export default function GlobalError({ error, reset }: ErrorProps) {
         >
           Coba Lagi
         </button>
-        <a
+        <Link
           href="/"
           className="rounded-lg border px-6 py-3 font-medium transition-colors hover:bg-muted"
         >
           Halaman Utama
-        </a>
+        </Link>
       </div>
     </div>
   );

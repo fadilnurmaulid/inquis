@@ -34,7 +34,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         </div>
 
         {/* Login form */}
-        <LoginForm redirectTo={params.redirect} />
+        <LoginForm redirectTo={params.redirect} defaultRole={params.role} />
 
         {/* Footer */}
         <p className="text-center text-xs text-muted-foreground">

@@ -15,6 +15,8 @@ import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/client";
+import { DemoLoginSection } from "@/components/auth/demo-login-section";
+import { DEMO_ACCOUNTS } from "@/lib/demo/accounts";
 
 const loginSchema = z.object({
   email: z.string().email("Email tidak valid"),
@@ -25,9 +27,10 @@ type LoginValues = z.infer<typeof loginSchema>;
 
 interface LoginFormProps {
   redirectTo?: string;
+  defaultRole?: string;
 }
 
-export function LoginForm({ redirectTo }: LoginFormProps) {
+export function LoginForm({ redirectTo, defaultRole }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const router = useRouter();
@@ -38,6 +41,15 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
+    defaultValues: (() => {
+      if (!defaultRole) return { email: "", password: "" };
+      const account =
+        DEMO_ACCOUNTS.find((a) => a.role === defaultRole.toUpperCase()) ??
+        DEMO_ACCOUNTS.find((a) => a.email.includes(defaultRole.toLowerCase()));
+      return account
+        ? { email: account.email, password: account.password }
+        : { email: "", password: "" };
+    })(),
   });
 
   async function onSubmit(values: LoginValues) {
@@ -69,7 +81,10 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
   }
 
   return (
-    <Card className="shadow-lg">
+    <div className="space-y-4">
+      <DemoLoginSection compact />
+
+      <Card className="shadow-lg">
       <CardHeader>
         <CardTitle>Masuk ke INQUIS</CardTitle>
         <CardDescription>
@@ -156,5 +171,6 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
         </form>
       </CardContent>
     </Card>
+    </div>
   );
 }

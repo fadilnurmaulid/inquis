@@ -18,6 +18,8 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
+    "demo:sync": "tsx scripts/sync-demo-auth.ts",
+    "demo:setup": "npm run db:seed && npm run demo:sync",
     "postinstall": "prisma generate"
   },
   "engines": {

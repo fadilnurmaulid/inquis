@@ -14,6 +14,7 @@ import { ContinueCard } from "@/components/dashboard/continue-card";
 import { ChildNav } from "@/components/dashboard/child-nav";
 import { WorldMapSkeleton } from "@/components/dashboard/world-map-skeleton";
 import { DashboardEmpty } from "@/components/dashboard/dashboard-empty";
+import { AchievementRow, computeAchievements } from "@/components/dashboard/achievement-badge";
 import { WORLDS } from "@/types";
 
 export const metadata: Metadata = { title: "Peta Dunia" };
@@ -26,6 +27,11 @@ export default async function PlayHomePage() {
   const data = await getChildDashboardData(user.id);
 
   const hasAnyProgress = data.totalCompletedActivities > 0;
+  const achievements = computeAchievements({
+    totalCompletedActivities: data.totalCompletedActivities,
+    completedWorlds: data.completedWorlds,
+    totalWorlds: data.totalWorlds,
+  });
 
   // FR-DASH-008: Determine next activity assets to hint for preloading
   const nextActivity = data.activeSession ?? data.nextRecommended;
@@ -124,6 +130,8 @@ export default async function PlayHomePage() {
                   activeSession={data.activeSession}
                   nextRecommended={data.nextRecommended}
                 />
+
+                <AchievementRow achievements={achievements} />
               </>
             ) : (
               <>
