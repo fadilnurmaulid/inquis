@@ -1,29 +1,48 @@
 /**
- * 404 Not Found page
- * Child-friendly language, no technical details exposed.
+ * 404 Not Found — child-friendly, never exposes technical details.
  */
 
 import Link from "next/link";
-import { SearchX } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Halaman Tidak Ditemukan — INQUIS" };
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-6 p-8 text-center">
-      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
-        <SearchX className="h-10 w-10 text-muted-foreground" />
+    <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gradient-to-br from-sky-50 to-blue-100 p-8 text-center">
+      {/* Illustration */}
+      <div className="flex h-28 w-28 items-center justify-center rounded-full bg-white/70 text-6xl shadow-sm">
+        🔭
       </div>
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold">Halaman Tidak Ditemukan</h1>
-        <p className="max-w-md text-muted-foreground">
-          Halaman yang kamu cari tidak ada. Yuk kembali ke halaman utama!
+
+      <div className="space-y-3">
+        <h1 className="font-display text-3xl font-bold text-gray-800">
+          Ups! Halaman Tidak Ditemukan
+        </h1>
+        <p className="mx-auto max-w-sm text-gray-500 leading-relaxed">
+          Halaman ini seperti pola yang hilang — tidak ada di sini!
+          Yuk kembali ke petualangan belajarmu.
         </p>
       </div>
-      <Link
-        href="/"
-        className="rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground transition-opacity hover:opacity-90"
-      >
-        Kembali ke Beranda
-      </Link>
-    </div>
+
+      <div className="flex flex-wrap justify-center gap-3">
+        <Link
+          href="/"
+          className="inline-flex min-h-[48px] items-center gap-2 rounded-2xl bg-primary px-6 py-3
+                     font-bold text-white shadow-md transition-all hover:scale-105 hover:bg-primary/90 active:scale-95"
+        >
+          🏠 Kembali ke Beranda
+        </Link>
+        <Link
+          href="/play/home"
+          className="inline-flex min-h-[48px] items-center gap-2 rounded-2xl border-2 border-primary/30
+                     bg-white px-6 py-3 font-bold text-primary transition-all hover:scale-105 hover:bg-primary/5 active:scale-95"
+        >
+          🗺️ Peta Dunia
+        </Link>
+      </div>
+
+      <p className="text-xs text-gray-400">INQUIS · LIDM 2026</p>
+    </main>
   );
 }

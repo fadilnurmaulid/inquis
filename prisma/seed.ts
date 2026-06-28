@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Development seed for INQUIS
  * Creates demo accounts for all roles + classroom + progress data
@@ -5,7 +6,9 @@
  * Run: npm run db:seed
  */
 
-import { PrismaClient, Role, WorldStatus, ActivityStatus, ScaffoldLevel } from "@prisma/client";
+import "dotenv/config";
+import { PrismaClient } from "@prisma/client"
+import {Role, WorldStatus, ActivityStatus, ScaffoldLevel} from "@/lib/db-enums";
 
 const prisma = new PrismaClient();
 

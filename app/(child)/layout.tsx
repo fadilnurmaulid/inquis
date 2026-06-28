@@ -1,11 +1,10 @@
 /**
  * Child interface layout — FND-011
- * Wraps all /play routes. Enforces CHILD role, provides child-specific context.
- * Child UI principles from ui-guidelines.md applied here.
+ * Wraps all /play routes. Enforces CHILD role, provides audio context.
+ * Applies child-screen utilities from ui-guidelines.md.
  */
 
 import { requireRole } from "@/lib/services/auth.service";
-import { getChildProfile } from "@/lib/services/auth.service";
 import { AudioProvider } from "@/components/providers/audio-provider";
 import type { Metadata } from "next";
 
@@ -16,16 +15,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function ChildLayout({ children }: { children: React.ReactNode }) {
-  const user = await requireRole(["CHILD"]);
-  const child = await getChildProfile(user.id);
+export default async function ChildLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  await requireRole(["CHILD"]);
 
   return (
     <AudioProvider>
-      <div
-        className="child-screen min-h-screen bg-gradient-to-b from-sky-100 to-blue-50"
-        data-child-id={child?.id}
-      >
+      <div className="child-screen min-h-screen">
         {children}
       </div>
     </AudioProvider>

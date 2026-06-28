@@ -4,10 +4,11 @@
  * Used exclusively in Server Components — no client-side fetching.
  */
 
+
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { ActivityStatus, WorldStatus } from "@prisma/client";
+import { ActivityStatus, WorldStatus } from "@/lib/db-enums";
 import { WORLDS } from "@/types";
 
 export interface ActivitySummary {
@@ -49,6 +50,8 @@ export interface ChildDashboardData {
   totalCompletedActivities: number;
   totalWorlds: number;
   completedWorlds: number;
+  /** Average independence index across all completed activities */
+  independenceAvg: number;
 }
 
 export async function getChildDashboardData(userId: string): Promise<ChildDashboardData> {
@@ -106,14 +109,14 @@ export async function getChildDashboardData(userId: string): Promise<ChildDashbo
 
   // Build per-world completed activity counts
   const completedByWorld: Record<string, number> = {};
-  for (const s of sessions) {
+  for (const s of sessions as { worldId: string; activityId: string; worldNumber: number; activityNumber: number; status: string; reflectionCompleted: boolean; startedAt: Date }[]) {
     if (s.status === ActivityStatus.COMPLETED) {
       completedByWorld[s.worldId] = (completedByWorld[s.worldId] ?? 0) + 1;
     }
   }
 
   // Compose world summaries
-  const worlds: WorldProgressSummary[] = worldProgress.map((wp) => {
+  const worlds: WorldProgressSummary[] = worldProgress.map((wp: { worldId: string; worldNumber: number; status: string; unlockedAt: Date | null; completedAt: Date | null }) => {
     const def = WORLDS.find((w) => w.id === wp.worldId)!;
     return {
       worldId: wp.worldId,
@@ -132,7 +135,7 @@ export async function getChildDashboardData(userId: string): Promise<ChildDashbo
   });
 
   // Find active (in-progress) session — most recent
-  const activeRaw = sessions.find((s) => s.status === ActivityStatus.IN_PROGRESS);
+  const activeRaw = sessions.find((s: { worldId: string; activityId: string; worldNumber: number; activityNumber: number; status: string; reflectionCompleted: boolean; startedAt: Date }) => s.status === ActivityStatus.IN_PROGRESS);
   const activeSession: ActivitySummary | null = activeRaw
     ? {
         activityId: activeRaw.activityId,
@@ -168,6 +171,16 @@ export async function getChildDashboardData(userId: string): Promise<ChildDashbo
   const totalCompletedActivities = Object.values(completedByWorld).reduce((a, b) => a + b, 0);
   const completedWorlds = worlds.filter((w) => w.status === WorldStatus.COMPLETED).length;
 
+  // Calculate independence average from assessments
+  const assessments = await prisma.assessment.findMany({
+    where: { childId: child.id },
+    select: { independenceIndex: true },
+  });
+  const independenceAvg =
+    assessments.length > 0
+      ? (assessments as { independenceIndex: number }[]).reduce((s: number, a: { independenceIndex: number }) => s + a.independenceIndex, 0) / assessments.length
+      : 0;
+
   return {
     child,
     worlds,
@@ -176,5 +189,6 @@ export async function getChildDashboardData(userId: string): Promise<ChildDashbo
     totalCompletedActivities,
     totalWorlds: WORLDS.length,
     completedWorlds,
+    independenceAvg,
   };
 }

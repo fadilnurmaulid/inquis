@@ -2,6 +2,7 @@
  * Teacher analytics — aggregates inquiry skill data for dashboard (FR-TP-006, FR-LIDM-005).
  */
 
+
 "use server";
 
 import { prisma } from "@/lib/prisma";
@@ -13,7 +14,7 @@ export async function getClassroomSkillAverages(classroomId: string): Promise<Sk
     select: { childId: true },
   });
 
-  const childIds = enrollments.map((e) => e.childId);
+  const childIds = enrollments.map((e: { childId: string }) => e.childId);
   if (childIds.length === 0) {
     return { observe: 0, question: 0, predict: 0, explore: 0, conclude: 0 };
   }
@@ -34,7 +35,7 @@ export async function getClassroomSkillAverages(classroomId: string): Promise<Sk
   }
 
   const sum = assessments.reduce(
-    (acc, a) => ({
+    (acc: { observe: number; question: number; predict: number; explore: number; conclude: number }, a: { observeScore: number; questionScore: number; predictScore: number; exploreScore: number; concludeScore: number }) => ({
       observe: acc.observe + a.observeScore,
       question: acc.question + a.questionScore,
       predict: acc.predict + a.predictScore,
@@ -90,11 +91,11 @@ export async function getClassroomStudentSummaries(
     },
   });
 
-  return enrollments.map((e) => {
+  return enrollments.map((e: { child: { id: string; displayName: string; activitySessions: { id: string }[]; assessments: { independenceIndex: number }[]; worldProgress: { worldId: string }[] } }) => {
     const assessments = e.child.assessments;
     const independenceAvg =
       assessments.length > 0
-        ? assessments.reduce((s, a) => s + a.independenceIndex, 0) / assessments.length
+        ? assessments.reduce((s: number, a: { independenceIndex: number }) => s + a.independenceIndex, 0) / assessments.length
         : 0;
 
     return {
@@ -113,7 +114,7 @@ export async function getTeacherImpactMetrics(teacherId: string) {
     select: { id: true },
   });
 
-  const classroomIds = classrooms.map((c) => c.id);
+  const classroomIds = classrooms.map((c: { id: string }) => c.id);
   const enrollments = await prisma.classEnrollment.count({
     where: { classroomId: { in: classroomIds } },
   });
@@ -123,7 +124,7 @@ export async function getTeacherImpactMetrics(teacherId: string) {
       where: { classroomId: { in: classroomIds } },
       select: { childId: true },
     })
-  ).map((e) => e.childId);
+  ).map((e: { childId: string }) => e.childId);
 
   const [totalActivities, avgIndependence] = await Promise.all([
     prisma.activitySession.count({
@@ -140,6 +141,6 @@ export async function getTeacherImpactMetrics(teacherId: string) {
   return {
     totalStudents: enrollments,
     totalActivitiesCompleted: totalActivities,
-    avgIndependence: avgIndependence._avg.independenceIndex ?? 0,
+    avgIndependence: (avgIndependence as { _avg: { independenceIndex: number | null } })._avg.independenceIndex ?? 0,
   };
 }

@@ -5,6 +5,11 @@
  * Usage: npm run demo:sync
  */
 
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+import "dotenv/config";
 import { createClient } from "@supabase/supabase-js";
 import { DEMO_PASSWORD } from "../lib/demo/accounts";
 
@@ -33,28 +38,59 @@ async function main() {
   console.warn("🔄 Syncing demo auth users...");
 
   for (const user of DEMO_USERS) {
-    // Try to find existing user
-    const { data: listData } = await supabase.auth.admin.listUsers();
-    const existing = listData?.users?.find((u) => u.email === user.email);
+  const { data: listData } = await supabase.auth.admin.listUsers();
 
-    if (existing) {
-      const { error } = await supabase.auth.admin.updateUserById(existing.id, {
-        password: DEMO_PASSWORD,
-        user_metadata: { role: user.role },
-      });
-      if (error) console.warn(`  ⚠ Update ${user.email}: ${error.message}`);
-      else console.warn(`  ✓ Updated ${user.email}`);
-    } else {
-      const { error } = await supabase.auth.admin.createUser({
+  let authUser = listData?.users?.find(
+    (u) => u.email === user.email
+  );
+
+  if (!authUser) {
+    const { data, error } =
+      await supabase.auth.admin.createUser({
         email: user.email,
         password: DEMO_PASSWORD,
         email_confirm: true,
-        user_metadata: { role: user.role },
+        user_metadata: {
+          role: user.role,
+        },
       });
-      if (error) console.warn(`  ⚠ Create ${user.email}: ${error.message}`);
-      else console.warn(`  ✓ Created ${user.email}`);
+
+    if (error) {
+      console.warn(error.message);
+      continue;
     }
+
+    authUser = data.user;
+
+    console.log("✓ Created", user.email);
+  } else {
+    await supabase.auth.admin.updateUserById(authUser.id, {
+      password: DEMO_PASSWORD,
+      user_metadata: {
+        role: user.role,
+      },
+    });
+
+    console.log("✓ Updated", user.email);
   }
+
+  // ============================
+  // UPDATE PRISMA
+  // ============================
+
+  await prisma.user.update({
+    where: {
+      email: user.email,
+    },
+    data: {
+      supabaseId: authUser.id,
+    },
+  });
+
+  console.log("  ↳ synced Prisma");
+  }
+
+  await prisma.$disconnect();
 
   console.warn("✅ Demo auth sync complete.");
   console.warn(`   Password for all demo accounts: ${DEMO_PASSWORD}`);

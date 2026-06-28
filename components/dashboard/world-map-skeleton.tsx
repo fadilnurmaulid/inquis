@@ -1,41 +1,56 @@
 /**
  * WorldMapSkeleton — DASH-013
- * Skeleton loader shown while dashboard data fetches.
- * Matches WorldMap layout exactly — no layout shift on load.
+ * Pixel-perfect skeleton matching the dashboard layout.
+ * Prevents layout shift during data fetch.
  */
-
-import { Skeleton } from "@/components/ui/skeleton";
 
 export function WorldMapSkeleton() {
   return (
-    <div className="w-full space-y-4" aria-busy="true" aria-label="Memuat peta dunia...">
+    <div
+      className="w-full space-y-4"
+      aria-busy="true"
+      aria-label="Memuat peta dunia..."
+    >
       {/* ProgressJourney skeleton */}
-      <div className="rounded-3xl bg-white/60 p-5">
+      <div className="rounded-3xl bg-white/60 p-5 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
-          <Skeleton className="h-6 w-32" />
-          <Skeleton className="h-6 w-20 rounded-full" />
+          <div className="h-6 w-36 animate-pulse rounded-xl bg-gray-200" />
+          <div className="h-6 w-24 animate-pulse rounded-full bg-gray-200" />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="flex flex-1 items-center gap-1">
-              <div className="flex flex-col items-center gap-1">
-                <Skeleton className="h-12 w-12 rounded-full" />
-                <Skeleton className="h-3 w-10" />
+            <div key={i} className="flex flex-1 items-center">
+              <div className="flex flex-col items-center gap-1.5">
+                <div className="h-12 w-12 animate-pulse rounded-full bg-gray-200" />
+                <div className="h-3 w-10 animate-pulse rounded-full bg-gray-100" />
               </div>
-              {i < 4 && <Skeleton className="h-1 flex-1" />}
+              {i < 4 && (
+                <div className="mx-1 h-1.5 flex-1 animate-pulse rounded-full bg-gray-100" />
+              )}
             </div>
           ))}
         </div>
+        <div className="mt-4 h-4 w-3/4 animate-pulse rounded-full bg-gray-100 mx-auto" />
       </div>
 
       {/* ContinueCard skeleton */}
-      <Skeleton className="h-24 w-full rounded-3xl" />
+      <div className="h-28 animate-pulse rounded-3xl bg-primary/20" />
 
-      {/* WorldCard skeletons — 2×2 grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {[1, 2, 3, 4].map((i) => (
-          <Skeleton key={i} className="h-40 w-full rounded-3xl" />
-        ))}
+      {/* WorldCard grid skeletons */}
+      <div>
+        <div className="mb-3 h-6 w-28 animate-pulse rounded-xl bg-gray-200" />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="h-44 animate-pulse rounded-3xl"
+              style={{
+                background: `linear-gradient(135deg, #e5e7eb${i % 2 === 0 ? "dd" : "aa"}, #d1d5db88)`,
+                animationDelay: `${i * 0.1}s`,
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

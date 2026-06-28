@@ -14,12 +14,21 @@ import { ContinueCard } from "@/components/dashboard/continue-card";
 import { ChildNav } from "@/components/dashboard/child-nav";
 import { WorldMapSkeleton } from "@/components/dashboard/world-map-skeleton";
 import { DashboardEmpty } from "@/components/dashboard/dashboard-empty";
-import { AchievementRow, computeAchievements } from "@/components/dashboard/achievement-badge";
+import { AchievementRow } from "@/components/dashboard/achievement-badge";
+import { computeAchievements } from "@/lib/achievements";
 import { WORLDS } from "@/types";
 
 export const metadata: Metadata = { title: "Peta Dunia" };
 
 // Revalidate on every request so progress is always fresh (FR-DASH-009)
+// World companion emojis
+const COMPANION_EMOJI: Record<string, string> = {
+  "world-1": "🦋",
+  "world-2": "🐢",
+  "world-3": "🔮",
+  "world-4": "🧪",
+};
+
 export const dynamic = "force-dynamic";
 
 export default async function PlayHomePage() {
@@ -51,7 +60,7 @@ export default async function PlayHomePage() {
       )}
 
       {/* Main scrollable area — padding-bottom leaves room for fixed ChildNav */}
-      <main className="min-h-screen pb-24">
+      <main className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50/50 to-indigo-50 pb-24">
         {/* Dashboard header */}
         <header className="sticky top-0 z-30 bg-gradient-to-b from-sky-100 to-transparent px-4 pb-2 pt-6">
           <div className="mx-auto flex max-w-lg items-center justify-between">
@@ -90,7 +99,7 @@ export default async function PlayHomePage() {
               }}
               aria-hidden
             >
-              🦉
+              {COMPANION_EMOJI[nextWorldDef?.id ?? ""] ?? "🦉"}
             </div>
             <div>
               <p className="font-display font-bold text-gray-800">

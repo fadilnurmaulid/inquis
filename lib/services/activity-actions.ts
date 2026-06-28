@@ -11,7 +11,7 @@ import {
   completeWorld,
   updateActivityScaffold,
 } from "@/lib/services/progress.service";
-import { ScaffoldLevel, ActivityStatus } from "@prisma/client";
+import { ScaffoldLevel, ActivityStatus } from "@/lib/db-enums";
 import { WORLDS } from "@/types";
 import { revalidatePath } from "next/cache";
 

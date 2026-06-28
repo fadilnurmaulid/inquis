@@ -1,86 +1,63 @@
+"use client";
+
 /**
  * AchievementBadge — DASH-008
- * Displays earned milestones for child progress.
+ * Milestone display for child progress. Visual, encouraging, earned vs. unearned.
  */
-
-"use client";
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-export interface Achievement {
-  id: string;
-  emoji: string;
-  title: string;
-  description: string;
-  earned: boolean;
-}
-
-export const ACHIEVEMENTS: Achievement[] = [
-  { id: "first-step", emoji: "🌱", title: "Langkah Pertama", description: "Mulai aktivitas pertama", earned: false },
-  { id: "world-1", emoji: "🔵", title: "Penjelajah Pola", description: "Selesaikan Dunia 1", earned: false },
-  { id: "world-2", emoji: "🟢", title: "Penjelajah Pengurutan", description: "Selesaikan Dunia 2", earned: false },
-  { id: "world-3", emoji: "🟡", title: "Penjelajah Prediksi", description: "Selesaikan Dunia 3", earned: false },
-  { id: "world-4", emoji: "🟣", title: "Ilmuwan Kecil", description: "Selesaikan semua dunia", earned: false },
-  { id: "independent", emoji: "⭐", title: "Pemikir Mandiri", description: "Selesai tanpa petunjuk", earned: false },
-];
-
-export function computeAchievements(data: {
-  totalCompletedActivities: number;
-  completedWorlds: number;
-  totalWorlds: number;
-}): Achievement[] {
-  return ACHIEVEMENTS.map((a) => {
-    let earned = false;
-    switch (a.id) {
-      case "first-step":
-        earned = data.totalCompletedActivities >= 1;
-        break;
-      case "world-1":
-        earned = data.completedWorlds >= 1;
-        break;
-      case "world-2":
-        earned = data.completedWorlds >= 2;
-        break;
-      case "world-3":
-        earned = data.completedWorlds >= 3;
-        break;
-      case "world-4":
-        earned = data.completedWorlds >= data.totalWorlds;
-        break;
-      case "independent":
-        earned = data.totalCompletedActivities >= 3;
-        break;
-    }
-    return { ...a, earned };
-  });
-}
+import type { Achievement } from "@/lib/achievements";
+export { ACHIEVEMENTS, computeAchievements } from "@/lib/achievements";
 
 interface AchievementBadgeProps {
   achievement: Achievement;
   size?: "sm" | "md";
+  showDescription?: boolean;
 }
 
-export function AchievementBadge({ achievement, size = "md" }: AchievementBadgeProps) {
+export function AchievementBadge({
+  achievement,
+  size = "md",
+  showDescription = false,
+}: AchievementBadgeProps) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 22 }}
       className={cn(
-        "flex flex-col items-center gap-1 rounded-2xl border p-3 text-center transition-all",
+        "flex flex-col items-center gap-1.5 rounded-2xl border-2 p-3 text-center transition-all",
         achievement.earned
-          ? "border-primary/30 bg-primary/5 shadow-sm"
-          : "border-gray-200 bg-gray-50 opacity-50 grayscale"
+          ? "border-primary/30 bg-gradient-to-b from-primary/10 to-primary/5 shadow-sm"
+          : "border-gray-200 bg-gray-50 opacity-40 grayscale"
       )}
       title={achievement.description}
-      aria-label={`${achievement.title}${achievement.earned ? " — diraih" : " — belum diraih"}`}
+      aria-label={`${achievement.title}${achievement.earned ? " — diraih!" : " — belum diraih"}`}
     >
-      <span className={cn(size === "sm" ? "text-2xl" : "text-3xl")} aria-hidden>
+      <span
+        className={cn(
+          size === "sm" ? "text-2xl" : "text-3xl",
+          achievement.earned && "animate-wiggle"
+        )}
+        aria-hidden
+      >
         {achievement.emoji}
       </span>
-      <span className={cn("font-display font-bold text-gray-800", size === "sm" ? "text-[10px]" : "text-xs")}>
+      <span
+        className={cn(
+          "font-display font-bold text-gray-800",
+          size === "sm" ? "text-[10px] leading-tight" : "text-xs"
+        )}
+      >
         {achievement.title}
       </span>
+      {showDescription && (
+        <span className="text-[10px] text-gray-500 leading-tight">
+          {achievement.description}
+        </span>
+      )}
     </motion.div>
   );
 }
@@ -94,13 +71,27 @@ export function AchievementRow({ achievements }: AchievementRowProps) {
   if (earned.length === 0) return null;
 
   return (
-    <section aria-label="Pencapaian" className="rounded-3xl bg-white/60 p-4 shadow-sm">
-      <h2 className="mb-3 font-display text-lg font-bold text-gray-800">🏅 Pencapaian</h2>
+    <motion.section
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
+      aria-label="Pencapaianmu"
+      className="rounded-3xl bg-white/60 p-4 shadow-sm backdrop-blur-sm"
+    >
+      <h2 className="mb-3 font-display text-lg font-bold text-gray-800">
+        🏅 Pencapaian
+      </h2>
       <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
         {achievements.map((a) => (
           <AchievementBadge key={a.id} achievement={a} size="sm" />
         ))}
       </div>
-    </section>
+      {earned.length > 0 && (
+        <p className="mt-3 text-center text-xs text-gray-500">
+          {earned.length}/{achievements.length} pencapaian diraih ·{" "}
+          <span className="font-semibold text-primary">Terus semangat! 💪</span>
+        </p>
+      )}
+    </motion.section>
   );
 }

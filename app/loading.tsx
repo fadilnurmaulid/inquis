@@ -1,20 +1,21 @@
 /**
- * Global route loading fallback — FND-019 / FR-011
- * Shown during route transitions. Never a blank page.
+ * Global route loading fallback — never shows a blank page.
+ * Animated INQUIS Q mark with pulse ring.
  */
 
 export default function Loading() {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        {/* Animated INQUIS logo mark */}
-        <div className="relative h-16 w-16">
-          <div className="animate-pulse-ring absolute inset-0 rounded-full bg-primary/30" />
-          <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-primary">
-            <span className="font-display text-2xl font-bold text-white">Q</span>
-          </div>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-gradient-to-br from-sky-50 to-blue-100">
+      {/* Animated INQUIS logo mark */}
+      <div className="relative">
+        <div className="absolute inset-0 animate-pulse-ring rounded-full bg-primary/30" />
+        <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-inquis-sky to-inquis-ocean shadow-2xl shadow-primary/30">
+          <span className="font-display text-3xl font-bold text-white">Q</span>
         </div>
-        <p className="text-sm text-muted-foreground">Memuat...</p>
+      </div>
+      <div className="space-y-1 text-center">
+        <p className="font-display text-base font-semibold text-gray-700">INQUIS</p>
+        <p className="text-sm text-gray-400">Memuat...</p>
       </div>
     </div>
   );

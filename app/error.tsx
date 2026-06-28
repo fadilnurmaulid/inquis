@@ -1,13 +1,13 @@
 "use client";
 
 /**
- * Global Error Boundary — FND-018 / FR-010
- * Catches unexpected runtime errors without exposing implementation details.
+ * Global Error Boundary — child-friendly, never exposes stack traces.
  */
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, RefreshCw, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -16,41 +16,48 @@ interface ErrorProps {
 
 export default function GlobalError({ error, reset }: ErrorProps) {
   useEffect(() => {
-    // Log to monitoring service (future Sentry integration point)
     console.error("[GlobalError]", error.digest ?? error.message);
   }, [error]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-6 p-8 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
-        <AlertCircle className="h-8 w-8 text-destructive" />
+    <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gradient-to-br from-sky-50 to-blue-100 p-8 text-center">
+      {/* Icon */}
+      <div className="flex h-24 w-24 items-center justify-center rounded-full bg-red-50 shadow-sm">
+        <AlertCircle className="h-12 w-12 text-red-400" aria-hidden />
       </div>
-      <div className="space-y-2">
-        <h1 className="text-2xl font-semibold">Ups, ada yang salah!</h1>
-        <p className="max-w-md text-muted-foreground">
-          Maaf, terjadi kesalahan yang tidak terduga. Tim kami sudah diberitahu.
-          Coba lagi atau kembali ke halaman utama.
+
+      <div className="space-y-3 max-w-sm">
+        <h1 className="font-display text-2xl font-bold text-gray-800">
+          Ups, Ada yang Salah!
+        </h1>
+        <p className="text-gray-500 leading-relaxed">
+          Terjadi kesalahan yang tidak terduga. Tim kami sudah diberitahu.
+          Coba lagi atau kembali ke beranda.
         </p>
         {process.env.NODE_ENV === "development" && (
-          <p className="mt-2 rounded bg-muted px-3 py-1 font-mono text-xs text-muted-foreground">
+          <p className="mt-2 rounded-xl bg-red-50 px-4 py-2 font-mono text-xs text-red-600 text-left">
             {error.message}
           </p>
         )}
       </div>
-      <div className="flex gap-3">
-        <button
+
+      <div className="flex flex-wrap justify-center gap-3">
+        <Button
           onClick={reset}
-          className="rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          variant="childPrimary"
+          size="lg"
+          className="rounded-2xl"
         >
+          <RefreshCw className="h-4 w-4" />
           Coba Lagi
-        </button>
-        <Link
-          href="/"
-          className="rounded-lg border px-6 py-3 font-medium transition-colors hover:bg-muted"
-        >
-          Halaman Utama
-        </Link>
+        </Button>
+        <Button asChild variant="outline" size="lg" className="rounded-2xl">
+          <Link href="/">
+            <Home className="h-4 w-4" />
+            Beranda
+          </Link>
+        </Button>
       </div>
-    </div>
+    </main>
   );
 }

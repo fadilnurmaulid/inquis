@@ -1,10 +1,11 @@
 "use client";
 
 /**
- * CompanionCharacter — friendly guide for child activities.
+ * CompanionCharacter — animated friendly guide for child activities.
+ * Each world has a unique companion with mood-responsive feedback.
  */
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface CompanionCharacterProps {
@@ -12,14 +13,22 @@ interface CompanionCharacterProps {
   message: string;
   themeColor: string;
   mood?: "idle" | "happy" | "thinking" | "celebrate";
+  emoji?: string;
   className?: string;
 }
 
-const MOOD_EMOJI = {
+const MOOD_EMOJI: Record<string, string> = {
   idle: "🦉",
   happy: "😊",
   thinking: "🤔",
   celebrate: "🎉",
+};
+
+const MOOD_BG: Record<string, string> = {
+  idle: "",
+  happy: "bg-green-50 border-green-200",
+  thinking: "bg-amber-50 border-amber-200",
+  celebrate: "bg-yellow-50 border-yellow-200",
 };
 
 export function CompanionCharacter({
@@ -27,26 +36,59 @@ export function CompanionCharacter({
   message,
   themeColor,
   mood = "idle",
+  emoji,
   className,
 }: CompanionCharacterProps) {
+  const displayEmoji = emoji && mood === "idle" ? emoji : MOOD_EMOJI[mood];
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={cn("flex items-start gap-3 rounded-2xl bg-white/80 p-4 shadow-sm", className)}
-      aria-live="polite"
-    >
-      <div
-        className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl text-2xl shadow-sm"
-        style={{ background: `linear-gradient(135deg, ${themeColor}cc, ${themeColor}66)` }}
-        aria-hidden
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={mood + message.slice(0, 10)}
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -4 }}
+        transition={{ duration: 0.2 }}
+        className={cn(
+          "flex items-start gap-3 rounded-2xl border-2 bg-white/85 p-4 shadow-sm backdrop-blur-sm",
+          "transition-colors duration-300",
+          MOOD_BG[mood] || "border-gray-100",
+          className
+        )}
+        aria-live="polite"
+        aria-atomic="true"
       >
-        {MOOD_EMOJI[mood]}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="font-display text-sm font-bold text-gray-800">{name}</p>
-        <p className="text-sm leading-relaxed text-gray-600">{message}</p>
-      </div>
-    </motion.div>
+        {/* Avatar */}
+        <motion.div
+          animate={
+            mood === "celebrate"
+              ? { scale: [1, 1.2, 0.9, 1.15, 1], rotate: [0, -10, 10, -5, 0] }
+              : mood === "happy"
+              ? { scale: [1, 1.08, 1] }
+              : mood === "thinking"
+              ? { y: [0, -3, 0] }
+              : { y: [0, -4, 0] }
+          }
+          transition={
+            mood === "idle"
+              ? { duration: 3, repeat: Infinity, ease: "easeInOut" }
+              : { duration: 0.5 }
+          }
+          className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl text-3xl shadow-sm"
+          style={{
+            background: `linear-gradient(135deg, ${themeColor}cc, ${themeColor}66)`,
+          }}
+          aria-hidden
+        >
+          {displayEmoji}
+        </motion.div>
+
+        {/* Speech bubble */}
+        <div className="min-w-0 flex-1">
+          <p className="font-display text-sm font-bold text-gray-800">{name}</p>
+          <p className="mt-0.5 text-sm leading-relaxed text-gray-600">{message}</p>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

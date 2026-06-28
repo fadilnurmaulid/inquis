@@ -1,6 +1,6 @@
 /**
  * Activity page — /play/activity/[activityId]
- * Renders ActivityPlayer for all defined activities.
+ * Renders the full ActivityPlayer for all defined activities.
  */
 
 import type { Metadata } from "next";
@@ -12,11 +12,19 @@ import { getActivityDefinition } from "@/lib/activities/definitions";
 import { WORLDS } from "@/types";
 import { ChildNav } from "@/components/dashboard/child-nav";
 import { ActivityPlayer } from "@/components/activities/activity-player";
-import { ActivityStatus } from "@prisma/client";
+import { ActivityStatus } from "@/lib/db-enums";
 
 interface PageProps {
   params: Promise<{ activityId: string }>;
 }
+
+// World companion emojis
+const COMPANION_EMOJI: Record<string, string> = {
+  "world-1": "🦋",
+  "world-2": "🐢",
+  "world-3": "🔮",
+  "world-4": "🧪",
+};
 
 function parseActivityId(activityId: string) {
   const match = activityId.match(/^activity-(\d+)-(\d+)$/);
@@ -55,6 +63,7 @@ export default async function ActivityPage({ params }: PageProps) {
   });
   if (!child) redirect("/play/home");
 
+  // Gate: world must be unlocked
   const worldProgress = await prisma.worldProgress.findUnique({
     where: { childId_worldId: { childId: child.id, worldId } },
     select: { status: true },
@@ -63,6 +72,7 @@ export default async function ActivityPage({ params }: PageProps) {
     redirect("/play/home");
   }
 
+  // Gate: previous activity must be completed (except first)
   if (activityNumber > 1) {
     const prevCompleted = await prisma.activitySession.findFirst({
       where: {
@@ -76,6 +86,7 @@ export default async function ActivityPage({ params }: PageProps) {
     if (!prevCompleted) redirect(`/play/world/${worldId}`);
   }
 
+  // Fetch or create session
   let session = await prisma.activitySession.findFirst({
     where: { childId: child.id, activityId, isFirstAttempt: true },
     orderBy: { startedAt: "desc" },
@@ -92,15 +103,18 @@ export default async function ActivityPage({ params }: PageProps) {
     });
   }
 
+  const companionEmoji = COMPANION_EMOJI[worldId];
+
   return (
     <>
-      <main className="min-h-screen pb-24">
+      <main className="min-h-screen pb-24 bg-gradient-to-br from-sky-50 to-blue-50">
         <ActivityPlayer
           definition={definition}
           sessionId={session.id}
           childId={child.id}
           themeColor={world.themeColor}
           companionName={world.companionName}
+          companionEmoji={companionEmoji}
           alreadyCompleted={alreadyCompleted}
         />
       </main>

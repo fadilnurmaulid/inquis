@@ -1,6 +1,6 @@
 /**
  * Teacher interface layout — FND-011
- * Wraps all /teacher routes with sidebar navigation.
+ * Responsive: sidebar on desktop, top bar on mobile.
  */
 
 import { requireRole } from "@/lib/services/auth.service";
@@ -14,13 +14,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function TeacherLayout({ children }: { children: React.ReactNode }) {
+export default async function TeacherLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   await requireRole(["TEACHER", "ADMIN"]);
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       <TeacherNav />
-      <div className="mx-auto flex-1 max-w-7xl">{children}</div>
+      <div className="mx-auto w-full max-w-7xl flex-1 overflow-auto">
+        {children}
+      </div>
     </div>
   );
 }

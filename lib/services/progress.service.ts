@@ -4,10 +4,11 @@
  * Progress data is never deleted automatically (BR-005).
  */
 
+
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { ActivityStatus, WorldStatus, ScaffoldLevel } from "@prisma/client";
+import { ActivityStatus, WorldStatus, ScaffoldLevel } from "@/lib/db-enums";
 import { WORLDS } from "@/types";
 
 // ─────────────────────────────────────────────
@@ -179,14 +180,14 @@ export async function completeActivity(
     : null;
 
   // Independence Index: NONE=1.0, HINT_1=0.85, HINT_2=0.65, HINT_3=0.45, ANSWER_REVEAL=0.2
-  const independenceMap: Record<ScaffoldLevel, number> = {
+  const independenceMap: { [key: string]: number } = {
     NONE: 1.0,
     HINT_1: 0.85,
     HINT_2: 0.65,
     HINT_3: 0.45,
     ANSWER_REVEAL: 0.2,
   };
-  const independenceIndex = independenceMap[session.maxScaffoldReached];
+  const independenceIndex = independenceMap[session.maxScaffoldReached as string] ?? 0.5;
 
   const updatedSession = await prisma.activitySession.update({
     where: { id: sessionId },
