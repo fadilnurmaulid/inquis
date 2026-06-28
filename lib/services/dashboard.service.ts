@@ -109,14 +109,14 @@ export async function getChildDashboardData(userId: string): Promise<ChildDashbo
 
   // Build per-world completed activity counts
   const completedByWorld: Record<string, number> = {};
-  for (const s of sessions as { worldId: string; activityId: string; worldNumber: number; activityNumber: number; status: string; reflectionCompleted: boolean; startedAt: Date }[]) {
+  for (const s of sessions) {
     if (s.status === ActivityStatus.COMPLETED) {
       completedByWorld[s.worldId] = (completedByWorld[s.worldId] ?? 0) + 1;
     }
   }
 
   // Compose world summaries
-  const worlds: WorldProgressSummary[] = worldProgress.map((wp: { worldId: string; worldNumber: number; status: string; unlockedAt: Date | null; completedAt: Date | null }) => {
+  const worlds: WorldProgressSummary[] = worldProgress.map((wp) => {
     const def = WORLDS.find((w) => w.id === wp.worldId)!;
     return {
       worldId: wp.worldId,
@@ -135,7 +135,9 @@ export async function getChildDashboardData(userId: string): Promise<ChildDashbo
   });
 
   // Find active (in-progress) session — most recent
-  const activeRaw = sessions.find((s: { worldId: string; activityId: string; worldNumber: number; activityNumber: number; status: string; reflectionCompleted: boolean; startedAt: Date }) => s.status === ActivityStatus.IN_PROGRESS);
+  const activeRaw = sessions.find(
+    (s) => s.status === ActivityStatus.IN_PROGRESS
+  );
   const activeSession: ActivitySummary | null = activeRaw
     ? {
         activityId: activeRaw.activityId,
@@ -178,8 +180,11 @@ export async function getChildDashboardData(userId: string): Promise<ChildDashbo
   });
   const independenceAvg =
     assessments.length > 0
-      ? (assessments as { independenceIndex: number }[]).reduce((s: number, a: { independenceIndex: number }) => s + a.independenceIndex, 0) / assessments.length
-      : 0;
+      ? assessments.reduce(
+        (sum, a) => sum + a.independenceIndex,
+        0
+      ) / assessments.length
+    : 0;
 
   return {
     child,
