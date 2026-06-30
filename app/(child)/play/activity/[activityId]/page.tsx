@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const def = getActivityDefinition(activityId);
   if (!parsed) return { title: "Aktivitas" };
   return {
-    title: def?.title ?? `${parsed.world.titleBahasa} — Aktivitas ${parsed.activityNumber}`,
+    title: def?.title ?? `${parsed.world.titleBahasa} · Aktivitas ${parsed.activityNumber}`,
   };
 }
 

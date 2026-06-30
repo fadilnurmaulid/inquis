@@ -216,12 +216,12 @@ const WORLD_3: ActivityDefinition[] = [
     { id: "b", emoji: "🟢", label: "Hijau" },
     { id: "c", emoji: "⚫", label: "Hitam" },
   ], "a"),
-  w3(2, "Prediksi Cuaca", "Awan gelap — apa selanjutnya?", [
+  w3(2, "Prediksi Cuaca", "Awan gelap, apa selanjutnya?", [
     { id: "a", emoji: "☀️", label: "Cerah" },
     { id: "b", emoji: "🌧️", label: "Hujan", isCorrect: true },
     { id: "c", emoji: "❄️", label: "Salju" },
   ], "b"),
-  w3(3, "Prediksi Tanaman", "Bibit disiram — apa yang terjadi?", [
+  w3(3, "Prediksi Tanaman", "Bibit disiram, apa yang terjadi?", [
     { id: "a", emoji: "🌱", label: "Tumbuh", isCorrect: true },
     { id: "b", emoji: "🍂", label: "Layu" },
     { id: "c", emoji: "🪨", label: "Jadi batu" },
@@ -231,7 +231,7 @@ const WORLD_3: ActivityDefinition[] = [
     { id: "b", emoji: "8️⃣", label: "8", isCorrect: true },
     { id: "c", emoji: "9️⃣", label: "9" },
   ], "b"),
-  w3(5, "Prediksi Akhir", "Bola digulung — kemana?", [
+  w3(5, "Prediksi Akhir", "Bola digulung, kemana?", [
     { id: "a", emoji: "⬆️", label: "Naik" },
     { id: "b", emoji: "➡️", label: "Maju", isCorrect: true },
     { id: "c", emoji: "🔄", label: "Melayang" },
@@ -277,7 +277,7 @@ const WORLD_4: ActivityDefinition[] = [
     { id: "b", emoji: "💧", label: "Mencair", isCorrect: true },
     { id: "c", emoji: "🔥", label: "Membakar" },
   ], "b"),
-  w4(2, "Kesimpulan Bayangan", "Matahari di belakang — bayangan?", [
+  w4(2, "Kesimpulan Bayangan", "Matahari di belakang, bayangan?", [
     { id: "a", emoji: "🌑", label: "Di depan", isCorrect: true },
     { id: "b", emoji: "✨", label: "Hilang" },
     { id: "c", emoji: "🌈", label: "Berwarna" },

@@ -8,7 +8,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "INQUIS — Belajar Sains dengan Bermain",
+  title: "INQUIS · Belajar Sains dengan Bermain",
   description:
     "Platform pembelajaran inkuiri berbasis sains untuk anak usia 5–7 tahun. Kembangkan kemampuan berpikir ilmiah melalui eksplorasi yang menyenangkan.",
 };
@@ -77,7 +77,7 @@ export default function LandingPage() {
         href="/demo"
         className="mb-4 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-inquis-grass to-emerald-500 px-10 py-5 text-xl font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-200 hover:scale-105 hover:shadow-2xl active:scale-95"
       >
-        🎮 Coba Mode Demo — LIDM 2026
+        🎮 Coba Mode Demo · LIDM 2026
       </Link>
 
       {/* Role CTAs */}

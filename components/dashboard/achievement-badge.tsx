@@ -34,7 +34,7 @@ export function AchievementBadge({
           : "border-gray-200 bg-gray-50 opacity-40 grayscale"
       )}
       title={achievement.description}
-      aria-label={`${achievement.title}${achievement.earned ? " — diraih!" : " — belum diraih"}`}
+      aria-label={`${achievement.title}${achievement.earned ? ", diraih!" : ", belum diraih"}`}
     >
       <span
         className={cn(

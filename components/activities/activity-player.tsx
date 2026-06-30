@@ -414,7 +414,7 @@ export function ActivityPlayer({
                       🔍 Hmm, coba amati lagi ya!
                     </p>
                     <p className="text-sm text-amber-600">
-                      Kamu boleh mencoba lagi — ilmuwan selalu mencoba berkali-kali!
+                      Kamu boleh mencoba lagi, ilmuwan selalu mencoba berkali-kali!
                     </p>
                   </div>
                   <Button
@@ -442,7 +442,7 @@ export function ActivityPlayer({
                 {definition.reflectionQuestion}
               </p>
               <p className="text-center text-sm text-gray-500">
-                Tidak ada jawaban salah — ini tentang apa yang kamu rasakan!
+                Tidak ada jawaban salah, ini tentang apa yang kamu rasakan!
               </p>
               <div className="space-y-2">
                 {definition.reflectionOptions.map((opt) => (
@@ -465,7 +465,7 @@ export function ActivityPlayer({
 
               {saveError && (
                 <div className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive" role="alert">
-                  {saveError} —{" "}
+                  {saveError}{" "}
                   <button
                     onClick={handleReflectionSubmit}
                     className="font-semibold underline min-h-0 min-w-0"

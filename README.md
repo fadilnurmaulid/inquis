@@ -1,145 +1,333 @@
 # INQUIS
 
-**Interactive Inquiry System for Early Scientific Thinking**  
-LIDM 2026 — Division IPDP
+> **Inquiry-Based Interactive Scientific Learning Platform for Early Childhood Education**
 
-Platform pembelajaran inkuiri berbasis sains untuk anak usia 5–7 tahun. Mengembangkan kemampuan berpikir ilmiah melalui eksplorasi matematika interaktif.
+<p align="center">
 
----
+A modern inquiry-based digital learning platform designed to cultivate **Scientific Thinking** in children aged **5–7 years** through interactive mathematical exploration, playful learning, and evidence-based pedagogy.
 
-## Tech Stack
+Built for **Lomba Inovasi Digital Mahasiswa (LIDM) 2026**.
 
-- **Framework:** Next.js 15 (App Router)
-- **Language:** TypeScript (strict)
-- **Styling:** Tailwind CSS + shadcn/ui
-- **Database:** PostgreSQL via Supabase (Prisma ORM)
-- **Auth:** Supabase Auth
-- **Animation:** Framer Motion
-- **Testing:** Vitest + React Testing Library + Playwright
+</p>
 
 ---
 
-## Local Setup
+## Overview
 
-### 1. Clone and install
+INQUIS is an educational web application that introduces children to the fundamentals of scientific thinking using an Inquiry Learning approach.
 
-```bash
-git clone <repo-url>
-cd inquis
-npm install
-```
+Instead of emphasizing memorization, INQUIS encourages children to:
 
-### 2. Configure environment variables
+- Observe
+- Ask questions
+- Predict outcomes
+- Explore solutions
+- Draw conclusions
 
-```bash
-cp .env.example .env.local
-```
+through engaging mathematical patterns and everyday phenomena.
 
-Fill in the values from your Supabase project:
-
-| Variable | Where to find it |
-|---|---|
-| `DATABASE_URL` | Supabase → Settings → Database → Connection string (Transaction) |
-| `DIRECT_URL` | Supabase → Settings → Database → Connection string (Session) |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API → Project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API → anon key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API → service_role key |
-
-### 3. Initialize database
-
-```bash
-# Push schema to Supabase
-npm run db:push
-
-# Seed development data
-npm run db:seed
-```
-
-### 4. Start development server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
+The platform also provides parents and teachers with learning analytics to monitor children's cognitive development and inquiry skills.
 
 ---
 
-## Demo Accounts
+## Educational Objectives
 
-After seeding, use these accounts:
+INQUIS aims to help children develop:
 
-| Role | Email | Password |
-|---|---|---|
-| Teacher | `demo.teacher@inquis.app` | Set in Supabase Auth dashboard |
-| Parent | `demo.parent@inquis.app` | Set in Supabase Auth dashboard |
+- Scientific Thinking
+- Observation Skills
+- Pattern Recognition
+- Logical Reasoning
+- Prediction Skills
+- Problem Solving
+- Curiosity
+- Digital Literacy
 
 ---
 
-## Available Scripts
+## Learning Framework
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run type-check` | TypeScript validation |
-| `npm run lint` | ESLint |
-| `npm run format` | Prettier |
-| `npm run test` | Run unit tests (Vitest) |
-| `npm run test:e2e` | Run E2E tests (Playwright) |
-| `npm run db:migrate` | Run Prisma migrations |
-| `npm run db:seed` | Seed development data |
-| `npm run db:studio` | Open Prisma Studio |
+The learning model follows the Inquiry Learning Cycle:
+
+```text
+Observe
+      ↓
+Question
+      ↓
+Predict
+      ↓
+Explore
+      ↓
+Conclude
+```
+
+This framework is integrated into every learning activity throughout the platform.
+
+---
+
+## Learning Worlds
+
+### 🌱 World 1 — Pattern Explorer
+
+Recognize patterns and make predictions.
+
+Children learn to identify mathematical relationships through playful activities.
+
+---
+
+### 🍎 World 2 — Sorting Explorer
+
+Develop classification and logical reasoning skills.
+
+Children group objects based on observable characteristics.
+
+---
+
+### 🌤 World 3 — Prediction Explorer
+
+Understand simple cause-and-effect relationships.
+
+Children make predictions based on everyday scenarios.
+
+---
+
+### 🔬 World 4 — Little Scientist
+
+Integrate previous skills into complete scientific inquiry activities.
+
+Children solve contextual problems using observation, reasoning, and evidence.
+
+---
+
+## Features
+
+### Child Experience
+
+- Inquiry-based learning activities
+- Progressive learning worlds
+- Interactive gameplay
+- Achievement system
+- Progress tracking
+- Child-friendly interface
+- Animated feedback
+
+### Parent Dashboard
+
+- Learning progress
+- Achievement overview
+- Recommended activities
+- Child development summary
+
+### Teacher Dashboard
+
+- Classroom overview
+- Student analytics
+- Progress monitoring
+- Learning insights
+
+---
+
+## Technology Stack
+
+### Frontend
+
+- Next.js 15 (App Router)
+- React
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+
+### Backend
+
+- Supabase
+- Prisma ORM
+- PostgreSQL
+
+### Authentication
+
+- Supabase Auth
+
+### Deployment
+
+- Vercel
+
+---
+
+## Architecture
+
+```text
+app/
+components/
+lib/
+prisma/
+public/
+.kiro/
+```
+
+The project follows a modular architecture with clear separation between:
+
+- UI Components
+- Business Logic
+- Database Access
+- Authentication
+- Learning Services
 
 ---
 
 ## Project Structure
 
-```
-app/                    # Next.js App Router pages + layouts
-  (child)/              # /play route group — CHILD role
-  (teacher)/            # /teacher route group — TEACHER role
-  (parent)/             # /parent route group — PARENT role
-  login/                # Shared login page
-components/
-  auth/                 # AuthGuard, RoleGuard, LoginForm
-  providers/            # AudioProvider
-  shared/               # ErrorBoundary, LoadingScreen, PageHeader
-  ui/                   # Base UI components (Button, Card, etc.)
-lib/
-  services/             # AuthService, ProgressService, StorageService
-  supabase/             # Browser/server/middleware Supabase clients
-  env.ts                # Environment variable validation
-  prisma.ts             # Prisma singleton
-  utils.ts              # Shared utilities
-prisma/
-  schema.prisma         # Database schema
-  seed.ts               # Development seed data
-tests/
-  unit/                 # Vitest unit tests
-  e2e/                  # Playwright E2E tests
-  setup.ts              # Vitest global setup
-types/
-  index.ts              # Shared TypeScript types
+```text
+INQUIS
+├── app/
+├── components/
+├── lib/
+├── prisma/
+├── public/
+├── .kiro/
+├── package.json
+└── README.md
 ```
 
 ---
 
-## Specification Documents
+## Local Development
 
-Implementation specs live in `.kiro/specs/`:
+Clone the repository.
 
-- `foundation/` — App architecture, auth, routing, database
-- `dashboard/` — Child world map and progress display
-- `teacher-panel/` — Classroom management and analytics
-- `world-1-pattern-explorer/` through `world-4-little-scientist/` — Learning worlds
+```bash
+git clone <repository-url>
+```
 
-Steering documents (non-negotiable constraints) live in `.kiro/steering/`.
+Install dependencies.
+
+```bash
+npm install
+```
+
+Configure environment variables.
+
+```bash
+cp .env.example .env.local
+```
+
+Run Prisma.
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+Start the development server.
+
+```bash
+npm run dev
+```
 
 ---
 
-## Architecture Reference
+## Environment Variables
 
-See `.kiro/specs/foundation/architecture.md` for the full architectural blueprint.
+Example:
 
-Key principles: server-first, separation of concerns, type safety, feature-oriented organization.
+```env
+DATABASE_URL=
+DIRECT_URL=
+
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+---
+
+## Demo
+
+The application includes demonstration accounts for evaluation purposes.
+
+Demo users allow reviewers to experience the platform without creating new accounts.
+
+---
+
+## Educational Principles
+
+INQUIS is designed around several educational principles:
+
+- Inquiry Learning
+- Scientific Thinking
+- Mathematical Inquiry
+- Active Learning
+- Play-Based Learning
+- Digital Literacy
+- Child-Centered Learning
+
+---
+
+## Development Status
+
+Current status:
+
+- Foundation completed
+- Authentication completed
+- Dashboard completed
+- Learning worlds implemented
+- Parent dashboard implemented
+- Teacher dashboard implemented
+- Responsive layout completed
+- Production deployment completed
+
+---
+
+## Roadmap
+
+Future improvements may include:
+
+- Adaptive learning
+- AI-assisted learning recommendations
+- Classroom management enhancements
+- Additional learning worlds
+- Gamification improvements
+- Offline support
+
+---
+
+## Contributing
+
+This repository is currently maintained as part of the LIDM 2026 project.
+
+Contributions, discussions, and educational feedback are welcome.
+
+---
+
+## License
+
+This project is intended for educational and research purposes.
+
+Please refer to the project license for usage details.
+
+---
+
+## Authors
+
+Developed by the **INQUIS Team** for **Lomba Inovasi Digital Mahasiswa (LIDM) 2026**.
+
+---
+
+## Acknowledgements
+
+Special thanks to:
+
+- Direktorat Pembelajaran dan Kemahasiswaan
+- Lomba Inovasi Digital Mahasiswa (LIDM)
+- Next.js
+- Supabase
+- Prisma
+- Vercel
+
+---
+
+<p align="center">
+
+Made with ❤️ to inspire young scientists through inquiry-based learning.
+
+</p>

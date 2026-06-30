@@ -304,7 +304,7 @@ export default async function WorldPage({ params }: PageProps) {
               <Link
                 key={activity.activityId}
                 href={`/play/activity/${activity.activityId}`}
-                aria-label={`${statusLabel} — ${activity.activityName}`}
+                aria-label={`${statusLabel}: ${activity.activityName}`}
               >
                 {card}
               </Link>

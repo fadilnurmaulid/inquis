@@ -28,7 +28,7 @@ export function ProgressJourney({ worlds, totalCompletedActivities }: ProgressJo
   const totalActivities = worlds.reduce((sum, w) => sum + w.totalActivities, 0);
 
   const SUMMARY_MESSAGES = [
-    "Petualanganmu baru dimulai — ayo jelajahi Dunia 1! 🚀",
+    "Petualanganmu baru dimulai, ayo jelajahi Dunia 1! 🚀",
     "Hebat! Kamu menyelesaikan Dunia 1. Lanjutkan ke Dunia 2! 💪",
     "Luar biasa! Sudah separuh perjalanan! ⭐",
     "Hampir sampai! Satu dunia lagi! 🌟",

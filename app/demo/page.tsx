@@ -10,15 +10,15 @@ import { DemoLoginSection } from "@/components/auth/demo-login-section";
 import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Mode Demo — INQUIS",
-  description: "Coba INQUIS langsung tanpa mendaftar — untuk juri LIDM 2026",
+  title: "Mode Demo",
+  description: "Coba INQUIS langsung tanpa mendaftar, untuk juri LIDM 2026",
 };
 
 const DEMO_FLOW = [
-  { step: 1, role: "Anak — Bima (Pemula)", desc: "Dunia 1 Aktivitas 1 → selesaikan siklus inkuiri lengkap" },
-  { step: 2, role: "Anak — Rara (Lanjutan)", desc: "Lihat peta dunia dengan kemajuan dan pencapaian nyata" },
-  { step: 3, role: "Guru — Bu Sari", desc: "Dashboard kelas dengan analitik berpikir ilmiah per siswa" },
-  { step: 4, role: "Orang Tua — Pak Budi", desc: "Ringkasan kemajuan Rara dengan narasi yang mudah dipahami" },
+  { step: 1, role: "Anak · Bima (Pemula)", desc: "Dunia 1 Aktivitas 1 → selesaikan siklus inkuiri lengkap" },
+  { step: 2, role: "Anak · Rara (Lanjutan)", desc: "Lihat peta dunia dengan kemajuan dan pencapaian nyata" },
+  { step: 3, role: "Guru · Bu Sari", desc: "Dashboard kelas dengan analitik berpikir ilmiah per siswa" },
+  { step: 4, role: "Orang Tua · Pak Budi", desc: "Ringkasan kemajuan Rara dengan narasi yang mudah dipahami" },
 ];
 
 export default function DemoPage() {
@@ -32,7 +32,7 @@ export default function DemoPage() {
           </div>
           <h1 className="font-display text-3xl font-bold text-gray-900">Mode Demo INQUIS</h1>
           <p className="mt-2 text-gray-500">
-            Klik untuk langsung masuk — tidak perlu mendaftar
+            Klik untuk langsung masuk, tidak perlu mendaftar
           </p>
         </div>
 

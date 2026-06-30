@@ -56,7 +56,7 @@ export function DemoLoginSection({ compact = false }: DemoLoginSectionProps) {
       <div className="flex items-center gap-2">
         <Sparkles className="h-4 w-4 text-primary" aria-hidden />
         <h3 className="font-display text-sm font-bold text-gray-800">
-          Mode Demo — LIDM 2026
+          Mode Demo · LIDM 2026
         </h3>
       </div>
 

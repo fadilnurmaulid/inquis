@@ -9,7 +9,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Metode Inkuiri — INQUIS",
+  title: "Metode Inkuiri",
   description:
     "Bagaimana INQUIS mengembangkan berpikir ilmiah anak usia 5–7 tahun melalui inkuiri matematika",
 };
@@ -30,9 +30,9 @@ const WORLDS_OVERVIEW = [
 ];
 
 const KURIKULUM_MAPPING = [
-  { dimensi: "Bernalar Kritis", icon: "🧠", mapping: "Siklus inkuiri 5 langkah di setiap aktivitas — anak didorong menyimpulkan sendiri" },
+  { dimensi: "Bernalar Kritis", icon: "🧠", mapping: "Siklus inkuiri 5 langkah di setiap aktivitas, anak didorong menyimpulkan sendiri" },
   { dimensi: "Mandiri",         icon: "💪", mapping: "Scaffolding progresif: petunjuk diberikan hanya saat diminta, anak mengendalikan proses" },
-  { dimensi: "Kreatif",         icon: "✨", mapping: "Fase eksplorasi bebas sebelum tantangan formal — mendorong kreativitas solusi" },
+  { dimensi: "Kreatif",         icon: "✨", mapping: "Fase eksplorasi bebas sebelum tantangan formal, mendorong kreativitas solusi" },
   { dimensi: "Gotong Royong",   icon: "🤝", mapping: "Dirancang untuk mendukung pembelajaran kolaboratif dalam konteks kelas" },
 ];
 
@@ -63,7 +63,7 @@ export default function AboutPage() {
             Inkuiri Ilmiah untuk Anak Usia 5–7 Tahun
           </h1>
           <p className="mt-4 text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            INQUIS bukan worksheet digital — platform ini merancang{" "}
+            INQUIS bukan worksheet digital, platform ini merancang{" "}
             <strong className="text-gray-800">siklus berpikir ilmiah</strong>{" "}
             melalui eksplorasi interaktif yang menyenangkan dan terstruktur.
           </p>
@@ -76,7 +76,7 @@ export default function AboutPage() {
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Pendidikan anak usia dini di Indonesia masih dominan{" "}
-            <em>rote learning</em> — hafalan tanpa pemahaman konseptual.
+            <em>rote learning</em>, hafalan tanpa pemahaman konseptual.
             Penelitian menunjukkan anak usia 5–7 tahun justru berada di
             <strong className="text-gray-800"> periode emas</strong> untuk
             mengembangkan kemampuan observasi, prediksi, dan penalaran
@@ -153,7 +153,7 @@ export default function AboutPage() {
             📚 Keselarasan Kurikulum Merdeka
           </h2>
           <p className="text-sm text-muted-foreground mb-5">
-            Profil Pelajar Pancasila — dimensi yang paling relevan dengan INQUIS:
+            Profil Pelajar Pancasila, dimensi yang paling relevan dengan INQUIS:
           </p>
           <div className="space-y-3">
             {KURIKULUM_MAPPING.map((item) => (
@@ -177,7 +177,7 @@ export default function AboutPage() {
           <p className="text-muted-foreground leading-relaxed max-w-lg mx-auto mb-5">
             Integrasi metodologi pembelajaran inkuiri dengan aktivitas matematika dan sains
             untuk anak usia 5–7 tahun dalam lingkungan digital interaktif yang secara eksplisit
-            mem-<em>scaffold</em> pengembangan keterampilan berpikir ilmiah — dilengkapi{" "}
+            mem-<em>scaffold</em> pengembangan keterampilan berpikir ilmiah, dilengkapi{" "}
             <strong className="text-gray-800">Independence Index</strong> yang mengukur
             kemandirian berpikir setiap anak secara individual.
           </p>

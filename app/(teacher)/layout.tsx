@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: {
-    default: "INQUIS — Panel Guru",
+    default: "INQUIS · Panel Guru",
     template: "%s | Panel Guru",
   },
 };

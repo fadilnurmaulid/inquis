@@ -113,7 +113,7 @@ export default async function TeacherDashboardPage() {
             {skillAverages && (
               <SkillProgress
                 averages={skillAverages}
-                title={`Keterampilan Inkuiri — ${primaryClassroom?.name}`}
+                title={`Keterampilan Inkuiri · ${primaryClassroom?.name}`}
               />
             )}
 
@@ -124,7 +124,7 @@ export default async function TeacherDashboardPage() {
             >
               <div className="mb-1">
                 <h3 className="font-display font-bold text-gray-800">
-                  Siswa — {primaryClassroom?.name}
+                  Siswa · {primaryClassroom?.name}
                 </h3>
                 <p className="text-xs text-muted-foreground">
                   Kode kelas:{" "}

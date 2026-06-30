@@ -42,7 +42,7 @@ export function ContinueCard({
               Semua Dunia Selesai! 🏆
             </p>
             <p className="text-sm text-white/90">
-              Kamu telah menjelajahi semua dunia belajar — luar biasa!
+              Kamu telah menjelajahi semua dunia belajar, luar biasa!
             </p>
           </div>
         </div>

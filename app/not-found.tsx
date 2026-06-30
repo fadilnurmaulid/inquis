@@ -5,7 +5,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Halaman Tidak Ditemukan — INQUIS" };
+export const metadata: Metadata = { title: "Halaman Tidak Ditemukan" };
 
 export default function NotFound() {
   return (
@@ -20,7 +20,7 @@ export default function NotFound() {
           Ups! Halaman Tidak Ditemukan
         </h1>
         <p className="mx-auto max-w-sm text-gray-500 leading-relaxed">
-          Halaman ini seperti pola yang hilang — tidak ada di sini!
+          Halaman ini seperti pola yang hilang, tidak ada di sini!
           Yuk kembali ke petualangan belajarmu.
         </p>
       </div>

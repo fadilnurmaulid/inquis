@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: {
-    default: "INQUIS — Portal Orang Tua",
+    default: "INQUIS · Portal Orang Tua",
     template: "%s | Portal Orang Tua",
   },
 };

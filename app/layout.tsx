@@ -27,16 +27,16 @@ const fredoka = Fredoka({
 // ── Metadata ───────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
   title: {
-    default: "INQUIS — Belajar Sains dengan Bermain",
+    default: "INQUIS · Belajar Sains dengan Bermain",
     template: "%s | INQUIS",
   },
   description:
     "Platform pembelajaran inkuiri berbasis sains untuk anak usia 5–7 tahun. " +
     "Kembangkan kemampuan berpikir ilmiah melalui eksplorasi yang menyenangkan.",
   keywords: ["INQUIS", "sains anak", "inkuiri", "LIDM 2026", "pembelajaran digital"],
-  authors: [{ name: "INQUIS Team — LIDM 2026" }],
+  authors: [{ name: "INQUIS Team · LIDM 2026" }],
   openGraph: {
-    title: "INQUIS — Belajar Sains dengan Bermain",
+    title: "INQUIS · Belajar Sains dengan Bermain",
     description:
       "Platform pembelajaran inkuiri berbasis sains untuk anak usia 5–7 tahun.",
     type: "website",

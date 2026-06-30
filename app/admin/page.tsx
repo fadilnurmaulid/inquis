@@ -39,8 +39,8 @@ export default async function AdminDashboardPage() {
           </p>
         </div>
         <ul className="text-left text-sm text-muted-foreground">
-          <li>📊 /admin/analytics — Analitik platform</li>
-          <li>📝 /admin/content — Manajemen konten</li>
+          <li>📊 /admin/analytics: Analitik platform</li>
+          <li>📝 /admin/content: Manajemen konten</li>
         </ul>
         <Button asChild variant="outline">
           <Link href="/">← Kembali ke Beranda</Link>

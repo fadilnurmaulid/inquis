@@ -44,7 +44,7 @@ export default function PlayError({ error, reset }: PlayErrorProps) {
             Ups, Ada Masalah!
           </h2>
           <p className="text-gray-500">
-            Peta dunia tidak bisa dimuat. Coba lagi ya — kamu pasti bisa! 💪
+            Peta dunia tidak bisa dimuat. Coba lagi ya, kamu pasti bisa! 💪
           </p>
         </motion.div>
 

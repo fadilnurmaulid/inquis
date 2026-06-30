@@ -92,7 +92,7 @@ export function WorldCard({ world, onClick, isRecommended }: WorldCardProps) {
           ? "linear-gradient(135deg, #e5e7eb, #d1d5db)"
           : `linear-gradient(135deg, ${world.themeColor}ee, ${world.themeColor}88)`,
       }}
-      aria-label={`${world.titleBahasa} — ${config.label}`}
+      aria-label={`${world.titleBahasa}: ${config.label}`}
       aria-disabled={isLocked}
     >
       {/* Recommended pulse ring */}

@@ -31,8 +31,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
           Ups, Ada yang Salah!
         </h1>
         <p className="text-gray-500 leading-relaxed">
-          Terjadi kesalahan yang tidak terduga. Tim kami sudah diberitahu.
-          Coba lagi atau kembali ke beranda.
+          Terjadi kesalahan yang tidak terduga. Coba lagi atau kembali ke beranda.
         </p>
         {process.env.NODE_ENV === "development" && (
           <p className="mt-2 rounded-xl bg-red-50 px-4 py-2 font-mono text-xs text-red-600 text-left">

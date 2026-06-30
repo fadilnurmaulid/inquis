@@ -122,7 +122,7 @@ export default async function ChildProfilePage() {
                 : progressPercent < 50
                 ? "Kamu sedang berkembang dengan bagus! 💪"
                 : progressPercent < 100
-                ? "Hampir selesai — teruskan! 🌟"
+                ? "Hampir selesai, teruskan! 🌟"
                 : "Semua selesai! Kamu luar biasa! 🏆"}
             </p>
           </section>
