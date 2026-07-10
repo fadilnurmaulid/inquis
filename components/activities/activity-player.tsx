@@ -414,7 +414,10 @@ export function ActivityPlayer({
                       🔍 Hmm, coba amati lagi ya!
                     </p>
                     <p className="text-sm text-amber-600">
-                      Kamu boleh mencoba lagi, ilmuwan selalu mencoba berkali-kali!
+                      {definition.hints[0]}
+                    </p>
+                    <p className="mt-1 text-xs text-amber-500">
+                      Ilmuwan selalu mencoba berkali-kali, kamu pasti bisa!
                     </p>
                   </div>
                   <Button
