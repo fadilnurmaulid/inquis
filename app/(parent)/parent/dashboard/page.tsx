@@ -28,18 +28,18 @@ function skillNarrative(independenceAvg: number, completedActivities: number) {
   const pct = Math.round(independenceAvg * 100);
   const skills = [];
   if (completedActivities >= 1)
-    skills.push({ icon: "👀", skill: "Mengamati", desc: "Menemukan pola & perbedaan antar benda.", level: "Berkembang" });
+    skills.push({ icon: "👀", skill: "Mengamati", desc: "Menemukan pola & perbedaan pada daun, bunga, dan alam sekitar.", level: "Berkembang" });
   if (completedActivities >= 3)
-    skills.push({ icon: "🔍", skill: "Membedakan", desc: "Mengenali benda yang berbeda dalam kelompok.", level: "Berkembang" });
+    skills.push({ icon: "🔍", skill: "Membedakan", desc: "Mengenali sampah organik, anorganik, dan makhluk hidup di sekitarnya.", level: "Berkembang" });
   if (pct >= 70)
     skills.push({ icon: "💪", skill: "Kemandirian", desc: `Menyelesaikan ${pct}% aktivitas tanpa petunjuk, tanda kepercayaan diri tinggi!`, level: "Sangat Baik" });
   return skills;
 }
 
 const INDEPENDENCE_TIPS: Record<string, string> = {
-  high:    "Tanyakan: \"Pola apa yang kamu temukan hari ini?\" Ini memperkuat kemampuan observasi.",
-  medium:  "Coba ajak anak bercerita tentang aktivitasnya. Dorong ia menjelaskan pikirannya sendiri.",
-  low:     "Temani anak saat belajar dan tunjukkan ketertarikan pada apa yang ia temukan.",
+  high:    "Ajak anak mengamati tanaman di sekitar rumah, lalu tanyakan pola apa yang ia temukan hari ini.",
+  medium:  "Coba praktikkan pemilahan sampah bersama, lalu minta anak menjelaskan alasannya sendiri.",
+  low:     "Temani anak saat belajar dan tanyakan mengapa tanaman butuh sinar matahari dan air.",
 };
 
 export default async function ParentDashboardPage() {

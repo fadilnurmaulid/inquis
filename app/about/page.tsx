@@ -11,22 +11,22 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "Metode Inkuiri",
   description:
-    "Bagaimana INQUIS mengembangkan berpikir ilmiah anak usia 5–7 tahun melalui inkuiri matematika",
+    "Bagaimana INQUIS mengembangkan berpikir ilmiah dan kepedulian lingkungan pada anak usia 5–7 tahun melalui inkuiri sains",
 };
 
 const INQUIRY_CYCLE = [
-  { emoji: "👀", skill: "Amati",       step: 1, desc: "Mengamati pola, perbedaan, dan kemiripan di lingkungan sekitar", world: "Dunia 1–2" },
-  { emoji: "❓", skill: "Tanya",       step: 2, desc: "Merumuskan pertanyaan sains dari hasil pengamatan sendiri",       world: "Dunia 1–2" },
-  { emoji: "🔮", skill: "Prediksi",    step: 3, desc: "Menebak apa yang akan terjadi berdasarkan bukti yang ada",        world: "Dunia 3"   },
+  { emoji: "👀", skill: "Amati",       step: 1, desc: "Mengamati pola, perbedaan, dan kemiripan pada alam sekitar", world: "Dunia 1–2" },
+  { emoji: "❓", skill: "Tanya",       step: 2, desc: "Merumuskan pertanyaan tentang lingkungan dari hasil pengamatan sendiri", world: "Dunia 1–2" },
+  { emoji: "🔮", skill: "Prediksi",    step: 3, desc: "Menebak apa yang akan terjadi pada tanaman, hewan, atau lingkungan berdasarkan bukti", world: "Dunia 3"   },
   { emoji: "🔬", skill: "Jelajahi",    step: 4, desc: "Menguji prediksi melalui interaksi langsung dengan objek belajar",world: "Dunia 2–4" },
-  { emoji: "💡", skill: "Simpulkan",   step: 5, desc: "Menarik kesimpulan ilmiah berdasarkan bukti nyata",               world: "Dunia 4"   },
+  { emoji: "💡", skill: "Simpulkan",   step: 5, desc: "Menarik kesimpulan ilmiah dan langkah nyata untuk menjaga alam", world: "Dunia 4"   },
 ];
 
 const WORLDS_OVERVIEW = [
-  { emoji: "🦋", name: "Penjelajah Pola",    desc: "Observasi & pengenalan pola matematika dasar", color: "#60B8FF" },
-  { emoji: "🐢", name: "Penjelajah Urutan",  desc: "Klasifikasi & pengurutan berdasarkan atribut",  color: "#4ECB71" },
-  { emoji: "🔮", name: "Penjelajah Prediksi",desc: "Hipotesis & prediksi berbasis bukti",            color: "#FFD166" },
-  { emoji: "🧪", name: "Ilmuwan Kecil",      desc: "Integrasi seluruh siklus inkuiri ilmiah",       color: "#9B8EFF" },
+  { emoji: "🦋", name: "Penjelajah Pola Alam",         desc: "Observasi & pengenalan pola pada daun, bunga, dan alam", color: "#60B8FF" },
+  { emoji: "🐢", name: "Penjelajah Pemilahan",         desc: "Klasifikasi sampah, makhluk hidup, dan habitat hewan",   color: "#4ECB71" },
+  { emoji: "🔮", name: "Penjelajah Prediksi Alam",     desc: "Hipotesis & prediksi berbasis sebab-akibat di alam",     color: "#FFD166" },
+  { emoji: "🧪", name: "Ilmuwan Cilik Peduli Bumi",    desc: "Integrasi seluruh siklus inkuiri untuk menjaga lingkungan", color: "#9B8EFF" },
 ];
 
 const KURIKULUM_MAPPING = [
@@ -34,6 +34,7 @@ const KURIKULUM_MAPPING = [
   { dimensi: "Mandiri",         icon: "💪", mapping: "Scaffolding progresif: petunjuk diberikan hanya saat diminta, anak mengendalikan proses" },
   { dimensi: "Kreatif",         icon: "✨", mapping: "Fase eksplorasi bebas sebelum tantangan formal, mendorong kreativitas solusi" },
   { dimensi: "Gotong Royong",   icon: "🤝", mapping: "Dirancang untuk mendukung pembelajaran kolaboratif dalam konteks kelas" },
+  { dimensi: "Peduli Lingkungan", icon: "🌱", mapping: "Konten aktivitas dan kartu refleksi menanamkan kebiasaan menjaga alam sejak dini" },
 ];
 
 const INNOVATION_TECH = [
@@ -60,12 +61,13 @@ export default function AboutPage() {
             Metode Pembelajaran · LIDM 2026
           </p>
           <h1 className="font-display text-4xl font-bold text-gray-900 leading-tight">
-            Inkuiri Ilmiah untuk Anak Usia 5–7 Tahun
+            Inkuiri Ilmiah untuk Anak Peduli Lingkungan
           </h1>
           <p className="mt-4 text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto">
             INQUIS bukan worksheet digital, platform ini merancang{" "}
             <strong className="text-gray-800">siklus berpikir ilmiah</strong>{" "}
-            melalui eksplorasi interaktif yang menyenangkan dan terstruktur.
+            melalui eksplorasi alam yang menyenangkan dan terstruktur, sekaligus menumbuhkan
+            kepedulian anak terhadap lingkungan sejak dini.
           </p>
         </div>
 
@@ -76,12 +78,14 @@ export default function AboutPage() {
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Pendidikan anak usia dini di Indonesia masih dominan{" "}
-            <em>rote learning</em>, hafalan tanpa pemahaman konseptual.
-            Penelitian menunjukkan anak usia 5–7 tahun justru berada di
-            <strong className="text-gray-800"> periode emas</strong> untuk
-            mengembangkan kemampuan observasi, prediksi, dan penalaran
-            ilmiah dasar (Piaget, 1952; Kurikulum Merdeka, 2022). INQUIS
-            hadir sebagai solusi digital yang mengisi kesenjangan ini.
+            <em>rote learning</em>, hafalan tanpa pemahaman konseptual, dan kepedulian
+            lingkungan jarang ditanamkan sejak usia dini. Penelitian menunjukkan anak usia
+            5–7 tahun berada pada{" "}
+            <strong className="text-gray-800">periode emas</strong> untuk mengembangkan
+            kemampuan observasi, prediksi, dan penalaran ilmiah dasar (Piaget, 1952;
+            Kurikulum Merdeka, 2022). INQUIS hadir sebagai solusi digital yang mengisi
+            kesenjangan ini, sekaligus menanamkan kesadaran lingkungan melalui konteks
+            belajar sehari-hari.
           </p>
         </section>
 
@@ -175,9 +179,11 @@ export default function AboutPage() {
             Inovasi INQUIS
           </h2>
           <p className="text-muted-foreground leading-relaxed max-w-lg mx-auto mb-5">
-            Integrasi metodologi pembelajaran inkuiri dengan aktivitas matematika dan sains
-            untuk anak usia 5–7 tahun dalam lingkungan digital interaktif yang secara eksplisit
-            mem-<em>scaffold</em> pengembangan keterampilan berpikir ilmiah, dilengkapi{" "}
+            Integrasi metodologi pembelajaran inkuiri dengan aktivitas sains dan
+            matematika bertema lingkungan untuk anak usia 5–7 tahun, dalam
+            pengalaman digital interaktif yang secara eksplisit mem-<em>scaffold</em>{" "}
+            pengembangan keterampilan berpikir ilmiah sekaligus kepedulian terhadap
+            alam, dilengkapi{" "}
             <strong className="text-gray-800">Independence Index</strong> yang mengukur
             kemandirian berpikir setiap anak secara individual.
           </p>

@@ -275,17 +275,7 @@ export function ActivityPlayer({
                       aria-label={`${explored ? "Sudah dijelajahi: " : "Jelajahi: "}${item.label || item.emoji}`}
                       aria-pressed={explored}
                     >
-                      <span
-                        className={
-                          item.visualScale === "lg"
-                            ? "text-6xl"
-                            : item.visualScale === "sm"
-                              ? "text-2xl"
-                              : "text-4xl"
-                        }
-                      >
-                        {item.emoji}
-                      </span>
+                      <span className="text-4xl">{item.emoji}</span>
                       {item.label && (
                         <span className="text-xs font-semibold text-gray-600">
                           {item.label}
@@ -367,17 +357,7 @@ export function ActivityPlayer({
                       aria-label={option.label ?? option.emoji}
                       aria-pressed={isSelected}
                     >
-                      <span
-                        className={
-                          option.visualScale === "lg"
-                            ? "text-6xl"
-                            : option.visualScale === "sm"
-                              ? "text-2xl"
-                              : "text-4xl"
-                        }
-                      >
-                        {option.emoji}
-                      </span>
+                      <span className="text-4xl">{option.emoji}</span>
                       {option.label && (
                         <span className="text-xs font-semibold text-gray-600">
                           {option.label}
@@ -434,10 +414,7 @@ export function ActivityPlayer({
                       🔍 Hmm, coba amati lagi ya!
                     </p>
                     <p className="text-sm text-amber-600">
-                      {definition.hints[0]}
-                    </p>
-                    <p className="mt-1 text-xs text-amber-500">
-                      Ilmuwan selalu mencoba berkali-kali, kamu pasti bisa!
+                      Kamu boleh mencoba lagi, ilmuwan selalu mencoba berkali-kali!
                     </p>
                   </div>
                   <Button
@@ -546,6 +523,15 @@ export function ActivityPlayer({
                     ? "Kamu menyelesaikan semua aktivitas! Dunia berikutnya sudah terbuka! 🚀"
                     : "Kerja bagus! Kamu sedang berkembang menjadi ilmuwan kecil! 🔬"}
                 </p>
+
+                {definition.ecoReflection && (
+                  <div className="mx-auto mt-3 max-w-xs rounded-2xl bg-emerald-50 px-4 py-3 text-left">
+                    <p className="text-xs font-bold text-emerald-700">🌱 Tahukah Kamu?</p>
+                    <p className="mt-1 text-sm leading-relaxed text-emerald-800">
+                      {definition.ecoReflection}
+                    </p>
+                  </div>
+                )}
 
                 {/* Stars */}
                 <div className="flex justify-center gap-1 pt-2">

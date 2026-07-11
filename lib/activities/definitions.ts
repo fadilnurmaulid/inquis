@@ -12,7 +12,8 @@ function w1(
   challengePrompt: string,
   options: ActivityDefinition["options"],
   correctId: string,
-  hints: [string, string, string]
+  hints: [string, string, string],
+  ecoReflection: string
 ): ActivityDefinition {
   return {
     activityId: `activity-1-${n}`,
@@ -29,7 +30,6 @@ function w1(
       emoji: o.emoji,
       label: o.label ?? "",
       color: o.color,
-      visualScale: o.visualScale,
     })),
     challengeType: n === 2 || n === 5 ? "sequence" : "pick-one",
     challengePrompt,
@@ -43,76 +43,82 @@ function w1(
       { id: "r3", emoji: "🔍", label: "Bentuknya mirip" },
     ],
     primarySkill: "observe",
+    ecoReflection,
   };
 }
 
 const WORLD_1: ActivityDefinition[] = [
   w1(
     1,
-    "Temukan Warna",
-    "Amati benda-benda ini dengan teliti!",
-    "Ketuk benda yang berwarna BIRU!",
+    "Temukan Daun Kembar",
+    "Amati daun-daun ini. Mana yang sama?",
+    "Ketuk daun yang SAMA dengan yang di tengah!",
     [
-      { id: "a", emoji: "🔴", label: "Merah" },
-      { id: "b", emoji: "🟡", label: "Kuning" },
-      { id: "c", emoji: "🟢", label: "Hijau" },
-      { id: "d", emoji: "🔵", label: "Biru", isCorrect: true },
+      { id: "a", emoji: "🍁", label: "Daun Maple" },
+      { id: "b", emoji: "🍃", label: "Daun Hijau", isCorrect: true },
+      { id: "c", emoji: "🍂", label: "Daun Kering" },
+      { id: "d", emoji: "🍃", label: "Daun Hijau", isCorrect: true },
     ],
     "d",
-    ["Lihat warna setiap benda!", "Cari yang berwarna biru 💙", "Ketuk lingkaran biru!"]
+    ["Lihat bentuk daunnya dengan teliti!", "Yang sama adalah daun hijau 🍃", "Ketuk daun hijau di kanan!"],
+    "Setiap daun punya bentuk yang khas, itu membantu tumbuhan mengenali jenisnya sendiri."
   ),
   w1(
     2,
-    "Lanjutkan Pola",
-    "Amati urutan warna ini!",
-    "Warna apa yang selanjutnya?",
+    "Lanjutkan Pola Bunga",
+    "Amati urutan bunga ini!",
+    "Bunga apa yang selanjutnya?",
     [
-      { id: "a", emoji: "🔴", label: "Merah" },
-      { id: "b", emoji: "🔵", label: "Biru", isCorrect: true },
-      { id: "c", emoji: "🟡", label: "Kuning" },
+      { id: "a", emoji: "🌸", label: "Bunga Sakura" },
+      { id: "b", emoji: "🌻", label: "Bunga Matahari", isCorrect: true },
+      { id: "c", emoji: "🌷", label: "Tulip" },
     ],
     "b",
-    ["Pola: merah, biru, merah, biru...", "Setelah merah selalu biru!", "Pilih biru 🔵"]
+    ["Pola: sakura, matahari, sakura, matahari...", "Setelah sakura selalu bunga matahari!", "Pilih bunga matahari 🌻"],
+    "Bunga tumbuh dengan pola yang teratur agar bisa menarik lebah dan kupu-kupu untuk membantu penyerbukan."
   ),
   w1(
     3,
-    "Cari yang Berbeda",
-    "Satu benda berbeda dari yang lain!",
-    "Ketuk benda yang BERBEDA!",
+    "Cari Jejak yang Berbeda",
+    "Satu jejak kaki berbeda dari yang lain!",
+    "Ketuk jejak yang BERBEDA!",
     [
-      { id: "a", emoji: "⭐", label: "Bintang" },
-      { id: "b", emoji: "⭐", label: "Bintang" },
-      { id: "c", emoji: "🌙", label: "Bulan", isCorrect: true },
-      { id: "d", emoji: "⭐", label: "Bintang" },
+      { id: "a", emoji: "🐾", label: "Jejak Hewan" },
+      { id: "b", emoji: "🐾", label: "Jejak Hewan" },
+      { id: "c", emoji: "🦶", label: "Jejak Manusia", isCorrect: true },
+      { id: "d", emoji: "🐾", label: "Jejak Hewan" },
     ],
     "c",
-    ["Hitung benda yang sama...", "Tiga bintang, satu bulan!", "Ketuk bulan 🌙"]
+    ["Hitung jejak yang sama...", "Tiga jejak hewan, satu jejak manusia!", "Ketuk jejak manusia 🦶"],
+    "Mengamati jejak kaki membantu kita mengenali hewan apa saja yang tinggal di sekitar kita."
   ),
   w1(
     4,
-    "Pola Warna",
-    "Warna-warna ini membentuk pola!",
+    "Pola Warna Alam",
+    "Warna-warna daun ini membentuk pola!",
     "Warna apa yang melengkapi pola?",
     [
       { id: "a", emoji: "🟢", label: "Hijau", isCorrect: true },
-      { id: "b", emoji: "🔴", label: "Merah" },
+      { id: "b", emoji: "🟤", label: "Cokelat" },
       { id: "c", emoji: "🟣", label: "Ungu" },
     ],
     "a",
-    ["Pola: hijau, kuning, hijau, kuning...", "Setelah kuning selalu hijau!", "Pilih hijau 🟢"]
+    ["Pola: hijau, kuning, hijau, kuning...", "Setelah kuning selalu hijau!", "Pilih hijau 🟢"],
+    "Daun berwarna hijau karena mengandung klorofil, zat yang membantu tumbuhan membuat makanannya dari sinar matahari."
   ),
   w1(
     5,
-    "Pola Bentuk",
-    "Bentuk-bentuk ini punya urutan!",
-    "Bentuk apa selanjutnya?",
+    "Pola Pertumbuhan",
+    "Tahap tumbuhnya tanaman punya urutan!",
+    "Tahap apa selanjutnya?",
     [
-      { id: "a", emoji: "🔺", label: "Segitiga", isCorrect: true },
-      { id: "b", emoji: "🟦", label: "Kotak" },
-      { id: "c", emoji: "⭕", label: "Lingkaran" },
+      { id: "a", emoji: "🌳", label: "Pohon Besar", isCorrect: true },
+      { id: "b", emoji: "🌰", label: "Biji" },
+      { id: "c", emoji: "🌱", label: "Tunas" },
     ],
     "a",
-    ["Pola: segitiga, kotak, segitiga, kotak...", "Setelah kotak selalu segitiga!", "Pilih segitiga 🔺"]
+    ["Pola: biji, tunas, pohon besar...", "Setelah tunas selalu tumbuh menjadi pohon besar!", "Pilih pohon besar 🌳"],
+    "Tumbuhan tumbuh melalui tahapan yang teratur, dari biji, tunas, hingga menjadi pohon besar yang kuat."
   ),
 ];
 
@@ -122,7 +128,8 @@ function w2(
   instruction: string,
   challengePrompt: string,
   options: ActivityDefinition["options"],
-  correctId: string
+  correctId: string,
+  ecoReflection: string
 ): ActivityDefinition {
   return {
     activityId: `activity-2-${n}`,
@@ -134,53 +141,89 @@ function w2(
     companionIntro: `Hai! Aku Sori 🐢 Ayo urutkan ${title.toLowerCase()}!`,
     companionEncourage: "Hebat! Kamu pandai mengelompokkan!",
     explorePrompt: "Ketuk dan amati benda-benda ini!",
-    exploreItems: options.map((o) => ({
-      id: o.id,
-      emoji: o.emoji,
-      label: o.label ?? "",
-      visualScale: o.visualScale,
-    })),
+    exploreItems: options.map((o) => ({ id: o.id, emoji: o.emoji, label: o.label ?? "" })),
     challengeType: "pick-one",
     challengePrompt,
     options,
     correctOptionId: correctId,
     hints: ["Amati ukuran dan bentuknya!", "Kelompokkan yang mirip!", "Pilih jawaban yang tepat!"],
-    reflectionQuestion: "Bagaimana kamu mengurutkannya?",
+    reflectionQuestion: "Bagaimana kamu mengelompokkannya?",
     reflectionOptions: [
       { id: "r1", emoji: "📏", label: "Menurut ukuran" },
       { id: "r2", emoji: "🎨", label: "Menurut warna" },
       { id: "r3", emoji: "🔷", label: "Menurut bentuk" },
     ],
     primarySkill: "observe",
+    ecoReflection,
   };
 }
 
 const WORLD_2: ActivityDefinition[] = [
-  w2(1, "Urutkan Ukuran", "Amati ukuran benda!", "Mana yang PALING KECIL?", [
-    { id: "a", emoji: "🐘", label: "Gajah", visualScale: "lg" },
-    { id: "b", emoji: "🐁", label: "Tikus", isCorrect: true, visualScale: "sm" },
-    { id: "c", emoji: "🐕", label: "Anjing", visualScale: "md" },
-  ], "b"),
-  w2(2, "Kelompokkan Warna", "Benda-benda punya warna berbeda!", "Mana yang warna MERAH?", [
-    { id: "a", emoji: "🍎", label: "Apel", isCorrect: true },
-    { id: "b", emoji: "🍌", label: "Pisang" },
-    { id: "c", emoji: "🫐", label: "Bluberi" },
-  ], "a"),
-  w2(3, "Kelompokkan Bentuk", "Amati bentuknya!", "Mana yang bulat?", [
-    { id: "a", emoji: "⚽", label: "Bola", isCorrect: true },
-    { id: "b", emoji: "📦", label: "Kotak" },
-    { id: "c", emoji: "📐", label: "Segitiga" },
-  ], "a"),
-  w2(4, "Urutkan Tinggi", "Mana yang paling tinggi?", "Ketuk yang PALING TINGGI!", [
-    { id: "a", emoji: "🌱", label: "Tunas", visualScale: "sm" },
-    { id: "b", emoji: "🌳", label: "Pohon", isCorrect: true, visualScale: "lg" },
-    { id: "c", emoji: "🌿", label: "Semak", visualScale: "md" },
-  ], "b"),
-  w2(5, "Klasifikasi Akhir", "Kelompokkan hewan darat!", "Mana hewan yang hidup di DARAT?", [
-    { id: "a", emoji: "🐟", label: "Ikan" },
-    { id: "b", emoji: "🦁", label: "Singa", isCorrect: true },
-    { id: "c", emoji: "🐬", label: "Lumba" },
-  ], "b"),
+  w2(
+    1,
+    "Pilah Sampah Organik",
+    "Amati jenis sampah ini!",
+    "Mana yang termasuk sampah ORGANIK?",
+    [
+      { id: "a", emoji: "🍌", label: "Kulit Pisang", isCorrect: true },
+      { id: "b", emoji: "🥤", label: "Botol Plastik" },
+      { id: "c", emoji: "🥫", label: "Kaleng" },
+    ],
+    "a",
+    "Sampah organik seperti kulit buah bisa terurai secara alami dan diolah menjadi pupuk kompos."
+  ),
+  w2(
+    2,
+    "Kelompokkan Sampah Daur Ulang",
+    "Benda-benda ini bisa didaur ulang atau tidak!",
+    "Mana yang bisa DIDAUR ULANG?",
+    [
+      { id: "a", emoji: "📦", label: "Kardus", isCorrect: true },
+      { id: "b", emoji: "🍎", label: "Sisa Buah" },
+      { id: "c", emoji: "🍂", label: "Daun Kering" },
+    ],
+    "a",
+    "Kardus dan kertas termasuk sampah yang bisa didaur ulang menjadi barang baru, sehingga mengurangi sampah menumpuk."
+  ),
+  w2(
+    3,
+    "Makhluk Hidup dan Tak Hidup",
+    "Amati mana yang hidup!",
+    "Mana yang termasuk MAKHLUK HIDUP?",
+    [
+      { id: "a", emoji: "🐦", label: "Burung", isCorrect: true },
+      { id: "b", emoji: "🪨", label: "Batu" },
+      { id: "c", emoji: "🧱", label: "Bata" },
+    ],
+    "a",
+    "Makhluk hidup seperti burung bisa bernapas, bergerak, dan tumbuh, berbeda dengan benda mati seperti batu."
+  ),
+  w2(
+    4,
+    "Urutkan Tinggi Pohon",
+    "Mana yang paling tinggi?", 
+    "Ketuk pohon yang PALING TINGGI!",
+    [
+      { id: "a", emoji: "🌱", label: "Tunas" },
+      { id: "b", emoji: "🌳", label: "Pohon Dewasa", isCorrect: true },
+      { id: "c", emoji: "🌿", label: "Semak" },
+    ],
+    "b",
+    "Pohon dewasa yang tinggi memberi banyak oksigen dan tempat berteduh bagi hewan serta manusia."
+  ),
+  w2(
+    5,
+    "Hewan Hutan atau Laut",
+    "Kelompokkan hewan berdasarkan habitatnya!",
+    "Mana hewan yang hidup di HUTAN?",
+    [
+      { id: "a", emoji: "🐬", label: "Lumba-lumba" },
+      { id: "b", emoji: "🦁", label: "Singa", isCorrect: true },
+      { id: "c", emoji: "🐠", label: "Ikan" },
+    ],
+    "b",
+    "Setiap hewan punya habitat masing-masing. Menjaga hutan dan laut tetap bersih membantu hewan tetap punya tempat tinggal."
+  ),
 ];
 
 function w3(
@@ -188,7 +231,8 @@ function w3(
   title: string,
   challengePrompt: string,
   options: ActivityDefinition["options"],
-  correctId: string
+  correctId: string,
+  ecoReflection: string
 ): ActivityDefinition {
   return {
     activityId: `activity-3-${n}`,
@@ -213,35 +257,71 @@ function w3(
       { id: "r3", emoji: "🤔", label: "Tebak yang masuk akal" },
     ],
     primarySkill: "predict",
+    ecoReflection,
   };
 }
 
 const WORLD_3: ActivityDefinition[] = [
-  w3(1, "Prediksi Warna", "Pola warnanya: Hijau, Merah, Hijau, Merah, lalu...?", [
-    { id: "a", emoji: "🔴", label: "Merah" },
-    { id: "b", emoji: "🟢", label: "Hijau", isCorrect: true },
-    { id: "c", emoji: "⚫", label: "Hitam" },
-  ], "b"),
-  w3(2, "Prediksi Cuaca", "Awan gelap, apa selanjutnya?", [
-    { id: "a", emoji: "☀️", label: "Cerah" },
-    { id: "b", emoji: "🌧️", label: "Hujan", isCorrect: true },
-    { id: "c", emoji: "❄️", label: "Salju" },
-  ], "b"),
-  w3(3, "Prediksi Tanaman", "Bibit disiram, apa yang terjadi?", [
-    { id: "a", emoji: "🌱", label: "Tumbuh", isCorrect: true },
-    { id: "b", emoji: "🍂", label: "Layu" },
-    { id: "c", emoji: "🪨", label: "Jadi batu" },
-  ], "a"),
-  w3(4, "Prediksi Pola", "2, 4, 6, ...?", [
-    { id: "a", emoji: "7️⃣", label: "7" },
-    { id: "b", emoji: "8️⃣", label: "8", isCorrect: true },
-    { id: "c", emoji: "9️⃣", label: "9" },
-  ], "b"),
-  w3(5, "Prediksi Akhir", "Bola digulung, kemana?", [
-    { id: "a", emoji: "⬆️", label: "Naik" },
-    { id: "b", emoji: "➡️", label: "Maju", isCorrect: true },
-    { id: "c", emoji: "🔄", label: "Melayang" },
-  ], "b"),
+  w3(
+    1,
+    "Prediksi Tanaman Disiram",
+    "Tanaman disiram air setiap hari, apa yang terjadi?",
+    [
+      { id: "a", emoji: "🌱", label: "Tumbuh Subur", isCorrect: true },
+      { id: "b", emoji: "🍂", label: "Layu" },
+      { id: "c", emoji: "🪨", label: "Jadi Batu" },
+    ],
+    "a",
+    "Plants need sunlight and water to grow. Tanaman butuh air dan sinar matahari agar tumbuh subur."
+  ),
+  w3(
+    2,
+    "Prediksi Tanaman Tidak Disiram",
+    "Tanaman tidak disiram selama berhari-hari, apa yang terjadi?",
+    [
+      { id: "a", emoji: "🌸", label: "Berbunga Lebat" },
+      { id: "b", emoji: "🥀", label: "Layu", isCorrect: true },
+      { id: "c", emoji: "🌳", label: "Makin Tinggi" },
+    ],
+    "b",
+    "Tanaman yang tidak disiram akan layu karena kekurangan air, sama seperti kita yang butuh minum setiap hari."
+  ),
+  w3(
+    3,
+    "Prediksi Sampah di Sungai",
+    "Sampah dibuang ke sungai, apa yang terjadi pada ikan?",
+    [
+      { id: "a", emoji: "🐟", label: "Ikan Sehat" },
+      { id: "b", emoji: "🤢", label: "Ikan Terganggu", isCorrect: true },
+      { id: "c", emoji: "🎉", label: "Ikan Senang" },
+    ],
+    "b",
+    "Throwing trash into rivers can harm living things. Membuang sampah ke sungai dapat mengganggu kehidupan ikan dan hewan air lainnya."
+  ),
+  w3(
+    4,
+    "Prediksi Cuaca dan Awan",
+    "Awan menjadi gelap, apa yang akan terjadi?",
+    [
+      { id: "a", emoji: "☀️", label: "Cerah Terus" },
+      { id: "b", emoji: "🌧️", label: "Hujan", isCorrect: true },
+      { id: "c", emoji: "❄️", label: "Salju" },
+    ],
+    "b",
+    "Awan gelap biasanya membawa hujan yang menyuburkan tanah dan membantu tanaman tumbuh."
+  ),
+  w3(
+    5,
+    "Prediksi Rumah Hewan",
+    "Hutan tempat tinggal hewan ditebang, apa yang terjadi pada hewan?",
+    [
+      { id: "a", emoji: "🏠", label: "Kehilangan Rumah", isCorrect: true },
+      { id: "b", emoji: "🎈", label: "Tetap Nyaman" },
+      { id: "c", emoji: "🎮", label: "Tidak Berpengaruh" },
+    ],
+    "a",
+    "Taking care of nature starts with small daily habits. Menjaga hutan tetap lestari membantu hewan mempunyai tempat tinggal yang aman."
+  ),
 ];
 
 function w4(
@@ -249,7 +329,8 @@ function w4(
   title: string,
   challengePrompt: string,
   options: ActivityDefinition["options"],
-  correctId: string
+  correctId: string,
+  ecoReflection: string
 ): ActivityDefinition {
   return {
     activityId: `activity-4-${n}`,
@@ -259,7 +340,7 @@ function w4(
     title,
     instruction: "Gunakan semua keterampilan ilmiahmu!",
     companionIntro: `Hai! Aku Sains 🧪 ${title}!`,
-    companionEncourage: "Kamu sudah seperti ilmuwan sejati!",
+    companionEncourage: "Kamu sudah seperti ilmuwan sejati yang peduli bumi!",
     explorePrompt: "Jelajahi dulu sebelum menyimpulkan!",
     exploreItems: options.map((o) => ({ id: o.id, emoji: o.emoji, label: o.label ?? "" })),
     challengeType: "conclude",
@@ -271,38 +352,74 @@ function w4(
     reflectionOptions: [
       { id: "r1", emoji: "🔬", label: "Cara mengamati" },
       { id: "r2", emoji: "💡", label: "Cara berpikir" },
-      { id: "r3", emoji: "🌟", label: "Sains itu seru!" },
+      { id: "r3", emoji: "🌟", label: "Menjaga alam itu seru!" },
     ],
     primarySkill: "conclude",
+    ecoReflection,
   };
 }
 
 const WORLD_4: ActivityDefinition[] = [
-  w4(1, "Eksperimen Air", "Air dingin + matahari = ?", [
-    { id: "a", emoji: "🧊", label: "Tetap beku" },
-    { id: "b", emoji: "💧", label: "Mencair", isCorrect: true },
-    { id: "c", emoji: "🔥", label: "Membakar" },
-  ], "b"),
-  w4(2, "Kesimpulan Bayangan", "Matahari di belakang, bayangan?", [
-    { id: "a", emoji: "🌑", label: "Di depan", isCorrect: true },
-    { id: "b", emoji: "✨", label: "Hilang" },
-    { id: "c", emoji: "🌈", label: "Berwarna" },
-  ], "a"),
-  w4(3, "Kesimpulan Tanaman", "Tanaman butuh apa?", [
-    { id: "a", emoji: "🍬", label: "Permen" },
-    { id: "b", emoji: "☀️💧", label: "Matahari & air", isCorrect: true },
-    { id: "c", emoji: "📺", label: "TV" },
-  ], "b"),
-  w4(4, "Kesimpulan Magnet", "Magnet menarik?", [
-    { id: "a", emoji: "🧲", label: "Logam", isCorrect: true },
-    { id: "b", emoji: "🪵", label: "Kayu" },
-    { id: "c", emoji: "🧸", label: "Boneka" },
-  ], "a"),
-  w4(5, "Ilmuwan Kecil", "Apa langkah pertama sains?", [
-    { id: "a", emoji: "👀", label: "Mengamati", isCorrect: true },
-    { id: "b", emoji: "😴", label: "Tidur" },
-    { id: "c", emoji: "🎮", label: "Main game" },
-  ], "a"),
+  w4(
+    1,
+    "Di Mana Bunga Sebaiknya Ditanam?",
+    "Bunga butuh sinar matahari, sebaiknya ditanam di mana?",
+    [
+      { id: "a", emoji: "🌞", label: "Tempat Terang", isCorrect: true },
+      { id: "b", emoji: "🌑", label: "Tempat Gelap" },
+      { id: "c", emoji: "🧊", label: "Dalam Kulkas" },
+    ],
+    "a",
+    "Bunga tumbuh paling baik di tempat yang terkena cukup sinar matahari."
+  ),
+  w4(
+    2,
+    "Mengapa Satu Tanaman Lebih Sehat?",
+    "Satu tanaman disiram rutin, satu lagi tidak. Mana yang lebih sehat?",
+    [
+      { id: "a", emoji: "🌿", label: "Yang Rutin Disiram", isCorrect: true },
+      { id: "b", emoji: "🥀", label: "Yang Tidak Disiram" },
+      { id: "c", emoji: "🍬", label: "Sama Saja" },
+    ],
+    "a",
+    "Tanaman yang disiram secara rutin tumbuh lebih sehat karena air membantu tanaman mengangkut makanannya."
+  ),
+  w4(
+    3,
+    "Bagaimana Cara Mengurangi Sampah?",
+    "Apa yang bisa kita lakukan untuk mengurangi sampah?",
+    [
+      { id: "a", emoji: "♻️", label: "Memilah & Daur Ulang", isCorrect: true },
+      { id: "b", emoji: "🗑️", label: "Membuang Sembarangan" },
+      { id: "c", emoji: "🔥", label: "Membakar Semua" },
+    ],
+    "a",
+    "We can help Earth by sorting our waste. Memilah dan mendaur ulang sampah membantu mengurangi sampah yang menumpuk."
+  ),
+  w4(
+    4,
+    "Bagaimana Hewan Mencari Makan?",
+    "Hewan mencari makanan menggunakan apa?",
+    [
+      { id: "a", emoji: "👃", label: "Indra Penciuman & Penglihatan", isCorrect: true },
+      { id: "b", emoji: "📺", label: "Menonton TV" },
+      { id: "c", emoji: "📱", label: "Bermain Gawai" },
+    ],
+    "a",
+    "Hewan menggunakan indra seperti penciuman dan penglihatan untuk menemukan makanan di alam."
+  ),
+  w4(
+    5,
+    "Ilmuwan Cilik Peduli Bumi",
+    "Apa langkah pertama untuk menjaga alam?",
+    [
+      { id: "a", emoji: "👀", label: "Mengamati Lingkungan", isCorrect: true },
+      { id: "b", emoji: "😴", label: "Tidur" },
+      { id: "c", emoji: "🎮", label: "Main Game" },
+    ],
+    "a",
+    "Taking care of nature starts with small daily habits. Menjaga alam dimulai dari kebiasaan kecil sehari-hari, seperti mengamati lingkungan di sekitar kita."
+  ),
 ];
 
 export const ALL_ACTIVITIES: Record<string, ActivityDefinition> = Object.fromEntries(

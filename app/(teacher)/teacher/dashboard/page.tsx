@@ -173,7 +173,7 @@ export default async function TeacherDashboardPage() {
           >
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-display font-bold text-gray-800">
-                📊 Perkembangan Berpikir Ilmiah
+                📊 Berpikir Ilmiah &amp; Kepedulian Lingkungan
               </h3>
               <span className="text-xs text-muted-foreground">
                 5 keterampilan inkuiri · 4 dunia belajar

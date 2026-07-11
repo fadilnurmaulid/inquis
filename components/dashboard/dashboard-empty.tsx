@@ -11,10 +11,10 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 const ENCOURAGEMENTS = [
-  { emoji: "👀", text: "Amati pola-pola seru" },
-  { emoji: "🔮", text: "Buat prediksi ilmiah" },
-  { emoji: "🔬", text: "Jelajahi seperti ilmuwan" },
-  { emoji: "💡", text: "Temukan kesimpulanmu" },
+  { emoji: "🍃", text: "Amati pola alam yang seru" },
+  { emoji: "🔮", text: "Prediksi apa yang terjadi pada tanaman" },
+  { emoji: "♻️", text: "Jelajahi cara menjaga bumi" },
+  { emoji: "💡", text: "Temukan kesimpulanmu sendiri" },
 ];
 
 export function DashboardEmpty() {
@@ -43,7 +43,7 @@ export function DashboardEmpty() {
         </h2>
         <p className="text-gray-500 leading-relaxed">
           Ayo mulai dari Dunia 1 dan kembangkan{" "}
-          <span className="font-semibold text-gray-700">berpikir ilmiahmu</span>{" "}
+          <span className="font-semibold text-gray-700">berpikir ilmiah serta kepedulianmu pada alam</span>{" "}
           bersama teman-teman baru!
         </p>
       </div>

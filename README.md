@@ -4,7 +4,7 @@
 
 <p align="center">
 
-A modern inquiry-based digital learning platform designed to cultivate **Scientific Thinking** in children aged **5–7 years** through interactive mathematical exploration, playful learning, and evidence-based pedagogy.
+A modern inquiry-based digital learning platform designed to cultivate **Scientific Thinking** and **Environmental Awareness** in children aged **5–7 years** through interactive exploration of nature, playful learning, and evidence-based pedagogy.
 
 Built for **Lomba Inovasi Digital Mahasiswa (LIDM) 2026**.
 
@@ -14,7 +14,7 @@ Built for **Lomba Inovasi Digital Mahasiswa (LIDM) 2026**.
 
 ## Overview
 
-INQUIS is an educational web application that introduces children to the fundamentals of scientific thinking using an Inquiry Learning approach.
+INQUIS is an educational web application that introduces children to the fundamentals of scientific thinking and environmental care using an Inquiry Learning approach.
 
 Instead of emphasizing memorization, INQUIS encourages children to:
 
@@ -41,7 +41,7 @@ INQUIS aims to help children develop:
 - Prediction Skills
 - Problem Solving
 - Curiosity
-- Digital Literacy
+- Environmental Awareness
 
 ---
 
@@ -258,7 +258,7 @@ INQUIS is designed around several educational principles:
 - Mathematical Inquiry
 - Active Learning
 - Play-Based Learning
-- Digital Literacy
+- Environmental Awareness
 - Child-Centered Learning
 
 ---

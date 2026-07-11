@@ -8,9 +8,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "INQUIS · Belajar Sains dengan Bermain",
+  title: "INQUIS · Belajar Sains & Peduli Lingkungan",
   description:
-    "Platform pembelajaran inkuiri berbasis sains untuk anak usia 5–7 tahun. Kembangkan kemampuan berpikir ilmiah melalui eksplorasi yang menyenangkan.",
+    "Platform pembelajaran inkuiri berbasis sains untuk anak usia 5–7 tahun. Kembangkan kemampuan berpikir ilmiah dan kepedulian pada lingkungan melalui eksplorasi yang menyenangkan.",
 };
 
 const STATS = [
@@ -37,12 +37,13 @@ export default function LandingPage() {
         </div>
         <div>
           <h1 className="font-display text-5xl font-bold text-gray-900 tracking-tight">INQUIS</h1>
-          <p className="mt-1 text-xl font-bold text-inquis-ocean">Belajar Sains dengan Bermain</p>
+          <p className="mt-1 text-xl font-bold text-inquis-ocean">Belajar Sains, Peduli Bumi</p>
         </div>
         <p className="mx-auto max-w-lg text-base leading-relaxed text-gray-600">
           Platform pembelajaran inkuiri untuk anak usia{" "}
           <strong className="text-gray-800">5–7 tahun</strong>. Kembangkan kemampuan
-          berpikir ilmiah melalui eksplorasi yang menyenangkan dan terstruktur.
+          berpikir ilmiah dan kepedulian terhadap lingkungan melalui eksplorasi yang
+          menyenangkan dan terstruktur.
         </p>
       </div>
 
