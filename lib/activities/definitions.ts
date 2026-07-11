@@ -29,6 +29,7 @@ function w1(
       emoji: o.emoji,
       label: o.label ?? "",
       color: o.color,
+      visualScale: o.visualScale,
     })),
     challengeType: n === 2 || n === 5 ? "sequence" : "pick-one",
     challengePrompt,
@@ -48,17 +49,17 @@ function w1(
 const WORLD_1: ActivityDefinition[] = [
   w1(
     1,
-    "Temukan Pasangan",
-    "Amati benda-benda ini. Mana yang sama?",
-    "Ketuk benda yang SAMA dengan yang di tengah!",
+    "Temukan Warna",
+    "Amati benda-benda ini dengan teliti!",
+    "Ketuk benda yang berwarna BIRU!",
     [
       { id: "a", emoji: "🔴", label: "Merah" },
-      { id: "b", emoji: "🔵", label: "Biru", isCorrect: true },
+      { id: "b", emoji: "🟡", label: "Kuning" },
       { id: "c", emoji: "🟢", label: "Hijau" },
       { id: "d", emoji: "🔵", label: "Biru", isCorrect: true },
     ],
     "d",
-    ["Lihat warnanya dengan teliti!", "Yang sama warna biru 💙", "Ketuk lingkaran biru di kanan!"]
+    ["Lihat warna setiap benda!", "Cari yang berwarna biru 💙", "Ketuk lingkaran biru!"]
   ),
   w1(
     2,
@@ -133,7 +134,12 @@ function w2(
     companionIntro: `Hai! Aku Sori 🐢 Ayo urutkan ${title.toLowerCase()}!`,
     companionEncourage: "Hebat! Kamu pandai mengelompokkan!",
     explorePrompt: "Ketuk dan amati benda-benda ini!",
-    exploreItems: options.map((o) => ({ id: o.id, emoji: o.emoji, label: o.label ?? "" })),
+    exploreItems: options.map((o) => ({
+      id: o.id,
+      emoji: o.emoji,
+      label: o.label ?? "",
+      visualScale: o.visualScale,
+    })),
     challengeType: "pick-one",
     challengePrompt,
     options,
@@ -151,9 +157,9 @@ function w2(
 
 const WORLD_2: ActivityDefinition[] = [
   w2(1, "Urutkan Ukuran", "Amati ukuran benda!", "Mana yang PALING KECIL?", [
-    { id: "a", emoji: "🐘", label: "Besar" },
-    { id: "b", emoji: "🐁", label: "Kecil", isCorrect: true },
-    { id: "c", emoji: "🐕", label: "Sedang" },
+    { id: "a", emoji: "🐘", label: "Gajah", visualScale: "lg" },
+    { id: "b", emoji: "🐁", label: "Tikus", isCorrect: true, visualScale: "sm" },
+    { id: "c", emoji: "🐕", label: "Anjing", visualScale: "md" },
   ], "b"),
   w2(2, "Kelompokkan Warna", "Benda-benda punya warna berbeda!", "Mana yang warna MERAH?", [
     { id: "a", emoji: "🍎", label: "Apel", isCorrect: true },
@@ -166,9 +172,9 @@ const WORLD_2: ActivityDefinition[] = [
     { id: "c", emoji: "📐", label: "Segitiga" },
   ], "a"),
   w2(4, "Urutkan Tinggi", "Mana yang paling tinggi?", "Ketuk yang PALING TINGGI!", [
-    { id: "a", emoji: "🌱", label: "Pendek" },
-    { id: "b", emoji: "🌳", label: "Tinggi", isCorrect: true },
-    { id: "c", emoji: "🌿", label: "Sedang" },
+    { id: "a", emoji: "🌱", label: "Tunas", visualScale: "sm" },
+    { id: "b", emoji: "🌳", label: "Pohon", isCorrect: true, visualScale: "lg" },
+    { id: "c", emoji: "🌿", label: "Semak", visualScale: "md" },
   ], "b"),
   w2(5, "Klasifikasi Akhir", "Kelompokkan hewan darat!", "Mana hewan yang hidup di DARAT?", [
     { id: "a", emoji: "🐟", label: "Ikan" },
@@ -211,11 +217,11 @@ function w3(
 }
 
 const WORLD_3: ActivityDefinition[] = [
-  w3(1, "Prediksi Warna", "Warna apa setelah 🟡?", [
-    { id: "a", emoji: "🔴", label: "Merah", isCorrect: true },
-    { id: "b", emoji: "🟢", label: "Hijau" },
+  w3(1, "Prediksi Warna", "Pola warnanya: Hijau, Merah, Hijau, Merah, lalu...?", [
+    { id: "a", emoji: "🔴", label: "Merah" },
+    { id: "b", emoji: "🟢", label: "Hijau", isCorrect: true },
     { id: "c", emoji: "⚫", label: "Hitam" },
-  ], "a"),
+  ], "b"),
   w3(2, "Prediksi Cuaca", "Awan gelap, apa selanjutnya?", [
     { id: "a", emoji: "☀️", label: "Cerah" },
     { id: "b", emoji: "🌧️", label: "Hujan", isCorrect: true },

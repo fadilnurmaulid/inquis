@@ -275,7 +275,17 @@ export function ActivityPlayer({
                       aria-label={`${explored ? "Sudah dijelajahi: " : "Jelajahi: "}${item.label || item.emoji}`}
                       aria-pressed={explored}
                     >
-                      <span className="text-4xl">{item.emoji}</span>
+                      <span
+                        className={
+                          item.visualScale === "lg"
+                            ? "text-6xl"
+                            : item.visualScale === "sm"
+                              ? "text-2xl"
+                              : "text-4xl"
+                        }
+                      >
+                        {item.emoji}
+                      </span>
                       {item.label && (
                         <span className="text-xs font-semibold text-gray-600">
                           {item.label}
@@ -357,7 +367,17 @@ export function ActivityPlayer({
                       aria-label={option.label ?? option.emoji}
                       aria-pressed={isSelected}
                     >
-                      <span className="text-4xl">{option.emoji}</span>
+                      <span
+                        className={
+                          option.visualScale === "lg"
+                            ? "text-6xl"
+                            : option.visualScale === "sm"
+                              ? "text-2xl"
+                              : "text-4xl"
+                        }
+                      >
+                        {option.emoji}
+                      </span>
                       {option.label && (
                         <span className="text-xs font-semibold text-gray-600">
                           {option.label}

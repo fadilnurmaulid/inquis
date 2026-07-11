@@ -19,6 +19,8 @@ export interface ExploreItem {
   emoji: string;
   label: string;
   color?: string;
+  /** Optional relative visual size, for activities comparing size/height */
+  visualScale?: "sm" | "md" | "lg";
 }
 
 export interface ChallengeOption {
@@ -27,6 +29,8 @@ export interface ChallengeOption {
   label?: string;
   color?: string;
   isCorrect?: boolean;
+  /** Optional relative visual size, for activities comparing size/height */
+  visualScale?: "sm" | "md" | "lg";
 }
 
 export interface ActivityDefinition {
