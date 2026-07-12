@@ -18,6 +18,15 @@ const COMPANION_EMOJI: Record<string, string> = {
   "world-4": "🧪",
 };
 
+// Short, distinct labels for the compact journey nodes (avoids collapsing to
+// the same word when titles share a common first word, e.g. "Penjelajah").
+const SHORT_LABEL: Record<string, string> = {
+  "world-1": "Pola",
+  "world-2": "Pilah",
+  "world-3": "Prediksi",
+  "world-4": "Ilmuwan",
+};
+
 interface ProgressJourneyProps {
   worlds: WorldProgressSummary[];
   totalCompletedActivities: number;
@@ -112,7 +121,7 @@ export function ProgressJourney({ worlds, totalCompletedActivities }: ProgressJo
                     isActive || isCompleted ? "text-gray-700" : "text-gray-400"
                   )}
                 >
-                  {world.titleBahasa.split(" ")[0]}
+                  {SHORT_LABEL[world.worldId] ?? world.titleBahasa.split(" ")[0]}
                 </span>
               </div>
 

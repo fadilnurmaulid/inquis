@@ -230,7 +230,7 @@ export function ActivityPlayer({
                 className="flex h-28 w-28 items-center justify-center rounded-3xl text-5xl shadow-2xl"
                 style={{ background: `linear-gradient(135deg, ${themeColor}dd, ${themeColor}88)` }}
               >
-                🔬
+                {companionEmoji ?? "🔬"}
               </motion.div>
               <div className="space-y-2">
                 <h1 className="font-display text-2xl font-bold text-gray-800">
@@ -384,14 +384,19 @@ export function ActivityPlayer({
               {/* Feedback: correct */}
               {phase === "feedback" && isCorrect && (
                 <div className="space-y-3">
-                  <div className="rounded-2xl bg-green-50 p-4 text-center">
+                  <motion.div
+                    initial={{ scale: 0.85, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 320, damping: 18 }}
+                    className="rounded-2xl bg-green-50 p-4 text-center"
+                  >
                     <p className="text-lg font-bold text-green-700">
                       🎉 Luar biasa! Kamu berhasil!
                     </p>
                     <p className="text-sm text-green-600">
                       Kamu menggunakan {hintsUsed === 0 ? "kemampuanmu sendiri" : `${hintsUsed} petunjuk`}
                     </p>
-                  </div>
+                  </motion.div>
                   <Button
                     variant="childPrimary"
                     size="lg"

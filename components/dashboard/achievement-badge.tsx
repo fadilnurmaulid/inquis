@@ -68,7 +68,6 @@ interface AchievementRowProps {
 
 export function AchievementRow({ achievements }: AchievementRowProps) {
   const earned = achievements.filter((a) => a.earned);
-  if (earned.length === 0) return null;
 
   return (
     <motion.section
@@ -86,12 +85,16 @@ export function AchievementRow({ achievements }: AchievementRowProps) {
           <AchievementBadge key={a.id} achievement={a} size="sm" />
         ))}
       </div>
-      {earned.length > 0 && (
-        <p className="mt-3 text-center text-xs text-gray-500">
-          {earned.length}/{achievements.length} pencapaian diraih ·{" "}
-          <span className="font-semibold text-primary">Terus semangat! 💪</span>
-        </p>
-      )}
+      <p className="mt-3 text-center text-xs text-gray-500">
+        {earned.length > 0 ? (
+          <>
+            {earned.length}/{achievements.length} pencapaian diraih ·{" "}
+            <span className="font-semibold text-primary">Terus semangat! 💪</span>
+          </>
+        ) : (
+          <>Selesaikan aktivitas pertamamu untuk meraih pencapaian pertama! 🌱</>
+        )}
+      </p>
     </motion.section>
   );
 }

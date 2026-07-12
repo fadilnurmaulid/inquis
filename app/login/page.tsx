@@ -30,7 +30,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           </div>
           <h1 className="font-display text-3xl font-bold text-gray-900">INQUIS</h1>
           <p className="mt-1 text-sm font-medium text-gray-500">
-            Belajar Sains dengan Bermain
+            Belajar Sains, Peduli Bumi
           </p>
         </div>
 

@@ -15,6 +15,7 @@ import { ChildNav } from "@/components/dashboard/child-nav";
 import { WorldIntro } from "@/components/world/world-intro";
 import { cn } from "@/lib/utils";
 import { ActivityStatus } from "@/lib/db-enums";
+import { getActivityDefinition } from "@/lib/activities/definitions";
 
 interface PageProps {
   params: Promise<{ worldId: string }>;
@@ -46,38 +47,6 @@ const COMPANION_EMOJI: Record<string, string> = {
   "world-2": "🐢",
   "world-3": "🔮",
   "world-4": "🧪",
-};
-
-// Activity title names per world
-const ACTIVITY_NAMES: Record<string, string[]> = {
-  "world-1": [
-    "Temukan Pasangan",
-    "Lanjutkan Pola",
-    "Cari yang Berbeda",
-    "Pola Warna",
-    "Pola Bentuk",
-  ],
-  "world-2": [
-    "Urutkan Ukuran",
-    "Kelompokkan Warna",
-    "Kelompokkan Bentuk",
-    "Urutkan Tinggi",
-    "Klasifikasi Akhir",
-  ],
-  "world-3": [
-    "Prediksi Warna",
-    "Prediksi Cuaca",
-    "Prediksi Tanaman",
-    "Prediksi Pola",
-    "Prediksi Akhir",
-  ],
-  "world-4": [
-    "Eksperimen Air",
-    "Kesimpulan Bayangan",
-    "Kesimpulan Tanaman",
-    "Kesimpulan Magnet",
-    "Ilmuwan Kecil",
-  ],
 };
 
 export default async function WorldPage({ params }: PageProps) {
@@ -129,7 +98,7 @@ export default async function WorldPage({ params }: PageProps) {
         inProgressNumber
       );
       const activityName =
-        ACTIVITY_NAMES[worldId]?.[i] ??
+        getActivityDefinition(activityId)?.title ??
         `Aktivitas ${activityNumber}`;
       return { activityNumber, activityId, status, activityName };
     }

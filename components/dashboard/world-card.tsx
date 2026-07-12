@@ -142,8 +142,8 @@ export function WorldCard({ world, onClick, isRecommended }: WorldCardProps) {
       </h3>
       <p
         className={cn(
-          "mt-0.5 text-sm",
-          isLocked ? "text-gray-400" : "text-white/80"
+          "mt-0.5 text-xs font-normal",
+          isLocked ? "text-gray-400/70" : "text-white/60"
         )}
       >
         {world.title}
