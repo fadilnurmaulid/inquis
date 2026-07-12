@@ -210,6 +210,19 @@ export default async function TeacherDashboardPage() {
                 );
               })}
             </div>
+
+            {/* Environmental character integration — maps each world to its concrete eco value */}
+            <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50/50 p-3">
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-emerald-700">
+                🌍 Nilai Lingkungan per Dunia
+              </p>
+              <div className="grid gap-1.5 text-xs text-emerald-800 sm:grid-cols-2">
+                <p><strong>Dunia 1</strong> · Mengenal & menghargai alam sekitar</p>
+                <p><strong>Dunia 2</strong> · Memilah sampah & merawat makhluk hidup</p>
+                <p><strong>Dunia 3</strong> · Dampak tindakan manusia pada alam</p>
+                <p><strong>Dunia 4</strong> · Kebiasaan nyata menjaga bumi</p>
+              </div>
+            </div>
           </section>
 
           {/* Multiple classrooms */}

@@ -47,7 +47,7 @@ export default async function ChildProfilePage() {
 
   return (
     <>
-      <main className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50/50 to-indigo-50 px-4 pb-28 pt-10">
+      <main className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50/50 to-indigo-50 px-4 pb-28 pt-10 lg:px-8">
         <div className="mx-auto max-w-lg space-y-5 lg:max-w-4xl">
           {/* Profile header */}
           <div className="flex flex-col items-center gap-4 text-center">

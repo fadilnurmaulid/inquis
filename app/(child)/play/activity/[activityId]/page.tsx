@@ -16,6 +16,7 @@ import { ActivityStatus } from "@/lib/db-enums";
 
 interface PageProps {
   params: Promise<{ activityId: string }>;
+  searchParams: Promise<{ replay?: string }>;
 }
 
 // World companion emojis
@@ -46,8 +47,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function ActivityPage({ params }: PageProps) {
+export default async function ActivityPage({ params, searchParams }: PageProps) {
   const { activityId } = await params;
+  const { replay } = await searchParams;
   const parsed = parseActivityId(activityId);
   if (!parsed) notFound();
 
@@ -94,7 +96,16 @@ export default async function ActivityPage({ params }: PageProps) {
 
   const alreadyCompleted = session?.status === ActivityStatus.COMPLETED;
 
-  if (!session) {
+  // Replay: child explicitly chose "Main Lagi" on an already-completed activity.
+  // Creates a fresh, non-first-attempt session via the existing replay-aware
+  // startActivity() — progression, scores, and achievements are untouched
+  // because every scoring/progression query already filters on
+  // isFirstAttempt: true (see progress.service.ts / activity-actions.ts).
+  const isReplay = replay === "1" && alreadyCompleted;
+
+  if (isReplay) {
+    session = await startActivity(child.id, activityId, worldId, worldNumber, activityNumber);
+  } else if (!session) {
     session = await startActivity(child.id, activityId, worldId, worldNumber, activityNumber);
   } else if (session.status === ActivityStatus.NOT_STARTED) {
     session = await prisma.activitySession.update({
@@ -115,7 +126,7 @@ export default async function ActivityPage({ params }: PageProps) {
           themeColor={world.themeColor}
           companionName={world.companionName}
           companionEmoji={companionEmoji}
-          alreadyCompleted={alreadyCompleted}
+          alreadyCompleted={alreadyCompleted && !isReplay}
         />
       </main>
       <ChildNav />

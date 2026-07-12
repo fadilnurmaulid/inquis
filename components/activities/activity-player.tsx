@@ -49,6 +49,15 @@ const PHASE_LABELS: Record<ActivityPhase, string> = {
   complete: "Selesai!",
 };
 
+// Success message per world, connects the correct-answer moment back to the
+// environmental character theme instead of generic praise.
+const SUCCESS_MESSAGE: Record<string, string> = {
+  "world-1": "🎉 Hebat! Kamu jago mengamati alam sekitar!",
+  "world-2": "🎉 Keren! Kamu tahu cara menjaga bumi lewat memilah!",
+  "world-3": "🎉 Tepat! Prediksimu membantu memahami alam!",
+  "world-4": "🎉 Luar biasa! Kamu berpikir dan bertindak seperti ilmuwan cilik yang peduli bumi!",
+};
+
 export function ActivityPlayer({
   definition,
   sessionId,
@@ -392,7 +401,7 @@ export function ActivityPlayer({
                     className="rounded-2xl bg-green-50 p-4 text-center"
                   >
                     <p className="text-lg font-bold text-green-700">
-                      🎉 Luar biasa! Kamu berhasil!
+                      {SUCCESS_MESSAGE[definition.worldId] ?? "🎉 Luar biasa! Kamu berhasil!"}
                     </p>
                     <p className="text-sm text-green-600">
                       Kamu menggunakan {hintsUsed === 0 ? "kemampuanmu sendiri" : `${hintsUsed} petunjuk`}
@@ -527,12 +536,16 @@ export function ActivityPlayer({
                 <h2 className="font-display text-2xl font-bold text-gray-800">
                   {worldCompleted
                     ? `${worldDef?.titleBahasa ?? "Dunia"} Selesai!`
+                    : alreadyCompleted
+                    ? "Aktivitas Ini Sudah Kamu Selesaikan"
                     : "Aktivitas Selesai!"}
                 </h2>
                 <p className="text-gray-500">
                   {worldCompleted
-                    ? "Kamu menyelesaikan semua aktivitas! Dunia berikutnya sudah terbuka! 🚀"
-                    : "Kerja bagus! Kamu sedang berkembang menjadi ilmuwan kecil! 🔬"}
+                    ? "Kamu menyelesaikan semua aktivitas dan belajar cara nyata menjaga bumi! Dunia berikutnya sudah terbuka 🚀"
+                    : alreadyCompleted
+                    ? "Mau mengingat lagi apa yang kamu pelajari? Kamu bisa main lagi kapan saja untuk berlatih 🌟"
+                    : "Kerja bagus! Setiap langkah kecilmu membantu menjaga alam tetap sehat 🌍"}
                 </p>
 
                 {definition.ecoReflection && (
@@ -560,9 +573,20 @@ export function ActivityPlayer({
               </div>
 
               <div className="flex w-full max-w-xs flex-col gap-3">
-                {definition.activityNumber < (worldDef?.activityCount ?? 5) ? (
+                {alreadyCompleted && (
                   <Button
                     variant="childPrimary"
+                    size="lg"
+                    onClick={() =>
+                      router.push(`/play/activity/${definition.activityId}?replay=1`)
+                    }
+                  >
+                    🔄 Main Lagi
+                  </Button>
+                )}
+                {definition.activityNumber < (worldDef?.activityCount ?? 5) ? (
+                  <Button
+                    variant={alreadyCompleted ? "outline" : "childPrimary"}
                     size="lg"
                     onClick={() =>
                       router.push(
@@ -574,7 +598,7 @@ export function ActivityPlayer({
                   </Button>
                 ) : (
                   <Button
-                    variant="childPrimary"
+                    variant={alreadyCompleted ? "outline" : "childPrimary"}
                     size="lg"
                     onClick={() =>
                       router.push(`/play/world/${definition.worldId}`)

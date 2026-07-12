@@ -39,7 +39,7 @@ export async function submitActivityCompletion(
   try {
     const session = await prisma.activitySession.findUnique({
       where: { id: input.sessionId },
-      select: { status: true, childId: true },
+      select: { status: true, childId: true, isFirstAttempt: true },
     });
 
     if (!session || session.childId !== input.childId) {
@@ -57,6 +57,22 @@ export async function submitActivityCompletion(
     }
 
     await completeReflection(input.sessionId, input.reflectionResponse);
+
+    // Replay attempts (isFirstAttempt: false) are for practice only. They mark
+    // their own session complete (for the completion-screen UI) but never
+    // create an Assessment row or touch world-completion counting, because
+    // teacher analytics (getClassroomSkillAverages, getTeacherImpactMetrics)
+    // aggregate the Assessment table without an isFirstAttempt filter — a
+    // scored replay would silently skew those averages. See
+    // lib/services/teacher-analytics.service.ts.
+    if (!session.isFirstAttempt) {
+      await prisma.activitySession.update({
+        where: { id: input.sessionId },
+        data: { status: ActivityStatus.COMPLETED, completedAt: new Date() },
+      });
+      revalidatePath(`/play/world/${input.worldId}`);
+      return { success: true, worldCompleted: false };
+    }
 
     // Score based on scaffold — higher independence = higher scores
     const base =
