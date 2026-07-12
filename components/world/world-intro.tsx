@@ -9,6 +9,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { EmojiAsset } from "@/components/shared/emoji-asset";
 
 interface WorldIntroProps {
   worldNumber: number;
@@ -55,7 +56,7 @@ export function WorldIntro({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -16, scale: 0.97 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="mx-4 mb-5 overflow-hidden rounded-3xl border-2 bg-white/90 shadow-md backdrop-blur-sm"
+        className="mx-4 mb-5 overflow-hidden rounded-3xl border-2 bg-white/90 shadow-md backdrop-blur-sm lg:mx-auto lg:max-w-3xl"
         style={{ borderColor: `${themeColor}55` }}
       >
         {/* Colored header strip */}
@@ -70,11 +71,11 @@ export function WorldIntro({
             <motion.div
               animate={{ y: [0, -4, 0] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-              className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl text-3xl shadow-md"
+              className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl shadow-md"
               style={{ background: themeColor }}
               aria-hidden
             >
-              {companionEmoji}
+              <EmojiAsset emoji={companionEmoji} textClassName="text-3xl" size={44} />
             </motion.div>
 
             <div>

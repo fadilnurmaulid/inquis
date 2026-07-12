@@ -68,7 +68,7 @@ export default async function ParentDashboardPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50/50 p-6 lg:p-10">
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-2xl lg:max-w-5xl">
         <PageHeader
           title={`Halo, ${parentName}! 👋`}
           description="Ringkasan kemajuan belajar anakmu"
@@ -93,7 +93,7 @@ export default async function ParentDashboardPage() {
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
             {childrenWithData.map((child) => {
               if (!child.dashboard) return null;
               const { dashboard: data } = child;

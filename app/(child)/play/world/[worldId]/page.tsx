@@ -13,6 +13,7 @@ import { WORLDS } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ChildNav } from "@/components/dashboard/child-nav";
 import { WorldIntro } from "@/components/world/world-intro";
+import { EmojiAsset } from "@/components/shared/emoji-asset";
 import { cn } from "@/lib/utils";
 import { ActivityStatus } from "@/lib/db-enums";
 import { getActivityDefinition } from "@/lib/activities/definitions";
@@ -115,20 +116,20 @@ export default async function WorldPage({ params }: PageProps) {
       <main className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50/40 to-white pb-24">
         {/* World header */}
         <header
-          className="px-4 pb-8 pt-10 text-center"
+          className="px-4 pb-8 pt-10 text-center lg:px-8"
           style={{
             background: `linear-gradient(180deg, ${world.themeColor}44 0%, transparent 100%)`,
           }}
         >
           {/* Companion illustration */}
           <div
-            className="mx-auto mb-3 flex h-24 w-24 items-center justify-center rounded-3xl text-4xl shadow-2xl"
+            className="mx-auto mb-3 flex h-24 w-24 items-center justify-center rounded-3xl shadow-2xl"
             style={{
               background: `linear-gradient(135deg, ${world.themeColor}ee, ${world.themeColor}88)`,
             }}
             aria-hidden
           >
-            {companionEmoji}
+            <EmojiAsset emoji={companionEmoji} textClassName="text-4xl" size={64} />
           </div>
 
           <h1 className="font-display text-2xl font-bold text-gray-800">
@@ -138,7 +139,7 @@ export default async function WorldPage({ params }: PageProps) {
           <p className="mt-1.5 text-sm font-semibold text-gray-600">
             Temanmu:{" "}
             <span style={{ color: world.themeColor }} className="font-bold">
-              {world.companionName} {companionEmoji}
+              {world.companionName} <EmojiAsset emoji={companionEmoji} textClassName="text-sm" size={16} className="inline-block align-[-2px]" />
             </span>
           </p>
 
@@ -177,7 +178,7 @@ export default async function WorldPage({ params }: PageProps) {
 
         {/* Activity list */}
         <section
-          className="mx-auto max-w-lg space-y-3 px-4"
+          className="mx-auto max-w-lg space-y-3 px-4 lg:max-w-3xl lg:px-8"
           aria-label="Daftar aktivitas"
         >
           <h2 className="font-display text-lg font-bold text-gray-800">
@@ -283,7 +284,7 @@ export default async function WorldPage({ params }: PageProps) {
 
         {/* World completion message */}
         {completedCount === world.activityCount && (
-          <div className="mx-auto mt-6 max-w-lg px-4">
+          <div className="mx-auto mt-6 max-w-lg px-4 lg:max-w-3xl lg:px-8">
             <div
               className="rounded-2xl p-5 text-center text-white shadow-lg"
               style={{
@@ -302,8 +303,8 @@ export default async function WorldPage({ params }: PageProps) {
         )}
 
         {/* Back button */}
-        <div className="mx-auto mt-6 max-w-lg px-4">
-          <Button asChild variant="outline" size="lg" className="w-full rounded-2xl">
+        <div className="mx-auto mt-6 max-w-lg px-4 lg:max-w-3xl lg:px-8">
+          <Button asChild variant="outline" size="lg" className="w-full rounded-2xl lg:mx-auto lg:block lg:max-w-xs">
             <Link href="/play/home">← Kembali ke Peta Dunia</Link>
           </Button>
         </div>

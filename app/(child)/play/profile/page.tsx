@@ -48,7 +48,7 @@ export default async function ChildProfilePage() {
   return (
     <>
       <main className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50/50 to-indigo-50 px-4 pb-28 pt-10">
-        <div className="mx-auto max-w-lg space-y-5">
+        <div className="mx-auto max-w-lg space-y-5 lg:max-w-4xl">
           {/* Profile header */}
           <div className="flex flex-col items-center gap-4 text-center">
             <div className="relative">
@@ -76,108 +76,116 @@ export default async function ChildProfilePage() {
             </div>
           </div>
 
-          {/* Stat cards */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-2xl bg-white/80 p-3 text-center shadow-sm">
-              <p className="font-display text-2xl font-bold text-primary">
-                {data.totalCompletedActivities}
-              </p>
-              <p className="text-[11px] font-semibold text-gray-500 leading-tight mt-0.5">
-                Aktivitas
-              </p>
+          <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
+            {/* Left column: stats + overall progress */}
+            <div className="space-y-5">
+              {/* Stat cards */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="rounded-2xl bg-white/80 p-3 text-center shadow-sm">
+                  <p className="font-display text-2xl font-bold text-primary">
+                    {data.totalCompletedActivities}
+                  </p>
+                  <p className="text-[11px] font-semibold text-gray-500 leading-tight mt-0.5">
+                    Aktivitas
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-white/80 p-3 text-center shadow-sm">
+                  <p className="font-display text-2xl font-bold text-inquis-grass">
+                    {data.completedWorlds}
+                  </p>
+                  <p className="text-[11px] font-semibold text-gray-500 leading-tight mt-0.5">
+                    Dunia Selesai
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-white/80 p-3 text-center shadow-sm">
+                  <p className="font-display text-2xl font-bold text-inquis-sun">
+                    {independencePct > 0 ? `${independencePct}%` : "—"}
+                  </p>
+                  <p className="text-[11px] font-semibold text-gray-500 leading-tight mt-0.5">
+                    Kemandirian
+                  </p>
+                </div>
+              </div>
+
+              {/* Overall progress */}
+              <section className="rounded-3xl bg-white/70 p-5 shadow-sm">
+                <h2 className="mb-3 font-display text-lg font-bold text-gray-800">
+                  Kemajuan Total
+                </h2>
+                <div className="mb-2 flex justify-between text-sm">
+                  <span className="text-gray-600">Aktivitas selesai</span>
+                  <span className="font-semibold text-primary">
+                    {data.totalCompletedActivities}/{totalActivities}
+                  </span>
+                </div>
+                <Progress value={progressPercent} className="h-3 rounded-full" />
+                <p className="mt-2 text-center text-xs text-gray-400">
+                  {progressPercent === 0
+                    ? "Mulai petualanganmu sekarang! 🚀"
+                    : progressPercent < 50
+                    ? "Kamu sedang berkembang dengan bagus! 💪"
+                    : progressPercent < 100
+                    ? "Hampir selesai, teruskan! 🌟"
+                    : "Semua selesai! Kamu luar biasa! 🏆"}
+                </p>
+              </section>
             </div>
-            <div className="rounded-2xl bg-white/80 p-3 text-center shadow-sm">
-              <p className="font-display text-2xl font-bold text-inquis-grass">
-                {data.completedWorlds}
-              </p>
-              <p className="text-[11px] font-semibold text-gray-500 leading-tight mt-0.5">
-                Dunia Selesai
-              </p>
-            </div>
-            <div className="rounded-2xl bg-white/80 p-3 text-center shadow-sm">
-              <p className="font-display text-2xl font-bold text-inquis-sun">
-                {independencePct > 0 ? `${independencePct}%` : "—"}
-              </p>
-              <p className="text-[11px] font-semibold text-gray-500 leading-tight mt-0.5">
-                Kemandirian
-              </p>
+
+            {/* Right column: per-world breakdown + achievements */}
+            <div className="mt-5 space-y-5 lg:mt-0">
+              {/* Per-world breakdown */}
+              <section className="rounded-3xl bg-white/70 p-5 shadow-sm">
+                <h2 className="mb-4 font-display text-lg font-bold text-gray-800">
+                  Per Dunia
+                </h2>
+                <ul className="space-y-4">
+                  {data.worlds.map((world) => {
+                    const pct =
+                      world.totalActivities > 0
+                        ? Math.round(
+                            (world.completedActivities / world.totalActivities) * 100
+                          )
+                        : 0;
+                    const isLocked = world.status === "LOCKED";
+                    const isComplete = world.status === "COMPLETED";
+
+                    return (
+                      <li key={world.worldId} className={isLocked ? "opacity-40" : ""}>
+                        <div className="mb-1.5 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-base" aria-hidden>
+                              {isComplete ? "✅" : isLocked ? "🔒" : "▶️"}
+                            </span>
+                            <span className="text-sm font-semibold text-gray-700">
+                              {world.titleBahasa}
+                            </span>
+                          </div>
+                          <span className="text-xs text-gray-500">
+                            {world.completedActivities}/{world.totalActivities}
+                          </span>
+                        </div>
+                        <div className="h-2.5 overflow-hidden rounded-full bg-gray-200">
+                          <div
+                            className="h-full rounded-full transition-all duration-700"
+                            style={{
+                              width: `${pct}%`,
+                              background: isLocked ? "#D1D5DB" : world.themeColor,
+                            }}
+                          />
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+
+              {/* Achievements */}
+              <AchievementRow achievements={achievements} />
             </div>
           </div>
 
-          {/* Overall progress */}
-          <section className="rounded-3xl bg-white/70 p-5 shadow-sm">
-            <h2 className="mb-3 font-display text-lg font-bold text-gray-800">
-              Kemajuan Total
-            </h2>
-            <div className="mb-2 flex justify-between text-sm">
-              <span className="text-gray-600">Aktivitas selesai</span>
-              <span className="font-semibold text-primary">
-                {data.totalCompletedActivities}/{totalActivities}
-              </span>
-            </div>
-            <Progress value={progressPercent} className="h-3 rounded-full" />
-            <p className="mt-2 text-center text-xs text-gray-400">
-              {progressPercent === 0
-                ? "Mulai petualanganmu sekarang! 🚀"
-                : progressPercent < 50
-                ? "Kamu sedang berkembang dengan bagus! 💪"
-                : progressPercent < 100
-                ? "Hampir selesai, teruskan! 🌟"
-                : "Semua selesai! Kamu luar biasa! 🏆"}
-            </p>
-          </section>
-
-          {/* Per-world breakdown */}
-          <section className="rounded-3xl bg-white/70 p-5 shadow-sm">
-            <h2 className="mb-4 font-display text-lg font-bold text-gray-800">
-              Per Dunia
-            </h2>
-            <ul className="space-y-4">
-              {data.worlds.map((world) => {
-                const pct =
-                  world.totalActivities > 0
-                    ? Math.round(
-                        (world.completedActivities / world.totalActivities) * 100
-                      )
-                    : 0;
-                const isLocked = world.status === "LOCKED";
-                const isComplete = world.status === "COMPLETED";
-
-                return (
-                  <li key={world.worldId} className={isLocked ? "opacity-40" : ""}>
-                    <div className="mb-1.5 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-base" aria-hidden>
-                          {isComplete ? "✅" : isLocked ? "🔒" : "▶️"}
-                        </span>
-                        <span className="text-sm font-semibold text-gray-700">
-                          {world.titleBahasa}
-                        </span>
-                      </div>
-                      <span className="text-xs text-gray-500">
-                        {world.completedActivities}/{world.totalActivities}
-                      </span>
-                    </div>
-                    <div className="h-2.5 overflow-hidden rounded-full bg-gray-200">
-                      <div
-                        className="h-full rounded-full transition-all duration-700"
-                        style={{
-                          width: `${pct}%`,
-                          background: isLocked ? "#D1D5DB" : world.themeColor,
-                        }}
-                      />
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-
-          {/* Achievements */}
-          <AchievementRow achievements={achievements} />
-
           {/* Actions */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 lg:mx-auto lg:max-w-sm">
             <Button asChild variant="childPrimary" size="lg" className="rounded-2xl">
               <Link href="/play/home">🗺️ Ke Peta Dunia</Link>
             </Button>

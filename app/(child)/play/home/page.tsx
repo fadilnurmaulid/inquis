@@ -15,6 +15,7 @@ import { ChildNav } from "@/components/dashboard/child-nav";
 import { WorldMapSkeleton } from "@/components/dashboard/world-map-skeleton";
 import { DashboardEmpty } from "@/components/dashboard/dashboard-empty";
 import { AchievementRow } from "@/components/dashboard/achievement-badge";
+import { EmojiAsset } from "@/components/shared/emoji-asset";
 import { computeAchievements } from "@/lib/achievements";
 import { WORLDS } from "@/types";
 
@@ -62,8 +63,8 @@ export default async function PlayHomePage() {
       {/* Main scrollable area — padding-bottom leaves room for fixed ChildNav */}
       <main className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50/50 to-indigo-50 pb-24">
         {/* Dashboard header */}
-        <header className="sticky top-0 z-30 bg-gradient-to-b from-sky-100 to-transparent px-4 pb-2 pt-6">
-          <div className="mx-auto flex max-w-lg items-center justify-between">
+        <header className="sticky top-0 z-30 bg-gradient-to-b from-sky-100 to-transparent px-4 pb-2 pt-6 lg:px-8">
+          <div className="mx-auto flex max-w-lg items-center justify-between lg:max-w-5xl">
             <div>
               <p className="text-sm text-gray-500">Halo,</p>
               <h1 className="font-display text-2xl font-bold text-gray-800">
@@ -84,14 +85,14 @@ export default async function PlayHomePage() {
         </header>
 
         {/* Content */}
-        <div className="mx-auto max-w-lg space-y-4 px-4 pt-2">
+        <div className="mx-auto max-w-lg space-y-4 px-4 pt-2 lg:max-w-5xl lg:px-8">
           {/* FR-DASH-002: Companion character placeholder (shown always) */}
           <div
             className="flex items-center gap-4 rounded-3xl bg-white/60 p-4 shadow-sm"
             aria-label="Karakter pendamping"
           >
             <div
-              className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl text-3xl shadow-sm"
+              className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl shadow-sm"
               style={{
                 background: nextWorldDef
                   ? `linear-gradient(135deg, ${nextWorldDef.themeColor}cc, ${nextWorldDef.themeColor}66)`
@@ -99,7 +100,11 @@ export default async function PlayHomePage() {
               }}
               aria-hidden
             >
-              {COMPANION_EMOJI[nextWorldDef?.id ?? ""] ?? "🦉"}
+              <EmojiAsset
+                emoji={COMPANION_EMOJI[nextWorldDef?.id ?? ""] ?? "🦉"}
+                textClassName="text-3xl"
+                size={44}
+              />
             </div>
             <div>
               <p className="font-display font-bold text-gray-800">
@@ -115,33 +120,39 @@ export default async function PlayHomePage() {
 
           <Suspense fallback={<WorldMapSkeleton />}>
             {hasAnyProgress ? (
-              <>
-                {/* Progress journey path (FR-DASH-005) */}
-                <ProgressJourney
-                  worlds={data.worlds}
-                  totalCompletedActivities={data.totalCompletedActivities}
-                />
-
-                {/* World map grid (FR-DASH-002, FR-DASH-003) */}
-                <section>
-                  <h2 className="mb-3 font-display text-lg font-bold text-gray-800">
-                    🗺️ Peta Dunia
-                  </h2>
-                  <WorldMap
+              <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-6 lg:space-y-0">
+                {/* Main column: journey + world map */}
+                <div className="space-y-4 lg:col-span-2">
+                  {/* Progress journey path (FR-DASH-005) */}
+                  <ProgressJourney
                     worlds={data.worlds}
-                    nextRecommended={data.nextRecommended}
-                    activeSession={data.activeSession}
+                    totalCompletedActivities={data.totalCompletedActivities}
                   />
-                </section>
 
-                {/* Continue / next recommended activity (FR-DASH-006) */}
-                <ContinueCard
-                  activeSession={data.activeSession}
-                  nextRecommended={data.nextRecommended}
-                />
+                  {/* World map grid (FR-DASH-002, FR-DASH-003) */}
+                  <section>
+                    <h2 className="mb-3 font-display text-lg font-bold text-gray-800">
+                      🗺️ Peta Dunia
+                    </h2>
+                    <WorldMap
+                      worlds={data.worlds}
+                      nextRecommended={data.nextRecommended}
+                      activeSession={data.activeSession}
+                    />
+                  </section>
+                </div>
 
-                <AchievementRow achievements={achievements} />
-              </>
+                {/* Sidebar column: continue + achievements (desktop only reflow) */}
+                <div className="mt-4 space-y-4 lg:col-span-1 lg:mt-0">
+                  {/* Continue / next recommended activity (FR-DASH-006) */}
+                  <ContinueCard
+                    activeSession={data.activeSession}
+                    nextRecommended={data.nextRecommended}
+                  />
+
+                  <AchievementRow achievements={achievements} />
+                </div>
+              </div>
             ) : (
               <>
                 {/* New learner — show empty state + world map (locked worlds visible) */}

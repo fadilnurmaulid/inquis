@@ -6,6 +6,7 @@
  */
 
 import { motion, AnimatePresence } from "framer-motion";
+import { EmojiAsset } from "@/components/shared/emoji-asset";
 import { cn } from "@/lib/utils";
 
 interface CompanionCharacterProps {
@@ -74,13 +75,13 @@ export function CompanionCharacter({
               ? { duration: 3, repeat: Infinity, ease: "easeInOut" }
               : { duration: 0.5 }
           }
-          className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl text-3xl shadow-sm"
+          className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl shadow-sm"
           style={{
             background: `linear-gradient(135deg, ${themeColor}cc, ${themeColor}66)`,
           }}
           aria-hidden
         >
-          {displayEmoji}
+          <EmojiAsset emoji={displayEmoji} textClassName="text-3xl" size={44} />
         </motion.div>
 
         {/* Speech bubble */}

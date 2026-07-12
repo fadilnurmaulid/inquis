@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Lightbulb, ArrowRight, Star, Trophy, CheckCircle } from "lucide-react";
 import type { ActivityDefinition, ActivityPhase } from "@/lib/activities/types";
 import { CompanionCharacter } from "./companion-character";
+import { EmojiAsset } from "@/components/shared/emoji-asset";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
@@ -173,7 +174,7 @@ export function ActivityPlayer({
   const canProceedFromExplore = exploredIds.size >= exploreMinRequired;
 
   return (
-    <div className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-lg flex-col gap-4 px-4 pb-28 pt-4">
+    <div className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-lg flex-col gap-4 px-4 pb-28 pt-4 lg:max-w-2xl lg:px-8">
       {/* Progress header */}
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-medium text-gray-500">
@@ -230,7 +231,7 @@ export function ActivityPlayer({
                 className="flex h-28 w-28 items-center justify-center rounded-3xl text-5xl shadow-2xl"
                 style={{ background: `linear-gradient(135deg, ${themeColor}dd, ${themeColor}88)` }}
               >
-                {companionEmoji ?? "🔬"}
+                <EmojiAsset emoji={companionEmoji ?? "🔬"} textClassName="text-5xl" size={72} />
               </motion.div>
               <div className="space-y-2">
                 <h1 className="font-display text-2xl font-bold text-gray-800">
@@ -258,7 +259,7 @@ export function ActivityPlayer({
               <p className="text-center font-display text-lg font-bold text-gray-800">
                 {definition.explorePrompt}
               </p>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                 {definition.exploreItems.map((item) => {
                   const explored = exploredIds.has(item.id);
                   return (
@@ -275,7 +276,7 @@ export function ActivityPlayer({
                       aria-label={`${explored ? "Sudah dijelajahi: " : "Jelajahi: "}${item.label || item.emoji}`}
                       aria-pressed={explored}
                     >
-                      <span className="text-4xl">{item.emoji}</span>
+                      <EmojiAsset emoji={item.emoji} textClassName="text-4xl" size={44} />
                       {item.label && (
                         <span className="text-xs font-semibold text-gray-600">
                           {item.label}
@@ -357,7 +358,7 @@ export function ActivityPlayer({
                       aria-label={option.label ?? option.emoji}
                       aria-pressed={isSelected}
                     >
-                      <span className="text-4xl">{option.emoji}</span>
+                      <EmojiAsset emoji={option.emoji} textClassName="text-4xl" size={44} />
                       {option.label && (
                         <span className="text-xs font-semibold text-gray-600">
                           {option.label}
@@ -414,14 +415,19 @@ export function ActivityPlayer({
               {/* Feedback: incorrect — encouraging, never punitive */}
               {phase === "feedback" && !isCorrect && (
                 <div className="space-y-3">
-                  <div className="rounded-2xl bg-amber-50 p-4 text-center">
+                  <motion.div
+                    initial={{ scale: 0.85, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 320, damping: 18 }}
+                    className="rounded-2xl bg-amber-50 p-4 text-center"
+                  >
                     <p className="text-base font-bold text-amber-700">
                       🔍 Hmm, coba amati lagi ya!
                     </p>
                     <p className="text-sm text-amber-600">
                       Kamu boleh mencoba lagi, ilmuwan selalu mencoba berkali-kali!
                     </p>
-                  </div>
+                  </motion.div>
                   <Button
                     variant="childPrimary"
                     size="lg"
@@ -462,7 +468,7 @@ export function ActivityPlayer({
                     )}
                     aria-pressed={reflectionId === opt.id}
                   >
-                    <span className="text-2xl" aria-hidden>{opt.emoji}</span>
+                    <EmojiAsset emoji={opt.emoji} textClassName="text-2xl" size={28} />
                     <span className="font-semibold text-gray-800">{opt.label}</span>
                   </button>
                 ))}

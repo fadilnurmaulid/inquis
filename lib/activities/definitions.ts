@@ -103,7 +103,7 @@ const WORLD_1: ActivityDefinition[] = [
       { id: "c", emoji: "🟣", label: "Ungu" },
     ],
     "a",
-    ["Pola: hijau, kuning, hijau, kuning...", "Setelah kuning selalu hijau!", "Pilih hijau 🟢"],
+    ["Pola: hijau, cokelat, hijau, cokelat...", "Setelah cokelat selalu hijau!", "Pilih hijau 🟢"],
     "Daun berwarna hijau karena mengandung klorofil, zat yang membantu tumbuhan membuat makanannya dari sinar matahari."
   ),
   w1(
@@ -201,7 +201,7 @@ const WORLD_2: ActivityDefinition[] = [
   w2(
     4,
     "Urutkan Tinggi Pohon",
-    "Mana yang paling tinggi?", 
+    "Mana yang paling tinggi?",
     "Ketuk pohon yang PALING TINGGI!",
     [
       { id: "a", emoji: "🌱", label: "Tunas" },
@@ -272,7 +272,7 @@ const WORLD_3: ActivityDefinition[] = [
       { id: "c", emoji: "🪨", label: "Jadi Batu" },
     ],
     "a",
-    "Plants need sunlight and water to grow. Tanaman butuh air dan sinar matahari agar tumbuh subur."
+    "Tanaman butuh air dan sinar matahari agar tumbuh subur."
   ),
   w3(
     2,
@@ -296,7 +296,7 @@ const WORLD_3: ActivityDefinition[] = [
       { id: "c", emoji: "🎉", label: "Ikan Senang" },
     ],
     "b",
-    "Throwing trash into rivers can harm living things. Membuang sampah ke sungai dapat mengganggu kehidupan ikan dan hewan air lainnya."
+    "Membuang sampah ke sungai dapat mengganggu kehidupan ikan dan hewan air lainnya."
   ),
   w3(
     4,
@@ -320,7 +320,7 @@ const WORLD_3: ActivityDefinition[] = [
       { id: "c", emoji: "🎮", label: "Tidak Berpengaruh" },
     ],
     "a",
-    "Taking care of nature starts with small daily habits. Menjaga hutan tetap lestari membantu hewan mempunyai tempat tinggal yang aman."
+    "Menjaga hutan tetap lestari membantu hewan mempunyai tempat tinggal yang aman."
   ),
 ];
 
@@ -394,7 +394,7 @@ const WORLD_4: ActivityDefinition[] = [
       { id: "c", emoji: "🔥", label: "Membakar Semua" },
     ],
     "a",
-    "We can help Earth by sorting our waste. Memilah dan mendaur ulang sampah membantu mengurangi sampah yang menumpuk."
+    "Memilah dan mendaur ulang sampah membantu mengurangi sampah yang menumpuk."
   ),
   w4(
     4,
@@ -418,7 +418,7 @@ const WORLD_4: ActivityDefinition[] = [
       { id: "c", emoji: "🎮", label: "Main Game" },
     ],
     "a",
-    "Taking care of nature starts with small daily habits. Menjaga alam dimulai dari kebiasaan kecil sehari-hari, seperti mengamati lingkungan di sekitar kita."
+    "Menjaga alam dimulai dari kebiasaan kecil sehari-hari, seperti mengamati lingkungan di sekitar kita."
   ),
 ];
 

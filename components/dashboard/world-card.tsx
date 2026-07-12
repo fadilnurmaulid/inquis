@@ -8,6 +8,7 @@
 
 import { motion } from "framer-motion";
 import { Lock, CheckCircle, Play, Star, Trophy, Sparkles } from "lucide-react";
+import { EmojiAsset } from "@/components/shared/emoji-asset";
 import { cn } from "@/lib/utils";
 import type { WorldProgressSummary } from "@/lib/services/dashboard.service";
 
@@ -114,9 +115,7 @@ export function WorldCard({ world, onClick, isRecommended }: WorldCardProps) {
             {world.worldNumber}
           </span>
           {/* World companion emoji */}
-          <span className="text-2xl" aria-hidden>
-            {worldEmoji}
-          </span>
+          <EmojiAsset emoji={worldEmoji} textClassName="text-2xl" size={28} />
         </div>
 
         {/* Status badge */}
