@@ -16,6 +16,8 @@ interface CompanionCharacterProps {
   mood?: "idle" | "happy" | "thinking" | "celebrate";
   emoji?: string;
   className?: string;
+  /** Avatar corner shape, varies per world identity. Defaults to the original rounded-2xl. */
+  avatarRadius?: string;
 }
 
 const MOOD_EMOJI: Record<string, string> = {
@@ -39,6 +41,7 @@ export function CompanionCharacter({
   mood = "idle",
   emoji,
   className,
+  avatarRadius = "rounded-2xl",
 }: CompanionCharacterProps) {
   const displayEmoji = emoji && mood === "idle" ? emoji : MOOD_EMOJI[mood];
 
@@ -75,7 +78,10 @@ export function CompanionCharacter({
               ? { duration: 3, repeat: Infinity, ease: "easeInOut" }
               : { duration: 0.5 }
           }
-          className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl shadow-sm"
+          className={cn(
+            "flex h-14 w-14 flex-shrink-0 items-center justify-center shadow-sm",
+            avatarRadius
+          )}
           style={{
             background: `linear-gradient(135deg, ${themeColor}cc, ${themeColor}66)`,
           }}

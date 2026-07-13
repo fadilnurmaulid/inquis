@@ -53,7 +53,8 @@ const STATUS_CONFIG: Record<
   },
 };
 
-// World emoji illustrations (future: replace with proper SVG illustrations)
+// World companion emoji — resolved to an SVG illustration by EmojiAsset
+// when available (components/illustrations/nature-icons.tsx).
 const WORLD_EMOJI: Record<string, string> = {
   "world-1": "🦋",
   "world-2": "🐢",

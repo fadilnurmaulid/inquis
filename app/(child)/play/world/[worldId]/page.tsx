@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { ChildNav } from "@/components/dashboard/child-nav";
 import { WorldIntro } from "@/components/world/world-intro";
 import { EmojiAsset } from "@/components/shared/emoji-asset";
+import { WorldAtmosphere } from "@/components/activities/world-atmosphere";
 import { cn } from "@/lib/utils";
 import { ActivityStatus } from "@/lib/db-enums";
 import { getActivityDefinition } from "@/lib/activities/definitions";
@@ -113,7 +114,8 @@ export default async function WorldPage({ params }: PageProps) {
 
   return (
     <>
-      <main className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50/40 to-white pb-24">
+      <main className="relative min-h-screen pb-24">
+        <WorldAtmosphere worldId={world.id} />
         {/* World header */}
         <header
           className="px-4 pb-8 pt-10 text-center lg:px-8"
@@ -243,7 +245,9 @@ export default async function WorldPage({ params }: PageProps) {
                       ? "Selesaikan aktivitas sebelumnya dulu"
                       : isCompleted
                       ? "Sudah kamu selesaikan 🌟"
-                      : `Eksplorasi ${world.titleBahasa.toLowerCase()}`}
+                      : isInProgress
+                      ? "Ayo lanjutkan petualanganmu!"
+                      : "Yuk, mulai jelajahi bersama teman kecilmu!"}
                   </p>
                 </div>
 

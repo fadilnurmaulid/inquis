@@ -14,7 +14,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Lightbulb, ArrowRight, Star, Trophy, CheckCircle } from "lucide-react";
 import type { ActivityDefinition, ActivityPhase } from "@/lib/activities/types";
 import { CompanionCharacter } from "./companion-character";
+import { WorldAtmosphere } from "./world-atmosphere";
+import { getWorldVisualIdentity } from "@/lib/activities/world-visual-identity";
 import { EmojiAsset } from "@/components/shared/emoji-asset";
+import { hasNatureIconFor } from "@/components/illustrations/nature-icons";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
@@ -83,8 +86,10 @@ export function ActivityPlayer({
     "idle" | "happy" | "thinking" | "celebrate"
   >("idle");
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [isChecking, setIsChecking] = useState(false);
 
   const worldDef = WORLDS.find((w) => w.id === definition.worldId);
+  const visualIdentity = getWorldVisualIdentity(definition.worldId);
 
   // Companion message per phase
   const companionMessage = (() => {
@@ -96,7 +101,9 @@ export function ActivityPlayer({
           ? definition.explorePrompt
           : "Bagus! Kamu sudah menjelajahi semuanya. Siap untuk tantangan? 👀";
       case "challenge":
-        return hintIndex >= 0
+        return isChecking
+          ? "Yuk kita lihat... 🔍"
+          : hintIndex >= 0
           ? definition.hints[hintIndex]
           : definition.instruction;
       case "feedback":
@@ -128,10 +135,15 @@ export function ActivityPlayer({
     (optionId: string) => {
       if (phase !== "challenge") return;
       setSelectedId(optionId);
-      const correct = optionId === definition.correctOptionId;
-      setIsCorrect(correct);
-      setCompanionMood(correct ? "celebrate" : "thinking");
-      setPhase("feedback");
+      setIsChecking(true);
+      setCompanionMood("thinking");
+      window.setTimeout(() => {
+        const correct = optionId === definition.correctOptionId;
+        setIsCorrect(correct);
+        setCompanionMood(correct ? "celebrate" : "thinking");
+        setIsChecking(false);
+        setPhase("feedback");
+      }, 450);
     },
     [phase, definition.correctOptionId]
   );
@@ -182,62 +194,86 @@ export function ActivityPlayer({
   const exploreMinRequired = Math.min(2, definition.exploreItems.length);
   const canProceedFromExplore = exploredIds.size >= exploreMinRequired;
 
+  // Only use SVG nature-icon illustrations when every item in a given grid
+  // has a matching icon — mixing icons and emoji glyphs in the same grid
+  // looks visually inconsistent, so we fall back to emoji for the whole
+  // group otherwise.
+  const exploreItemsAllHaveIcons = definition.exploreItems.every((i) =>
+    hasNatureIconFor(i.emoji)
+  );
+  const challengeOptionsAllHaveIcons = challengeOptions.every((o) =>
+    hasNatureIconFor(o.emoji)
+  );
+
   return (
-    <div className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-lg flex-col gap-4 px-4 pb-28 pt-4 lg:max-w-2xl lg:px-8">
-      {/* Progress header */}
-      <div className="space-y-2">
-        <div className="flex justify-between text-xs font-medium text-gray-500">
-          <span className="font-semibold text-gray-700">{worldDef?.titleBahasa}</span>
-          <span>Aktivitas {definition.activityNumber}/{worldDef?.activityCount ?? 5}</span>
-        </div>
-        <Progress value={PHASE_PROGRESS[phase]} className="h-2.5 rounded-full" />
-        {/* Phase stepper */}
-        <div className="flex justify-between">
-          {(["explore", "challenge", "reflection", "complete"] as ActivityPhase[]).map(
-            (p) => (
-              <div
-                key={p}
-                className={cn(
-                  "text-[10px] font-semibold transition-colors",
-                  PHASE_PROGRESS[phase] >= PHASE_PROGRESS[p]
-                    ? "text-primary"
-                    : "text-gray-300"
-                )}
-              >
-                {PHASE_LABELS[p]}
-              </div>
-            )
-          )}
-        </div>
-      </div>
+    <div className="mx-auto max-w-lg px-4 pb-28 pt-4 lg:max-w-5xl lg:px-8">
+      <WorldAtmosphere worldId={definition.worldId} />
+      <div className="flex min-h-[calc(100vh-6rem)] flex-col gap-4 lg:grid lg:grid-cols-[300px_1fr] lg:items-start lg:gap-8">
+        {/* Sidebar (desktop): progress + companion, stacked column on mobile */}
+        <div className="space-y-4 lg:sticky lg:top-8 lg:space-y-5">
+          {/* Progress header */}
+          <div className="space-y-2">
+            <div className="flex justify-between text-xs font-medium text-gray-500">
+              <span className="font-semibold text-gray-700">{worldDef?.titleBahasa}</span>
+              <span>Aktivitas {definition.activityNumber}/{worldDef?.activityCount ?? 5}</span>
+            </div>
+            <Progress value={PHASE_PROGRESS[phase]} className="h-2.5 rounded-full" />
+            {/* Phase stepper */}
+            <div className="flex justify-between lg:flex-col lg:items-start lg:gap-1.5 lg:pt-1">
+              {(["explore", "challenge", "reflection", "complete"] as ActivityPhase[]).map(
+                (p) => (
+                  <div
+                    key={p}
+                    className={cn(
+                      "text-[10px] font-semibold transition-colors lg:flex lg:items-center lg:gap-2 lg:text-xs",
+                      PHASE_PROGRESS[phase] >= PHASE_PROGRESS[p]
+                        ? "text-primary"
+                        : "text-gray-300"
+                    )}
+                  >
+                    <span
+                      className="hidden h-1.5 w-1.5 rounded-full bg-current lg:inline-block"
+                      aria-hidden
+                    />
+                    {PHASE_LABELS[p]}
+                  </div>
+                )
+              )}
+            </div>
+          </div>
 
-      {/* Companion */}
-      <CompanionCharacter
-        name={companionName}
-        message={companionMessage}
-        themeColor={themeColor}
-        mood={companionMood}
-        emoji={companionEmoji}
-      />
+          {/* Companion */}
+          <CompanionCharacter
+            name={companionName}
+            message={companionMessage}
+            themeColor={themeColor}
+            mood={companionMood}
+            emoji={companionEmoji}
+            avatarRadius={visualIdentity.cardRadius === "rounded-full" ? "rounded-full" : visualIdentity.cardRadius}
+          />
+        </div>
 
-      {/* Phase content */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={phase}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.22, ease: "easeOut" }}
-          className="flex flex-1 flex-col gap-4"
-        >
-          {/* ── INTRO ── */}
-          {phase === "intro" && (
-            <div className="flex flex-1 flex-col items-center justify-center gap-6 text-center">
-              <motion.div
-                initial={{ scale: 0.7, opacity: 0 }}
+        {/* Phase content (main column on desktop) */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={phase}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className="flex flex-1 flex-col gap-4 lg:min-h-[calc(100vh-10rem)]"
+          >
+            {/* ── INTRO ── */}
+            {phase === "intro" && (
+              <div className="flex flex-1 flex-col items-center justify-center gap-6 text-center">
+                <motion.div
+                  initial={{ scale: 0.7, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 280, damping: 20 }}
-                className="flex h-28 w-28 items-center justify-center rounded-3xl text-5xl shadow-2xl"
+                transition={{ type: "spring", stiffness: visualIdentity.springStiffness, damping: 20 }}
+                className={cn(
+                  "flex h-28 w-28 items-center justify-center text-5xl shadow-2xl",
+                  visualIdentity.cardRadius
+                )}
                 style={{ background: `linear-gradient(135deg, ${themeColor}dd, ${themeColor}88)` }}
               >
                 <EmojiAsset emoji={companionEmoji ?? "🔬"} textClassName="text-5xl" size={72} />
@@ -268,16 +304,36 @@ export function ActivityPlayer({
               <p className="text-center font-display text-lg font-bold text-gray-800">
                 {definition.explorePrompt}
               </p>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                {definition.exploreItems.map((item) => {
+              <div
+                className={cn(
+                  "grid gap-3",
+                  visualIdentity.exploreLayout === "flow" &&
+                    "grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4",
+                  visualIdentity.exploreLayout === "grid" &&
+                    "grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4",
+                  visualIdentity.exploreLayout === "focus" &&
+                    "grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-5"
+                )}
+              >
+                {definition.exploreItems.map((item, i) => {
                   const explored = exploredIds.has(item.id);
                   return (
                     <motion.button
                       key={item.id}
+                      initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{
+                        delay: i * visualIdentity.staggerDelay,
+                        type: "spring",
+                        stiffness: visualIdentity.springStiffness,
+                        damping: 20,
+                      }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => handleExploreTap(item.id)}
                       className={cn(
-                        "flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-2xl border-2 p-4 transition-all",
+                        "flex min-h-[88px] flex-col items-center justify-center gap-2 border-2 p-4 transition-all",
+                        visualIdentity.exploreLayout === "focus" ? "min-h-[76px] p-3" : "min-h-[88px] p-4",
+                        visualIdentity.cardRadius,
                         explored
                           ? "border-primary bg-primary/10 shadow-md"
                           : "border-gray-200 bg-white hover:border-primary/50 hover:shadow-sm"
@@ -285,18 +341,31 @@ export function ActivityPlayer({
                       aria-label={`${explored ? "Sudah dijelajahi: " : "Jelajahi: "}${item.label || item.emoji}`}
                       aria-pressed={explored}
                     >
-                      <EmojiAsset emoji={item.emoji} textClassName="text-4xl" size={44} />
+                      <EmojiAsset
+                        emoji={item.emoji}
+                        textClassName="text-4xl"
+                        size={44}
+                        forceEmoji={!exploreItemsAllHaveIcons}
+                      />
                       {item.label && (
                         <span className="text-xs font-semibold text-gray-600">
                           {item.label}
                         </span>
                       )}
-                      {explored && (
-                        <CheckCircle
-                          className="h-4 w-4 text-primary"
-                          aria-hidden
-                        />
-                      )}
+                      <AnimatePresence>
+                        {explored && (
+                          <motion.div
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                          >
+                            <CheckCircle
+                              className="h-4 w-4 text-primary"
+                              aria-hidden
+                            />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </motion.button>
                   );
                 })}
@@ -335,39 +404,64 @@ export function ActivityPlayer({
                   challengeOptions.length <= 3 ? "grid-cols-3" : "grid-cols-2"
                 )}
               >
-                {challengeOptions.map((option) => {
+                {challengeOptions.map((option, i) => {
                   const isSelected = selectedId === option.id;
                   const isAnswer = option.id === definition.correctOptionId;
                   const showResult = phase === "feedback" && isSelected;
                   const showCorrectHint =
                     phase === "feedback" && isAnswer && !isSelected;
+                  const isPending = isChecking && isSelected;
 
                   return (
                     <motion.button
                       key={option.id}
-                      whileTap={phase === "challenge" ? { scale: 0.9 } : {}}
+                      initial={{ opacity: 0, scale: 0.85, y: 10 }}
                       animate={
                         showResult && isCorrect
-                          ? { scale: [1, 1.08, 1] }
-                          : {}
+                          ? { opacity: 1, scale: [1, 1.08, 1], y: 0 }
+                          : showResult && !isCorrect
+                          ? { opacity: 1, scale: 1, y: 0, x: [0, -6, 6, -4, 4, 0] }
+                          : isPending
+                          ? { opacity: 1, scale: [1, 1.05, 1], y: 0 }
+                          : { opacity: 1, scale: 1, y: 0 }
                       }
-                      disabled={phase === "feedback"}
+                      transition={
+                        phase === "challenge" && !isChecking
+                          ? {
+                              delay: i * visualIdentity.staggerDelay,
+                              type: "spring",
+                              stiffness: visualIdentity.springStiffness,
+                              damping: 20,
+                            }
+                          : isPending
+                          ? { duration: 0.45, repeat: Infinity }
+                          : { duration: 0.4 }
+                      }
+                      whileTap={phase === "challenge" && !isChecking ? { scale: 0.9 } : {}}
+                      disabled={phase === "feedback" || isChecking}
                       onClick={() => handleChallengeSelect(option.id)}
                       className={cn(
-                        "flex min-h-[96px] flex-col items-center justify-center gap-2 rounded-2xl border-2 p-4 transition-all",
-                        phase === "challenge" &&
+                        "flex min-h-[96px] flex-col items-center justify-center gap-2 border-2 p-4 transition-colors",
+                        visualIdentity.cardRadius === "rounded-full" ? "rounded-[1.5rem]" : visualIdentity.cardRadius,
+                        phase === "challenge" && !isChecking &&
                           "border-gray-200 bg-white hover:border-primary hover:shadow-md active:scale-95",
+                        isPending && "border-primary/60 bg-primary/5",
                         showResult && isCorrect &&
                           "border-green-400 bg-green-50 shadow-md",
                         showResult && !isCorrect &&
                           "border-orange-300 bg-orange-50",
                         showCorrectHint &&
-                          "border-green-300 bg-green-50/60"
+                          "border-green-300 bg-green-50/60 animate-pulse"
                       )}
                       aria-label={option.label ?? option.emoji}
                       aria-pressed={isSelected}
                     >
-                      <EmojiAsset emoji={option.emoji} textClassName="text-4xl" size={44} />
+                      <EmojiAsset
+                        emoji={option.emoji}
+                        textClassName="text-4xl"
+                        size={44}
+                        forceEmoji={!challengeOptionsAllHaveIcons}
+                      />
                       {option.label && (
                         <span className="text-xs font-semibold text-gray-600">
                           {option.label}
@@ -379,7 +473,7 @@ export function ActivityPlayer({
               </div>
 
               {/* Hint button */}
-              {phase === "challenge" && hintsUsed < 3 && (
+              {phase === "challenge" && !isChecking && hintsUsed < 3 && (
                 <Button
                   variant="outline"
                   size="lg"
@@ -393,7 +487,28 @@ export function ActivityPlayer({
 
               {/* Feedback: correct */}
               {phase === "feedback" && isCorrect && (
-                <div className="space-y-3">
+                <div className="relative space-y-3">
+                  {/* Confetti burst — brief, purposeful, only on success */}
+                  <div className="pointer-events-none absolute inset-x-0 -top-2 flex justify-center overflow-visible">
+                    {["🌿", "✨", "🌟", "💚", "🍃"].map((piece, i) => (
+                      <motion.span
+                        key={i}
+                        className="absolute text-xl"
+                        initial={{ opacity: 1, x: 0, y: 0, scale: 0.6 }}
+                        animate={{
+                          opacity: 0,
+                          x: (i - 2) * 26,
+                          y: -46 - i * 4,
+                          scale: 1,
+                          rotate: (i - 2) * 40,
+                        }}
+                        transition={{ duration: 0.8, ease: "easeOut", delay: i * 0.03 }}
+                        aria-hidden
+                      >
+                        {piece}
+                      </motion.span>
+                    ))}
+                  </div>
                   <motion.div
                     initial={{ scale: 0.85, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -617,8 +732,9 @@ export function ActivityPlayer({
               </div>
             </div>
           )}
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

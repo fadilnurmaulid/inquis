@@ -8,6 +8,7 @@
 
 import { motion } from "framer-motion";
 import { Star, Lock } from "lucide-react";
+import { EmojiAsset } from "@/components/shared/emoji-asset";
 import { cn } from "@/lib/utils";
 import type { WorldProgressSummary } from "@/lib/services/dashboard.service";
 
@@ -97,7 +98,9 @@ export function ProgressJourney({ worlds, totalCompletedActivities }: ProgressJo
                       ? { boxShadow: "0 4px 12px #4ECB7166" }
                       : {}
                   }
-                  aria-label={`${world.titleBahasa}: ${world.status}`}
+                  aria-label={`${world.titleBahasa}: ${
+                    isCompleted ? "selesai" : isLocked ? "terkunci" : "sedang berlangsung"
+                  }`}
                 >
                   {isCompleted ? (
                     <Star
@@ -107,12 +110,7 @@ export function ProgressJourney({ worlds, totalCompletedActivities }: ProgressJo
                   ) : isLocked ? (
                     <Lock className="h-4 w-4 text-gray-300" aria-hidden />
                   ) : (
-                    <span
-                      className="text-xl leading-none"
-                      aria-hidden
-                    >
-                      {companionEmoji}
-                    </span>
+                    <EmojiAsset emoji={companionEmoji} textClassName="text-xl" size={24} />
                   )}
                 </motion.div>
                 <span

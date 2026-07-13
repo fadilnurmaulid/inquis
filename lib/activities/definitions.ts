@@ -424,7 +424,7 @@ const WORLD_3: ActivityDefinition[] = [
       { id: "c", emoji: "❄️", label: "Salju" },
     ],
     "b",
-    "Awan gelap biasanya membawa hujan yang menyuburkan tanah, mengisi sungai, dan membantu tanaman tumbuh, air hujan adalah salah satu sumber air bersih bagi alam.",
+    "Awan gelap biasanya membawa hujan. Air hujan menyuburkan tanah dan mengisi sungai, salah satu sumber air bersih untuk alam.",
     {
       question: "Kenapa hujan penting untuk alam di sekitar kita?",
       options: [
@@ -566,7 +566,7 @@ const WORLD_4: ActivityDefinition[] = [
       { id: "c", emoji: "📱", label: "Bermain Gawai" },
     ],
     "a",
-    "Hewan menggunakan indra seperti penciuman dan penglihatan untuk menemukan makanan di alam. Karena itu, alam yang bersih dan hijau membantu mereka bertahan hidup tanpa bantuan manusia.",
+    "Hewan menggunakan indra penciuman dan penglihatan untuk mencari makanan. Alam yang bersih dan hijau membantu mereka bertahan hidup sendiri.",
     {
       question: "Kenapa hewan liar butuh alam yang bersih dan hijau?",
       options: [
