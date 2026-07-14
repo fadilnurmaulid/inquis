@@ -344,7 +344,7 @@ export function ActivityPlayer({
                       whileTap={{ scale: 0.9 }}
                       onClick={() => handleExploreTap(item.id)}
                       className={cn(
-                        "flex min-h-[88px] flex-col items-center justify-center gap-2 border-2 p-4 transition-colors",
+                        "relative flex min-h-[88px] flex-col items-center justify-center gap-2 border-2 p-4 transition-colors",
                         visualIdentity.exploreLayout === "focus" ? "min-h-[76px] p-3" : "min-h-[88px] p-4",
                         visualIdentity.cardRadius,
                         explored
@@ -371,6 +371,7 @@ export function ActivityPlayer({
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                            className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-sm"
                           >
                             <CheckCircle
                               className="h-4 w-4 text-primary"

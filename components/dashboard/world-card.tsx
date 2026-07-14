@@ -83,7 +83,7 @@ export function WorldCard({ world, onClick, isRecommended }: WorldCardProps) {
       whileHover={isLocked ? {} : { scale: 1.03 }}
       transition={{ type: "spring", stiffness: 400, damping: 22 }}
       className={cn(
-        "relative w-full rounded-3xl p-5 text-left shadow-lg transition-shadow",
+        "relative flex w-full flex-col rounded-3xl p-5 text-left shadow-lg transition-shadow",
         "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/60",
         isLocked && "cursor-not-allowed opacity-60",
         !isLocked && "hover:shadow-xl active:shadow-md",
@@ -158,7 +158,7 @@ export function WorldCard({ world, onClick, isRecommended }: WorldCardProps) {
 
       {/* Progress bar */}
       {!isLocked && (
-        <div className="mt-4">
+        <div className="mt-auto pt-4">
           <div className="mb-1.5 flex items-center justify-between">
             <span className="text-xs text-white/80">
               {world.completedActivities}/{world.totalActivities} aktivitas
@@ -188,7 +188,7 @@ export function WorldCard({ world, onClick, isRecommended }: WorldCardProps) {
 
       {/* Lock overlay */}
       {isLocked && (
-        <div className="mt-3 flex items-center gap-1.5 text-gray-400">
+        <div className="mt-auto flex items-center gap-1.5 pt-4 text-gray-400">
           <Lock className="h-4 w-4" aria-hidden />
           <span className="text-sm">Selesaikan dunia sebelumnya dulu</span>
         </div>

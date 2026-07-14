@@ -6,6 +6,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -49,10 +50,10 @@ export default function AboutPage() {
         {/* Back */}
         <Link
           href="/"
-          className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground
-                     hover:text-foreground transition-colors min-h-0 min-w-0"
+          className="mb-8 inline-flex min-h-[40px] items-center gap-1.5 rounded-lg px-2 -ml-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-gray-100/70 hover:text-foreground"
         >
-          ← Beranda
+          <ArrowLeft className="h-4 w-4" aria-hidden />
+          Beranda
         </Link>
 
         {/* Hero */}
