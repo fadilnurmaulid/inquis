@@ -16,6 +16,8 @@ import type { ActivityDefinition, ActivityPhase } from "@/lib/activities/types";
 import { CompanionCharacter } from "./companion-character";
 import { WorldAtmosphere } from "./world-atmosphere";
 import { SortingChallenge } from "./sorting-challenge";
+import { MagnifyChallenge } from "./magnify-challenge";
+import { PredictChallenge } from "./predict-challenge";
 import { getWorldVisualIdentity } from "@/lib/activities/world-visual-identity";
 import { EmojiAsset } from "@/components/shared/emoji-asset";
 import { hasNatureIconFor } from "@/components/illustrations/nature-icons";
@@ -417,12 +419,46 @@ export function ActivityPlayer({
           {/* ── CHALLENGE + FEEDBACK ── */}
           {(phase === "challenge" || phase === "feedback") && (
             <div className="space-y-4">
+              {definition.worldId === "world-4" && (
+                <div className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-violet-400">
+                  {["Amati", "Tanya", "Prediksi", "Simpulkan"].map((step, i, arr) => (
+                    <span key={step} className="flex items-center gap-1.5">
+                      <span className={i === arr.length - 1 ? "text-violet-600" : ""}>
+                        {step}
+                      </span>
+                      {i < arr.length - 1 && <span aria-hidden>→</span>}
+                    </span>
+                  ))}
+                </div>
+              )}
               <p className="text-center font-display text-lg font-bold text-gray-800">
                 {definition.challengePrompt}
               </p>
 
               {definition.worldId === "world-2" ? (
                 <SortingChallenge
+                  options={challengeOptions}
+                  correctOptionId={definition.correctOptionId}
+                  phase={phase as "challenge" | "feedback"}
+                  selectedId={selectedId}
+                  isChecking={isChecking}
+                  isCorrect={isCorrect}
+                  onSelect={handleChallengeSelect}
+                  allHaveIcons={challengeOptionsAllHaveIcons}
+                />
+              ) : definition.worldId === "world-1" && definition.challengeType === "pick-one" ? (
+                <MagnifyChallenge
+                  options={challengeOptions}
+                  correctOptionId={definition.correctOptionId}
+                  phase={phase as "challenge" | "feedback"}
+                  selectedId={selectedId}
+                  isChecking={isChecking}
+                  isCorrect={isCorrect}
+                  onSelect={handleChallengeSelect}
+                  allHaveIcons={challengeOptionsAllHaveIcons}
+                />
+              ) : definition.worldId === "world-3" ? (
+                <PredictChallenge
                   options={challengeOptions}
                   correctOptionId={definition.correctOptionId}
                   phase={phase as "challenge" | "feedback"}
