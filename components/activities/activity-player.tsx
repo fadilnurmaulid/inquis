@@ -15,6 +15,7 @@ import { Lightbulb, ArrowRight, Star, Trophy, CheckCircle } from "lucide-react";
 import type { ActivityDefinition, ActivityPhase } from "@/lib/activities/types";
 import { CompanionCharacter } from "./companion-character";
 import { WorldAtmosphere } from "./world-atmosphere";
+import { SortingChallenge } from "./sorting-challenge";
 import { getWorldVisualIdentity } from "@/lib/activities/world-visual-identity";
 import { EmojiAsset } from "@/components/shared/emoji-asset";
 import { hasNatureIconFor } from "@/components/illustrations/nature-icons";
@@ -420,12 +421,24 @@ export function ActivityPlayer({
                 {definition.challengePrompt}
               </p>
 
-              <div
-                className={cn(
-                  "grid gap-3",
-                  challengeOptions.length <= 3 ? "grid-cols-3" : "grid-cols-2"
-                )}
-              >
+              {definition.worldId === "world-2" ? (
+                <SortingChallenge
+                  options={challengeOptions}
+                  correctOptionId={definition.correctOptionId}
+                  phase={phase as "challenge" | "feedback"}
+                  selectedId={selectedId}
+                  isChecking={isChecking}
+                  isCorrect={isCorrect}
+                  onSelect={handleChallengeSelect}
+                  allHaveIcons={challengeOptionsAllHaveIcons}
+                />
+              ) : (
+                <div
+                  className={cn(
+                    "grid gap-3",
+                    challengeOptions.length <= 3 ? "grid-cols-3" : "grid-cols-2"
+                  )}
+                >
                 {challengeOptions.map((option, i) => {
                   const isSelected = selectedId === option.id;
                   const isAnswer = option.id === definition.correctOptionId;
@@ -492,7 +505,8 @@ export function ActivityPlayer({
                     </motion.button>
                   );
                 })}
-              </div>
+                </div>
+              )}
 
               {/* Hint button */}
               {phase === "challenge" && !isChecking && hintsUsed < 3 && (

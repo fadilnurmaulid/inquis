@@ -6,6 +6,7 @@
 
 import type { Metadata } from "next";
 import { LoginForm } from "@/components/auth/login-form";
+import { InquisLogoMark } from "@/components/shared/inquis-logo-mark";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         {/* Logo */}
         <div className="text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-inquis-sky to-inquis-ocean shadow-xl shadow-inquis-sky/30">
-            <span className="font-display text-3xl font-bold text-white">Q</span>
+            <InquisLogoMark size={34} />
           </div>
           <h1 className="font-display text-3xl font-bold text-gray-900">INQUIS</h1>
           <p className="mt-1 text-sm font-medium text-gray-500">

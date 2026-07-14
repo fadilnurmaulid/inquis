@@ -6,6 +6,7 @@
 
 import Link from "next/link";
 import type { Metadata } from "next";
+import { InquisLogoMark } from "@/components/shared/inquis-logo-mark";
 
 export const metadata: Metadata = {
   title: "INQUIS · Belajar Sains & Peduli Lingkungan",
@@ -33,7 +34,7 @@ export default function LandingPage() {
       {/* Hero */}
       <div className="mb-8 space-y-4">
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-inquis-sky to-inquis-ocean shadow-2xl shadow-inquis-sky/40">
-          <span className="font-display text-4xl font-bold text-white">Q</span>
+          <InquisLogoMark size={44} />
         </div>
         <div>
           <h1 className="font-display text-5xl font-bold text-gray-900 tracking-tight">INQUIS</h1>

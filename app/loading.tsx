@@ -1,7 +1,9 @@
 /**
  * Global route loading fallback — never shows a blank page.
- * Animated INQUIS Q mark with pulse ring.
+ * Animated INQUIS brand mark with pulse ring.
  */
+
+import { InquisLogoMark } from "@/components/shared/inquis-logo-mark";
 
 export default function Loading() {
   return (
@@ -10,7 +12,7 @@ export default function Loading() {
       <div className="relative">
         <div className="absolute inset-0 animate-pulse-ring rounded-full bg-primary/30" />
         <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-inquis-sky to-inquis-ocean shadow-2xl shadow-primary/30">
-          <span className="font-display text-3xl font-bold text-white">Q</span>
+          <InquisLogoMark size={38} />
         </div>
       </div>
       <div className="space-y-1 text-center">

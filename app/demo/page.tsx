@@ -7,6 +7,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { DemoLoginSection } from "@/components/auth/demo-login-section";
+import { InquisLogoMark } from "@/components/shared/inquis-logo-mark";
 import { ArrowRight, ArrowLeft, BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -28,7 +29,7 @@ export default function DemoPage() {
         {/* Header */}
         <div className="text-center">
           <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-inquis-sky to-inquis-ocean shadow-2xl shadow-inquis-sky/40">
-            <span className="font-display text-4xl font-bold text-white">Q</span>
+            <InquisLogoMark size={44} />
           </div>
           <h1 className="font-display text-3xl font-bold text-gray-900">Mode Demo INQUIS</h1>
           <p className="mt-2 text-gray-500">

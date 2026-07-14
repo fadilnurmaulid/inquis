@@ -5,6 +5,7 @@
  */
 
 import { cn } from "@/lib/utils";
+import { InquisLogoMark } from "@/components/shared/inquis-logo-mark";
 
 interface LoadingScreenProps {
   message?: string;
@@ -37,7 +38,7 @@ export function LoadingScreen({
       <div className="relative h-16 w-16">
         <div className="animate-pulse-ring absolute inset-0 rounded-full bg-primary/20" />
         <div className="relative flex h-16 w-16 animate-float items-center justify-center rounded-full bg-primary shadow-lg">
-          <span className="font-display text-2xl font-bold text-white">Q</span>
+          <InquisLogoMark size={30} />
         </div>
       </div>
       <p className="text-sm text-muted-foreground">{message}</p>
