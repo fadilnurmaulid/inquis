@@ -120,6 +120,7 @@ export default async function ActivityPage({ params, searchParams }: PageProps) 
     <>
       <main className="min-h-screen pb-24 bg-gradient-to-br from-sky-50 to-blue-50">
         <ActivityPlayer
+          key={session.id}
           definition={definition}
           sessionId={session.id}
           childId={child.id}

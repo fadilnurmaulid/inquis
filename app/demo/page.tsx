@@ -7,7 +7,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { DemoLoginSection } from "@/components/auth/demo-login-section";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowLeft, BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Mode Demo",
@@ -59,13 +59,22 @@ export default function DemoPage() {
           </div>
         </div>
 
-        {/* Links */}
-        <div className="flex flex-wrap justify-center gap-4 text-sm">
-          <Link href="/about" className="flex items-center gap-1 font-semibold text-primary hover:underline">
-            📖 Metode Inkuiri <ArrowRight className="h-3.5 w-3.5" />
+        {/* Footer navigation */}
+        <div className="flex items-center justify-between gap-4 border-t border-gray-200/70 pt-5 text-sm">
+          <Link
+            href="/"
+            className="flex min-h-[40px] items-center gap-1.5 rounded-lg px-2 font-semibold text-gray-500 transition-colors hover:bg-gray-100/70 hover:text-gray-700"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden />
+            Beranda
           </Link>
-          <Link href="/" className="text-gray-500 hover:text-gray-700 hover:underline">
-            ← Beranda
+          <Link
+            href="/about"
+            className="flex min-h-[40px] items-center gap-1.5 rounded-lg px-2 font-semibold text-primary transition-colors hover:bg-primary/5"
+          >
+            <BookOpen className="h-4 w-4" aria-hidden />
+            Metode Inkuiri
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
           </Link>
         </div>
       </div>

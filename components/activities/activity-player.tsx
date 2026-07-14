@@ -8,7 +8,7 @@
  * Never punishes wrong answers (P2). Always encourages (LR-003).
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lightbulb, ArrowRight, Star, Trophy, CheckCircle } from "lucide-react";
@@ -194,6 +194,19 @@ export function ActivityPlayer({
   const exploreMinRequired = Math.min(2, definition.exploreItems.length);
   const canProceedFromExplore = exploredIds.size >= exploreMinRequired;
 
+  // Distinct companion reaction the moment the explore threshold is first
+  // reached — a small milestone beat, separate from the per-tap "happy"
+  // blip, so unlocking "Lanjut ke Tantangan" feels like an accomplishment.
+  const hasCelebratedExploreRef = useRef(false);
+  useEffect(() => {
+    if (canProceedFromExplore && !hasCelebratedExploreRef.current && phase === "explore") {
+      hasCelebratedExploreRef.current = true;
+      setCompanionMood("celebrate");
+      const t = window.setTimeout(() => setCompanionMood("idle"), 1400);
+      return () => window.clearTimeout(t);
+    }
+  }, [canProceedFromExplore, phase]);
+
   // Only use SVG nature-icon illustrations when every item in a given grid
   // has a matching icon — mixing icons and emoji glyphs in the same grid
   // looks visually inconsistent, so we fall back to emoji for the whole
@@ -331,7 +344,7 @@ export function ActivityPlayer({
                       whileTap={{ scale: 0.9 }}
                       onClick={() => handleExploreTap(item.id)}
                       className={cn(
-                        "flex min-h-[88px] flex-col items-center justify-center gap-2 border-2 p-4 transition-all",
+                        "flex min-h-[88px] flex-col items-center justify-center gap-2 border-2 p-4 transition-colors",
                         visualIdentity.exploreLayout === "focus" ? "min-h-[76px] p-3" : "min-h-[88px] p-4",
                         visualIdentity.cardRadius,
                         explored
@@ -378,16 +391,24 @@ export function ActivityPlayer({
                 </p>
               )}
 
-              {canProceedFromExplore && (
-                <Button
-                  variant="childPrimary"
-                  size="lg"
-                  onClick={() => setPhase("challenge")}
-                  className="w-full"
-                >
-                  Lanjut ke Tantangan <ArrowRight className="h-5 w-5" />
-                </Button>
-              )}
+              <AnimatePresence>
+                {canProceedFromExplore && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 280, damping: 20 }}
+                  >
+                    <Button
+                      variant="childPrimary"
+                      size="lg"
+                      onClick={() => setPhase("challenge")}
+                      className="w-full"
+                    >
+                      Lanjut ke Tantangan <ArrowRight className="h-5 w-5" />
+                    </Button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           )}
 
@@ -580,12 +601,16 @@ export function ActivityPlayer({
                 Tidak ada jawaban salah, ini tentang apa yang kamu rasakan!
               </p>
               <div className="space-y-2">
-                {definition.reflectionOptions.map((opt) => (
-                  <button
+                {definition.reflectionOptions.map((opt, i) => (
+                  <motion.button
                     key={opt.id}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * visualIdentity.staggerDelay, type: "spring", stiffness: visualIdentity.springStiffness, damping: 22 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => setReflectionId(opt.id)}
                     className={cn(
-                      "flex w-full min-h-[56px] items-center gap-3 rounded-2xl border-2 px-4 py-3 text-left transition-all",
+                      "flex w-full min-h-[56px] items-center gap-3 rounded-2xl border-2 px-4 py-3 text-left transition-colors",
                       reflectionId === opt.id
                         ? "border-primary bg-primary/10 shadow-sm"
                         : "border-gray-200 bg-white hover:border-primary/50 hover:shadow-sm"
@@ -594,7 +619,7 @@ export function ActivityPlayer({
                   >
                     <EmojiAsset emoji={opt.emoji} textClassName="text-2xl" size={28} />
                     <span className="font-semibold text-gray-800">{opt.label}</span>
-                  </button>
+                  </motion.button>
                 ))}
               </div>
 

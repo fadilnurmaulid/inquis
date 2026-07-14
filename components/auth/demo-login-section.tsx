@@ -7,7 +7,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, ChevronRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { DEMO_ACCOUNTS, type DemoAccount } from "@/lib/demo/accounts";
 import { cn } from "@/lib/utils";
@@ -101,7 +101,7 @@ export function DemoLoginSection({ compact = false }: DemoLoginSectionProps) {
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin text-primary" aria-label="Memuat..." />
               ) : (
-                <span className="text-primary/60 text-sm" aria-hidden>→</span>
+                <ChevronRight className="h-4 w-4 text-primary/60" aria-hidden />
               )}
             </button>
           );
