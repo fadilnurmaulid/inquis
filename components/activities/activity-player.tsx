@@ -88,6 +88,16 @@ export function ActivityPlayer({
   const [companionMood, setCompanionMood] = useState<
     "idle" | "happy" | "thinking" | "celebrate"
   >("idle");
+
+  // "challenge" and "feedback" render the same JSX block (they're gated by
+  // the same `phase === "challenge" || phase === "feedback"` condition) and
+  // must stay mounted continuously across that transition — otherwise the
+  // per-world challenge components (SortingChallenge, MagnifyChallenge,
+  // PredictChallenge) get destroyed and recreated mid-animation/mid-drag,
+  // which was the root cause of the reflection screen going blank after a
+  // drag-and-drop answer. Every other phase remains its own distinct key.
+  const phaseGroupKey =
+    phase === "challenge" || phase === "feedback" ? "challenge-group" : phase;
   const [saveError, setSaveError] = useState<string | null>(null);
   const [isChecking, setIsChecking] = useState(false);
 
@@ -272,7 +282,7 @@ export function ActivityPlayer({
         {/* Phase content (main column on desktop) */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={phase}
+            key={phaseGroupKey}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}

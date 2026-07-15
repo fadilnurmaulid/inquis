@@ -122,24 +122,12 @@ export function SortingChallenge({
               dragMomentum={false}
               whileDrag={{ scale: 1.12, zIndex: 10 }}
               onDragStart={() => setDraggingId(option.id)}
-              onDrag={(event) => {
-                const point =
-                  "clientX" in event
-                    ? (event as unknown as PointerEvent)
-                    : (event as TouchEvent).touches?.[0];
-                if (point) {
-                  setIsOverBin(isPointOverBin(point.clientX, point.clientY));
-                }
+              onDrag={(_event, info) => {
+                setIsOverBin(isPointOverBin(info.point.x, info.point.y));
               }}
-              onDragEnd={(event) => {
+              onDragEnd={(_event, info) => {
                 setDraggingId(null);
-                const point =
-                  "clientX" in event
-                    ? (event as unknown as PointerEvent)
-                    : (event as TouchEvent).changedTouches?.[0];
-                const droppedOnBin = point
-                  ? isPointOverBin(point.clientX, point.clientY)
-                  : false;
+                const droppedOnBin = isPointOverBin(info.point.x, info.point.y);
                 setIsOverBin(false);
                 if (droppedOnBin) {
                   submitOnce(option.id);
