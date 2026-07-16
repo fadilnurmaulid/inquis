@@ -382,7 +382,9 @@ function MesinDalam({
             <ArrowLeft className="h-4 w-4" aria-hidden />
             Kembali
           </Link>
-          <p className="label-spesimen text-right text-tinta-soft">Aktivitas {a.nomor}</p>
+          <p className="label-spesimen text-right text-tinta-soft">
+            {namaDunia} · {a.nomor}
+          </p>
         </div>
         <Penunjuk layar={layar} warna={warna} />
       </header>

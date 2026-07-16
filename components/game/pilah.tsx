@@ -52,7 +52,9 @@ export function PapanPilahWadah({ data, onSelesai }: PropsMain<PilahWadah>) {
     if (data.benda.every((b) => tempat[b.id])) selesaikan();
   }, [tempat, data.benda, sudah, selesaikan]);
 
-  const sisa = data.benda.filter((b) => !tempat[b.id]);
+  // Diambil dari `benda` (acakan berbenih), bukan data.benda: kalau urutan
+  // asli data yang tampil, urutan penulisan konten ikut bocor ke anak.
+  const sisa = benda.filter((b) => !tempat[b.id]);
 
   return (
     <Bingkai
