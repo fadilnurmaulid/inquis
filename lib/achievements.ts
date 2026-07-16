@@ -1,9 +1,15 @@
-// lib/achievements.ts
-// Pure utility — NO "use client". Aman dipanggil dari Server maupun Client.
+/**
+ * Capaian.
+ *
+ * Utilitas murni — tanpa "use client", aman dipanggil dari Server
+ * maupun Client Component. Wajahnya sekarang id spesimen, bukan emoji.
+ */
+
+import type { SpecimenId } from "@/components/illustrations/specimens";
 
 export interface Achievement {
   id: string;
-  emoji: string;
+  spesimen: SpecimenId;
   title: string;
   description: string;
   earned: boolean;
@@ -12,44 +18,44 @@ export interface Achievement {
 export const ACHIEVEMENTS: Achievement[] = [
   {
     id: "first-step",
-    emoji: "🌱",
-    title: "Langkah Pertama",
-    description: "Selesaikan aktivitas pertamamu",
+    spesimen: "biji",
+    title: "Biji Pertama",
+    description: "Menyelesaikan satu aktivitas",
     earned: false,
   },
   {
     id: "world-1",
-    emoji: "🦋",
-    title: "Pengamat Alam Cilik",
-    description: "Selesaikan Dunia 1: Penjelajah Pola Alam",
+    spesimen: "kupu-kupu",
+    title: "Pembaca Pola",
+    description: "Menuntaskan Dunia 1",
     earned: false,
   },
   {
     id: "world-2",
-    emoji: "🐢",
-    title: "Pahlawan Daur Ulang",
-    description: "Selesaikan Dunia 2: Penjelajah Pemilahan",
+    spesimen: "kura-kura",
+    title: "Ahli Pilah",
+    description: "Menuntaskan Dunia 2",
     earned: false,
   },
   {
     id: "world-3",
-    emoji: "🔮",
-    title: "Peramal Alam",
-    description: "Selesaikan Dunia 3: Penjelajah Prediksi Alam",
+    spesimen: "burung",
+    title: "Pembaca Cuaca",
+    description: "Menuntaskan Dunia 3",
     earned: false,
   },
   {
     id: "world-4",
-    emoji: "🧪",
-    title: "Sahabat Bumi",
-    description: "Selesaikan semua 4 dunia",
+    spesimen: "pohon-besar",
+    title: "Ilmuwan Cilik",
+    description: "Menuntaskan keempat dunia",
     earned: false,
   },
   {
     id: "independent",
-    emoji: "⭐",
-    title: "Ilmuwan Mandiri",
-    description: "Selesaikan 3 aktivitas tanpa petunjuk",
+    spesimen: "kaca-pembesar",
+    title: "Jalan Sendiri",
+    description: "Tiga aktivitas selesai",
     earned: false,
   },
 ];

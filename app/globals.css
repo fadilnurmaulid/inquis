@@ -4,59 +4,42 @@
 
 @layer base {
   :root {
-    /* ── Design tokens ── */
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Token shadcn dipetakan ke palet Jurnal Lapangan */
+    --background: 76 28% 92%; /* #EEF1E6 kertas */
+    --foreground: 143 26% 16%; /* #1E3326 tinta */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 70 30% 96%; /* #F7F8F2 */
+    --card-foreground: 143 26% 16%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 70 30% 96%;
+    --popover-foreground: 143 26% 16%;
 
-    /* INQUIS brand: sky blue */
-    --primary: 207 100% 69%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 137 38% 39%; /* #3E8B54 daun */
+    --primary-foreground: 70 30% 97%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 81 26% 87%; /* #E1E7D6 */
+    --secondary-foreground: 143 26% 16%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 81 26% 87%;
+    --muted-foreground: 143 19% 32%; /* #41604D */
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 35 69% 52%; /* #D9922E matahari */
+    --accent-foreground: 143 26% 16%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 6 51% 47%; /* #B3453A — hanya untuk galat sistem */
+    --destructive-foreground: 70 30% 97%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 207 100% 69%;
+    --border: 137 9% 78%;
+    --input: 137 9% 78%;
+    --ring: 137 38% 39%;
 
-    --radius: 0.75rem;
-  }
+    --radius: 1rem;
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 207 100% 69%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 207 100% 69%;
+    /* Warna dunia — dipakai lewat style prop, disimpan di sini agar satu sumber */
+    --dunia-1: #3e8b54;
+    --dunia-2: #2f7fa6;
+    --dunia-3: #d9922e;
+    --dunia-4: #6b5dd3;
   }
 }
 
@@ -65,78 +48,222 @@
     @apply border-border;
   }
 
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-kertas text-tinta;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1,
+      "ss01" 1;
+    /* Serat kertas daur ulang — dua lapis titik halus, bukan gambar. */
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(62, 139, 84, 0.045) 0 1px, transparent 1px),
+      radial-gradient(circle at 62% 72%, rgba(140, 90, 60, 0.04) 0 1px, transparent 1px);
+    background-size:
+      22px 22px,
+      31px 31px;
   }
 
-  /* Accessibility: focus visible ring */
+  /* Cincin fokus: selalu terlihat, mengikuti tinta bukan biru sistem. */
   :focus-visible {
-    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+    @apply outline-none ring-[3px] ring-ring ring-offset-2 ring-offset-background;
+    border-radius: 0.5rem;
   }
 
-  /* Touch targets — minimum 44px per ui-guidelines.md */
-  button,
-  [role="button"],
-  a {
-    @apply min-h-[44px] min-w-[44px];
+  /* Judul selalu memakai display face. */
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    font-weight: 700;
+  }
+
+  ::selection {
+    background: #a8d8b4;
+    color: #1e3326;
   }
 }
 
-@layer utilities {
-  /* Child-facing screen utility */
-  .child-screen {
+@layer components {
+  /* ── Label spesimen ────────────────────────────────────────────
+     Motif tanda-tangan produk: label mono huruf besar yang menandai
+     setiap dunia, aktivitas, dan bidang data — seperti tag yang
+     diikatkan pada spesimen di jurnal lapangan.                     */
+  .label-spesimen {
+    @apply inline-flex items-center gap-1.5 font-label text-label font-medium uppercase tracking-[0.14em];
+  }
+
+  /* ── Kartu kertas ───────────────────────────────────────────── */
+  .kartu-kertas {
+    @apply rounded-kartu border border-kertas-deep bg-kertas-lo shadow-kertas;
+  }
+
+  /* Tepi kertas sobek di sisi bawah kartu utama. */
+  .tepi-sobek::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -7px;
+    height: 8px;
+    background-image: radial-gradient(circle at 5px -2px, transparent 5px, #e1e7d6 5px);
+    background-size: 12px 10px;
+    background-repeat: repeat-x;
+    pointer-events: none;
+  }
+
+  /* ── Kontrol anak ────────────────────────────────────────────
+     Target sentuh 44px HANYA untuk kontrol yang memang tombol.
+     (Sebelumnya diterapkan ke semua <a>/<button> global sehingga
+     tautan teks sebaris ikut jadi 44px dan merusak perataan.)      */
+  .target-sentuh {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* Papan bermain: tanpa seleksi teks & tanpa highlight tap. */
+  .papan-main {
     @apply select-none;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
 
-  /* Smooth page entry */
-  .page-transition {
-    @apply animate-in fade-in-0 duration-300;
+  /* ── Tuas ────────────────────────────────────────────────────
+     Penggeser di laboratorium. Kepala tuas dibuat 28px — jauh di
+     atas bawaan peramban — karena jari anak 5 tahun tidak akan
+     menemukan lingkaran 12px. Warnanya diatur per-tuas lewat
+     custom property --tuas-warna.                                 */
+  .tuas {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
   }
 
-  /* Loading skeleton */
-  .skeleton {
-    @apply animate-pulse rounded-md bg-muted;
+  .tuas::-webkit-slider-runnable-track {
+    height: 10px;
+    border-radius: 9999px;
+    background: theme("colors.kertas.hi");
+    border: 1px solid theme("colors.kertas.deep");
+  }
+  .tuas::-moz-range-track {
+    height: 10px;
+    border-radius: 9999px;
+    background: theme("colors.kertas.hi");
+    border: 1px solid theme("colors.kertas.deep");
   }
 
-  /* Celebration burst animation */
-  .celebrate {
-    animation: bounce-in 0.4s ease-out;
+  .tuas::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 28px;
+    width: 28px;
+    margin-top: -10px;
+    border-radius: 9999px;
+    background: var(--tuas-warna, theme("colors.daun.DEFAULT"));
+    border: 3px solid theme("colors.kertas.lo");
+    box-shadow: 0 2px 6px -1px rgba(30, 51, 38, 0.35);
+    transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .tuas::-moz-range-thumb {
+    height: 28px;
+    width: 28px;
+    border-radius: 9999px;
+    background: var(--tuas-warna, theme("colors.daun.DEFAULT"));
+    border: 3px solid theme("colors.kertas.lo");
+    box-shadow: 0 2px 6px -1px rgba(30, 51, 38, 0.35);
+    transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  /* Floating companion animation */
-  .companion-float {
-    animation: float 3s ease-in-out infinite;
+  .tuas:hover::-webkit-slider-thumb {
+    transform: scale(1.12);
   }
-
-  /* Activity card hover lift */
-  .activity-card {
-    @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
+  .tuas:hover::-moz-range-thumb {
+    transform: scale(1.12);
   }
-
-  /* World card glow on hover */
-  .world-card-active {
-    @apply transition-all duration-200 hover:scale-[1.03] hover:shadow-xl active:scale-[0.97];
+  .tuas:active::-webkit-slider-thumb {
+    transform: scale(1.22);
   }
-
-  /* Smooth progress fill */
-  .progress-fill {
-    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  .tuas:active::-moz-range-thumb {
+    transform: scale(1.22);
+  }
+  .tuas:disabled {
+    cursor: default;
+    opacity: 0.55;
   }
 }
 
-/* ── Scrollbar styling ── */
+@layer utilities {
+  /* Garis kisi jurnal — dipakai pada bidang eksperimen. */
+  .kisi-jurnal {
+    background-image:
+      linear-gradient(to right, rgba(30, 51, 38, 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(30, 51, 38, 0.055) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .kilau-sekali {
+    position: relative;
+    overflow: hidden;
+  }
+  .kilau-sekali::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 38%, rgba(255, 255, 255, 0.55) 50%, transparent 62%);
+    animation: kilau 1.6s ease-in-out infinite;
+  }
+
+  .teks-seimbang {
+    text-wrap: balance;
+  }
+
+  /* Sembunyikan scrollbar pada baris yang digeser horizontal. */
+  .tanpa-scrollbar {
+    scrollbar-width: none;
+  }
+  .tanpa-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── Scrollbar (desktop) ── */
 @media (min-width: 768px) {
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 10px;
+    height: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: #e1e7d6;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border));
+    background-color: #aebcb1;
+    border: 3px solid #e1e7d6;
     border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #7a8f80;
+  }
+}
+
+/* ── Hormati preferensi gerak ────────────────────────────────────
+   Satu tempat, berlaku untuk CSS animation dan Framer Motion
+   (Framer membaca prefers-reduced-motion lewat MotionConfig di
+   app/layout.tsx).                                                 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
   }
 }

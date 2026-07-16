@@ -1,84 +1,127 @@
 /**
- * Demo Mode launcher — FR-LIDM-002
- * One-click access for LIDM judges. Integrated flow, no setup required.
- * Naturally embedded demo launcher per brief instructions.
+ * Halaman coba — /demo
+ *
+ * Dua jalan, dan bedanya ditulis terang-terangan:
+ *
+ *   Coba dulu   → tanpa masuk, semua terbuka, tidak ada yang disimpan
+ *   Masuk       → akun anak sungguhan, kemajuannya tersimpan
+ *
+ * Layar guru dan orang tua sudah tidak ada. Produk ini dipakai anak.
  */
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { DemoLoginSection } from "@/components/auth/demo-login-section";
-import { InquisLogoMark } from "@/components/shared/inquis-logo-mark";
-import { ArrowRight, ArrowLeft, BookOpen } from "lucide-react";
+import { Specimen } from "@/components/illustrations/specimens";
+import { LatarAlam } from "@/components/shared/latar-alam";
+import { Logo } from "@/components/brand/logo";
+import { SEMUA_AKTIVITAS } from "@/lib/game/content";
+import { NAMA_JENIS } from "@/lib/game/types";
 
 export const metadata: Metadata = {
-  title: "Mode Demo",
-  description: "Coba INQUIS langsung tanpa mendaftar, untuk juri LIDM 2026",
+  title: "Coba dulu",
+  description: "Mainkan dua puluh aktivitas tanpa mendaftar, atau masuk sebagai anak untuk menyimpan kemajuan.",
 };
 
-const DEMO_FLOW = [
-  { step: 1, role: "Anak · Bima (Pemula)", desc: "Dunia 1 Aktivitas 1 → selesaikan siklus inkuiri lengkap" },
-  { step: 2, role: "Anak · Rara (Lanjutan)", desc: "Lihat peta dunia dengan kemajuan dan pencapaian nyata" },
-  { step: 3, role: "Guru · Bu Sari", desc: "Dashboard kelas dengan analitik berpikir ilmiah per siswa" },
-  { step: 4, role: "Orang Tua · Pak Budi", desc: "Ringkasan kemajuan Rara dengan narasi yang mudah dipahami" },
-];
+const jenis = Array.from(new Set(SEMUA_AKTIVITAS.map((a) => a.tantangan.kind)));
 
 export default function DemoPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100 p-6">
-      <div className="w-full max-w-lg space-y-6">
-        {/* Header */}
-        <div className="text-center">
-          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-inquis-sky to-inquis-ocean shadow-2xl shadow-inquis-sky/40">
-            <InquisLogoMark size={44} />
-          </div>
-          <h1 className="font-display text-3xl font-bold text-gray-900">Mode Demo INQUIS</h1>
-          <p className="mt-2 text-gray-500">
-            Klik untuk langsung masuk, tidak perlu mendaftar
-          </p>
-        </div>
-
-        {/* Demo login buttons */}
-        <DemoLoginSection />
-
-        {/* Recommended flow */}
-        <div className="rounded-2xl border border-white/60 bg-white/60 p-5 shadow-sm backdrop-blur-sm">
-          <p className="mb-3 text-sm font-bold text-gray-800">
-            Alur demo yang disarankan (10–15 menit):
-          </p>
-          <div className="space-y-2">
-            {DEMO_FLOW.map(({ step, role, desc }) => (
-              <div key={step} className="flex items-start gap-3">
-                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs font-bold text-primary">
-                  {step}
-                </span>
-                <div>
-                  <p className="text-sm font-semibold text-gray-700">{role}</p>
-                  <p className="text-xs text-gray-500">{desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Footer navigation */}
-        <div className="flex items-center justify-between gap-4 border-t border-gray-200/70 pt-5 text-sm">
+    <>
+      <LatarAlam />
+      <main className="mx-auto w-full max-w-3xl px-4 pb-16 pt-6 sm:px-6">
+        <header className="mb-8 flex items-center justify-between gap-3">
           <Link
             href="/"
-            className="flex min-h-[40px] items-center gap-1.5 rounded-lg px-2 font-semibold text-gray-500 transition-colors hover:bg-gray-100/70 hover:text-gray-700"
+            className="target-sentuh inline-flex items-center gap-1.5 rounded-full border-2 border-kertas-deep bg-kertas-lo px-3.5 font-display text-kecil font-bold text-tinta-mid shadow-tile transition-all duration-cepat ease-pegas hover:-translate-y-0.5 hover:border-tinta-faint active:translate-y-0.5 active:shadow-tekan"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />
-            Beranda
+            Kembali
           </Link>
-          <Link
-            href="/about"
-            className="flex min-h-[40px] items-center gap-1.5 rounded-lg px-2 font-semibold text-primary transition-colors hover:bg-primary/5"
-          >
-            <BookOpen className="h-4 w-4" aria-hidden />
-            Metode Inkuiri
-            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-          </Link>
+          <Logo size={30} />
+        </header>
+
+        <div className="mb-8 flex flex-col gap-2">
+          <h1 className="font-display text-pekik font-extrabold text-tinta">Mau mulai dari mana?</h1>
+          <p className="max-w-xl text-badan leading-relaxed text-tinta-mid teks-seimbang">
+            Dua pilihan. Yang pertama untuk melihat-lihat, yang kedua untuk benar-benar belajar.
+          </p>
         </div>
-      </div>
-    </main>
+
+        <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2">
+          {/* Jalan 1 — tanpa masuk */}
+          <section className="flex flex-col gap-3 rounded-kartu border-2 border-daun/50 bg-kertas-lo p-5 shadow-kertas">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-daun/40 bg-daun-lo/30">
+                <Specimen id="kaca-pembesar" size={26} />
+              </span>
+              <div>
+                <p className="label-spesimen text-daun-hi">Tanpa masuk</p>
+                <h2 className="font-display text-besar font-extrabold text-tinta">Coba dulu</h2>
+              </div>
+            </div>
+
+            <ul className="flex flex-1 flex-col gap-1.5 text-kecil text-tinta-mid">
+              <li>Dua puluh aktivitas, semuanya terbuka.</li>
+              <li>Tidak perlu daftar atau mengisi apa pun.</li>
+              <li>Kemajuan tidak disimpan. Muat ulang, semuanya kosong lagi.</li>
+            </ul>
+
+            <Link
+              href="/demo/peta"
+              className="target-sentuh mt-1 inline-flex items-center justify-center gap-2 rounded-full border-2 border-daun-hi bg-daun px-6 font-display text-besar font-extrabold text-kertas-lo shadow-angkat transition-all duration-cepat ease-pegas hover:-translate-y-0.5 hover:bg-daun-hi active:translate-y-0.5 active:shadow-tekan"
+            >
+              Mulai coba
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </section>
+
+          {/* Jalan 2 — masuk */}
+          <section className="flex flex-col gap-3 rounded-kartu border-2 border-kertas-deep bg-kertas-lo p-5 shadow-kertas">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-kertas-deep bg-kertas">
+                <Specimen id="tunas" size={26} />
+              </span>
+              <div>
+                <p className="label-spesimen text-tinta-soft">Dengan akun</p>
+                <h2 className="font-display text-besar font-extrabold text-tinta">Masuk sebagai anak</h2>
+              </div>
+            </div>
+
+            <div className="flex-1">
+              <DemoLoginSection />
+            </div>
+
+            <p className="text-mikro leading-relaxed text-tinta-soft">
+              Punya akun sendiri?{" "}
+              <Link href="/login" className="font-semibold text-daun-hi underline underline-offset-2">
+                Masuk di sini
+              </Link>
+              .
+            </p>
+          </section>
+        </div>
+
+        {/* Isi ringkas */}
+        <section className="mt-8 rounded-kartu border-2 border-kertas-deep bg-kertas-lo/70 p-5">
+          <p className="label-spesimen mb-3 text-tinta-soft">Yang akan kamu temui</p>
+          <ul className="flex flex-wrap gap-2">
+            {jenis.map((j) => (
+              <li
+                key={j}
+                className="rounded-full border-2 border-kertas-deep bg-kertas px-3 py-1 font-display text-mikro font-bold text-tinta-mid"
+              >
+                {NAMA_JENIS[j]}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-kecil leading-relaxed text-tinta-mid">
+            Sepuluh jenis permainan, dibagi ke empat dunia. Tiap aktivitas berjalan lewat tahap yang sama:
+            amati, tebak, buktikan, lalu ceritakan caramu.
+          </p>
+        </section>
+      </main>
+    </>
   );
 }

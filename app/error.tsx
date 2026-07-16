@@ -1,13 +1,17 @@
 "use client";
 
 /**
- * Global Error Boundary — child-friendly, never exposes stack traces.
+ * Batas galat global.
+ *
+ * Tidak pernah menampilkan jejak tumpukan ke pengguna. Pesan aslinya
+ * hanya muncul saat pengembangan, di kotak terpisah.
  */
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { AlertCircle, RefreshCw, Home } from "lucide-react";
+import { Home, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Specimen } from "@/components/illustrations/specimens";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -20,42 +24,37 @@ export default function GlobalError({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gradient-to-br from-sky-50 to-blue-100 p-8 text-center">
-      {/* Icon */}
-      <div className="flex h-24 w-24 items-center justify-center rounded-full bg-red-50 shadow-sm">
-        <AlertCircle className="h-12 w-12 text-red-400" aria-hidden />
-      </div>
+    <main className="flex min-h-screen items-center justify-center bg-kertas px-4">
+      <div className="flex w-full max-w-sm flex-col items-center gap-4 rounded-kartu border-2 border-kertas-deep bg-kertas-lo p-8 text-center shadow-kertas">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-tanah/30 bg-tanah-lo/25">
+          <Specimen id="daun-kering" size={36} />
+        </span>
 
-      <div className="space-y-3 max-w-sm">
-        <h1 className="font-display text-2xl font-bold text-gray-800">
-          Ups, Ada yang Salah!
-        </h1>
-        <p className="text-gray-500 leading-relaxed">
-          Terjadi kesalahan yang tidak terduga. Coba lagi atau kembali ke beranda.
-        </p>
+        <div>
+          <h1 className="font-display text-judul font-extrabold text-tinta">Ada yang tersangkut</h1>
+          <p className="mt-1.5 text-kecil leading-relaxed text-tinta-mid">
+            Halaman ini gagal terbuka. Coba muat ulang, atau kembali ke beranda.
+          </p>
+        </div>
+
         {process.env.NODE_ENV === "development" && (
-          <p className="mt-2 rounded-xl bg-red-50 px-4 py-2 font-mono text-xs text-red-600 text-left">
+          <p className="w-full rounded-tile bg-tanah-lo/30 px-3.5 py-2.5 text-left font-label text-mikro text-tanah-hi">
             {error.message}
           </p>
         )}
-      </div>
 
-      <div className="flex flex-wrap justify-center gap-3">
-        <Button
-          onClick={reset}
-          variant="childPrimary"
-          size="lg"
-          className="rounded-2xl"
-        >
-          <RefreshCw className="h-4 w-4" />
-          Coba Lagi
-        </Button>
-        <Button asChild variant="outline" size="lg" className="rounded-2xl">
-          <Link href="/">
-            <Home className="h-4 w-4" />
-            Beranda
-          </Link>
-        </Button>
+        <div className="flex flex-col items-center gap-2.5 pt-1">
+          <Button onClick={reset} size="besar">
+            <RotateCcw aria-hidden />
+            Coba lagi
+          </Button>
+          <Button asChild variant="kertas" size="kecil">
+            <Link href="/">
+              <Home aria-hidden />
+              Ke beranda
+            </Link>
+          </Button>
+        </div>
       </div>
     </main>
   );

@@ -1,14 +1,18 @@
 "use client";
 
 /**
- * DemoLoginSection — one-click demo login for LIDM judges.
- * Naturally embedded in login page and demo page.
+ * Masuk sebagai anak uji coba.
+ *
+ * Berbeda dari tombol "Coba tanpa masuk" di halaman demo: yang ini
+ * masuk sungguhan, jadi kemajuannya tersimpan. Perbedaan itu ditulis
+ * terang-terangan di halaman, bukan disembunyikan.
  */
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Sparkles, ChevronRight } from "lucide-react";
+import { ChevronRight, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { Specimen } from "@/components/illustrations/specimens";
 import { DEMO_ACCOUNTS, type DemoAccount } from "@/lib/demo/accounts";
 import { cn } from "@/lib/utils";
 
@@ -17,104 +21,81 @@ interface DemoLoginSectionProps {
 }
 
 export function DemoLoginSection({ compact = false }: DemoLoginSectionProps) {
-  const [loadingId, setLoadingId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [memuat, setMemuat] = useState<string | null>(null);
+  const [galat, setGalat] = useState<string | null>(null);
   const router = useRouter();
 
-  async function loginDemo(account: DemoAccount) {
-    setLoadingId(account.email);
-    setError(null);
+  async function masuk(akun: DemoAccount) {
+    setMemuat(akun.email);
+    setGalat(null);
 
     const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email: account.email,
-      password: account.password,
+    const { error } = await supabase.auth.signInWithPassword({
+      email: akun.email,
+      password: akun.password,
     });
 
-    if (authError) {
-      setError(
-        "Demo login gagal. Pastikan akun demo sudah dibuat (npm run demo:setup)."
-      );
-      setLoadingId(null);
+    if (error) {
+      setGalat("Belum bisa masuk. Akun uji coba perlu dibuat dulu lewat `npm run demo:setup`.");
+      setMemuat(null);
       return;
     }
 
     router.refresh();
-    router.push(account.redirectTo);
+    router.push(akun.redirectTo);
   }
 
-  const cols = compact ? "grid-cols-2" : "grid-cols-1 sm:grid-cols-2";
-
   return (
-    <div
-      className={cn(
-        "rounded-2xl border border-dashed border-primary/40 bg-primary/5 p-4",
-        compact ? "space-y-3" : "space-y-4"
-      )}
-    >
-      {/* Header */}
-      <div className="flex items-center gap-2">
-        <Sparkles className="h-4 w-4 text-primary" aria-hidden />
-        <h3 className="font-display text-sm font-bold text-gray-800">
-          Mode Demo · LIDM 2026
-        </h3>
-      </div>
-
+    <div className="space-y-3">
       {!compact && (
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          Klik tombol di bawah untuk langsung masuk tanpa mendaftar.{" "}
-          <span className="font-medium text-gray-700">Tidak perlu setup apapun.</span>
+        <p className="text-kecil leading-relaxed text-tinta-mid">
+          Masuk sebagai salah satu anak di bawah. Kemajuannya tersimpan, jadi kamu bisa keluar dan
+          melanjutkan nanti.
         </p>
       )}
 
-      {/* Account buttons */}
-      <div className={cn("grid gap-2", cols)}>
-        {DEMO_ACCOUNTS.map((account) => {
-          const isLoading = loadingId === account.email;
-          const isDisabled = loadingId !== null;
+      <div className={cn("grid gap-2.5", compact ? "grid-cols-2" : "grid-cols-1 sm:grid-cols-2")}>
+        {DEMO_ACCOUNTS.map((akun) => {
+          const jalan = memuat === akun.email;
           return (
             <button
-              key={account.email}
-              onClick={() => loginDemo(account)}
-              disabled={isDisabled}
+              key={akun.email}
+              type="button"
+              onClick={() => masuk(akun)}
+              disabled={memuat !== null}
+              aria-label={`Masuk sebagai ${akun.label}`}
               className={cn(
-                "flex min-h-[56px] items-center gap-3 rounded-xl border-2 bg-white p-3 text-left",
-                "transition-all duration-200",
-                "hover:border-primary hover:shadow-md hover:-translate-y-0.5",
-                "active:scale-[0.98]",
-                "disabled:cursor-not-allowed disabled:opacity-60",
-                isLoading && "border-primary ring-2 ring-primary/20"
+                "target-sentuh flex items-center gap-3 rounded-kartu border-2 border-kertas-deep bg-kertas-lo p-3 text-left",
+                "shadow-tile transition-all duration-cepat ease-pegas",
+                "hover:-translate-y-0.5 hover:border-daun/60 hover:shadow-angkat",
+                "active:translate-y-0.5 active:shadow-tekan",
+                "disabled:cursor-default disabled:opacity-60",
+                jalan && "border-daun"
               )}
-              aria-label={`Masuk sebagai ${account.label}`}
             >
-              <span className="text-2xl" aria-hidden>{account.emoji}</span>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-bold text-gray-800">
-                  {account.label}
-                </p>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-kertas-deep bg-kertas">
+                <Specimen id={akun.spesimen} size={24} />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-display text-badan font-bold text-tinta">{akun.label}</span>
                 {!compact && (
-                  <p className="truncate text-xs text-muted-foreground">
-                    {account.description}
-                  </p>
+                  <span className="block text-mikro leading-tight text-tinta-soft">{akun.description}</span>
                 )}
-              </div>
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin text-primary" aria-label="Memuat..." />
+              </span>
+              {jalan ? (
+                <Loader2 className="h-4 w-4 shrink-0 animate-spin text-daun" aria-label="Sedang masuk" />
               ) : (
-                <ChevronRight className="h-4 w-4 text-primary/60" aria-hidden />
+                <ChevronRight className="h-4 w-4 shrink-0 text-tinta-faint" aria-hidden />
               )}
             </button>
           );
         })}
       </div>
 
-      {error && (
-        <div
-          role="alert"
-          className="rounded-xl bg-destructive/10 px-3 py-2.5 text-xs font-medium text-destructive"
-        >
-          {error}
-        </div>
+      {galat && (
+        <p role="alert" className="rounded-tile border-2 border-tanah/40 bg-tanah-lo/25 px-3.5 py-2.5 text-kecil text-tanah-hi">
+          {galat}
+        </p>
       )}
     </div>
   );

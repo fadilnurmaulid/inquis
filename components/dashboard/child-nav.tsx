@@ -1,92 +1,71 @@
-/**
- * ChildNav — DASH-009
- * Bottom navigation bar for the child interface.
- * Icon-first, no complex menus (ui-guidelines.md).
- * Includes: Home, Profile, Audio control (mute toggle).
- */
-
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { Home, User, Volume2, VolumeX } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useAudio } from "@/components/providers/audio-provider";
+/**
+ * Navigasi bawah untuk anak.
+ *
+ * Tiga tempat, ikon di depan, tanpa menu bertingkat. Warnanya kertas
+ * dan tinta seperti sisa produk — bukan lagi kaca putih buram yang
+ * berdiri sendiri di atas latar hijau.
+ */
 
-interface NavItem {
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Home, User, Volume2, VolumeX } from "lucide-react";
+import { useAudio } from "@/components/providers/audio-provider";
+import { cn } from "@/lib/utils";
+
+interface Tempat {
   href: string;
   icon: React.ElementType;
   label: string;
-  exact?: boolean;
+  persis?: boolean;
 }
 
-const NAV_ITEMS: NavItem[] = [
-  { href: "/play/home", icon: Home, label: "Beranda", exact: true },
+const TEMPAT: Tempat[] = [
+  { href: "/play/home", icon: Home, label: "Peta", persis: true },
   { href: "/play/profile", icon: User, label: "Profil" },
 ];
 
+const TOMBOL =
+  "flex min-h-[56px] min-w-[68px] flex-col items-center justify-center gap-1 rounded-tile px-3 py-1.5 transition-all duration-cepat ease-pegas active:scale-95";
+
 export function ChildNav() {
   const pathname = usePathname();
-  const router = useRouter();
   const { isMuted, toggleMute } = useAudio();
 
-  function isActive(item: NavItem) {
-    return item.exact ? pathname === item.href : pathname.startsWith(item.href);
-  }
+  const aktif = (t: Tempat) => (t.persis ? pathname === t.href : pathname.startsWith(t.href));
 
   return (
     <nav
       aria-label="Navigasi utama"
-      className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/30 bg-white/80 backdrop-blur-md"
+      className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-kertas-deep bg-kertas-lo/95 backdrop-blur-sm"
     >
-      <div className="mx-auto flex max-w-md items-center justify-around px-4 py-2">
-        {NAV_ITEMS.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item);
+      <div className="mx-auto flex max-w-md items-center justify-around px-4 py-1.5">
+        {TEMPAT.map((t) => {
+          const Ikon = t.icon;
+          const ini = aktif(t);
           return (
-            <button
-              key={item.href}
-              onClick={() => router.push(item.href)}
-              className={cn(
-                // Minimum 44px touch target (ui-guidelines.md)
-                "flex min-h-[56px] min-w-[64px] flex-col items-center justify-center gap-1",
-                "rounded-2xl px-4 py-2 transition-all duration-fast",
-                active
-                  ? "bg-primary/10 text-primary"
-                  : "text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-              )}
-              aria-label={item.label}
-              aria-current={active ? "page" : undefined}
+            <Link
+              key={t.href}
+              href={t.href}
+              aria-current={ini ? "page" : undefined}
+              className={cn(TOMBOL, ini ? "bg-daun-lo/45 text-daun-hi" : "text-tinta-soft hover:bg-kertas-hi hover:text-tinta")}
             >
-              <Icon
-                className={cn("h-6 w-6 transition-transform", active && "scale-110")}
-                aria-hidden
-              />
-              <span className="text-[10px] font-semibold leading-none">{item.label}</span>
-            </button>
+              <Ikon className={cn("h-6 w-6 transition-transform duration-cepat", ini && "scale-110")} aria-hidden />
+              <span className="text-[0.625rem] font-bold leading-none">{t.label}</span>
+            </Link>
           );
         })}
 
-        {/* Audio mute toggle */}
         <button
+          type="button"
           onClick={toggleMute}
-          className={cn(
-            "flex min-h-[56px] min-w-[64px] flex-col items-center justify-center gap-1",
-            "rounded-2xl px-4 py-2 transition-all duration-fast",
-            isMuted
-              ? "bg-destructive/10 text-destructive"
-              : "text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-          )}
-          aria-label={isMuted ? "Aktifkan suara" : "Matikan suara"}
+          aria-label={isMuted ? "Nyalakan suara" : "Matikan suara"}
           aria-pressed={isMuted}
+          className={cn(TOMBOL, isMuted ? "bg-tanah-lo/40 text-tanah-hi" : "text-tinta-soft hover:bg-kertas-hi hover:text-tinta")}
         >
-          {isMuted ? (
-            <VolumeX className="h-6 w-6" aria-hidden />
-          ) : (
-            <Volume2 className="h-6 w-6" aria-hidden />
-          )}
-          <span className="text-[10px] font-semibold leading-none">
-            {isMuted ? "Mute" : "Suara"}
-          </span>
+          {isMuted ? <VolumeX className="h-6 w-6" aria-hidden /> : <Volume2 className="h-6 w-6" aria-hidden />}
+          <span className="text-[0.625rem] font-bold leading-none">{isMuted ? "Senyap" : "Suara"}</span>
         </button>
       </div>
     </nav>

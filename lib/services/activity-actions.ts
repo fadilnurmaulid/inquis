@@ -58,13 +58,11 @@ export async function submitActivityCompletion(
 
     await completeReflection(input.sessionId, input.reflectionResponse);
 
-    // Replay attempts (isFirstAttempt: false) are for practice only. They mark
-    // their own session complete (for the completion-screen UI) but never
-    // create an Assessment row or touch world-completion counting, because
-    // teacher analytics (getClassroomSkillAverages, getTeacherImpactMetrics)
-    // aggregate the Assessment table without an isFirstAttempt filter — a
-    // scored replay would silently skew those averages. See
-    // lib/services/teacher-analytics.service.ts.
+    // Pemutaran ulang (isFirstAttempt: false) hanya latihan. Sesinya
+    // ditandai selesai supaya layar penutup benar, tapi tidak pernah
+    // membuat baris Assessment dan tidak ikut menghitung penuntasan
+    // dunia. Inilah yang membuat tombol "Main lagi" aman ditekan
+    // berkali-kali: kemajuan dan nilai anak tidak bergeser sedikit pun.
     if (!session.isFirstAttempt) {
       await prisma.activitySession.update({
         where: { id: input.sessionId },
@@ -115,8 +113,6 @@ export async function submitActivityCompletion(
     revalidatePath("/play/home");
     revalidatePath(`/play/world/${input.worldId}`);
     revalidatePath("/play/profile");
-    revalidatePath("/parent/dashboard");
-    revalidatePath("/teacher/dashboard");
 
     return { success: true, worldCompleted };
   } catch (e) {

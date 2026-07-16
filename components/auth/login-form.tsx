@@ -1,8 +1,11 @@
 "use client";
 
 /**
- * LoginForm — FND-008 / FND-015
- * Email + password login with integrated demo shortcuts.
+ * Formulir masuk.
+ *
+ * Tinggal satu tujuan setelah berhasil: /play/home. Peran guru dan
+ * orang tua sudah tidak ada, jadi tidak ada lagi peta peran ke dasbor
+ * masing-masing — dan tidak ada lagi kemungkinan salah antar.
  */
 
 import { useState } from "react";
@@ -10,200 +13,155 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
-import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { DemoLoginSection } from "@/components/auth/demo-login-section";
-import { DEMO_ACCOUNTS } from "@/lib/demo/accounts";
+import { getRoleHome } from "@/lib/services/auth-redirect";
+import type { UserRole } from "@/types";
+import { cn } from "@/lib/utils";
 
-const loginSchema = z.object({
-  email: z.string().email("Email tidak valid"),
-  password: z.string().min(6, "Password minimal 6 karakter"),
+const skema = z.object({
+  email: z.string().email("Alamat email belum benar"),
+  password: z.string().min(6, "Kata sandi minimal 6 huruf"),
 });
 
-type LoginValues = z.infer<typeof loginSchema>;
+type NilaiMasuk = z.infer<typeof skema>;
 
 interface LoginFormProps {
   redirectTo?: string;
-  defaultRole?: string;
 }
 
-export function LoginForm({ redirectTo, defaultRole }: LoginFormProps) {
-  const [showPassword, setShowPassword] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+export function LoginForm({ redirectTo }: LoginFormProps) {
+  const [lihat, setLihat] = useState(false);
+  const [galat, setGalat] = useState<string | null>(null);
   const router = useRouter();
-
-  const defaultValues = (() => {
-    if (!defaultRole) return { email: "", password: "" };
-    const account =
-      DEMO_ACCOUNTS.find((a) => a.role === defaultRole.toUpperCase()) ??
-      DEMO_ACCOUNTS.find((a) => a.email.includes(defaultRole.toLowerCase()));
-    return account
-      ? { email: account.email, password: account.password }
-      : { email: "", password: "" };
-  })();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues,
+  } = useForm<NilaiMasuk>({
+    resolver: zodResolver(skema),
+    defaultValues: { email: "", password: "" },
   });
 
-  async function onSubmit(values: LoginValues) {
-    setServerError(null);
+  async function kirim(nilai: NilaiMasuk) {
+    setGalat(null);
     const supabase = createClient();
 
     const { data, error } = await supabase.auth.signInWithPassword({
-      email: values.email,
-      password: values.password,
+      email: nilai.email,
+      password: nilai.password,
     });
 
     if (error || !data.user) {
-      setServerError("Email atau password salah. Gunakan akun demo di atas.");
+      setGalat("Email atau kata sandinya belum cocok. Coba periksa lagi.");
       return;
     }
 
-    const role = data.user.user_metadata?.role as string | undefined;
-    const roleDestinations: Record<string, string> = {
-      CHILD: "/play/home",
-      TEACHER: "/teacher/dashboard",
-      PARENT: "/parent/dashboard",
-      ADMIN: "/admin",
-    };
-    const destination = redirectTo ?? roleDestinations[role ?? ""] ?? "/";
+    const peran = data.user.user_metadata?.role as UserRole | undefined;
+    const tujuan = redirectTo ?? (peran ? getRoleHome(peran) : "/play/home");
 
     router.refresh();
-    router.push(destination);
+    router.push(tujuan);
   }
 
+  const kelasKolom = cn(
+    "target-sentuh w-full rounded-tile border-2 border-kertas-deep bg-kertas-lo px-3.5 py-2.5",
+    "text-badan text-tinta placeholder:text-tinta-faint",
+    "transition-colors duration-cepat focus:border-daun focus:outline-none"
+  );
+
   return (
-    <div className="space-y-4">
-      {/* Integrated demo section */}
+    <div className="flex flex-col gap-5">
       <DemoLoginSection compact />
 
-      {/* Divider */}
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
-        </div>
-        <div className="relative flex justify-center text-xs">
-          <span className="bg-gradient-to-br from-sky-50 to-blue-100 px-3 text-muted-foreground">
-            atau masuk manual
-          </span>
-        </div>
+      <div className="relative flex items-center gap-3">
+        <span className="h-0.5 flex-1 rounded-full bg-kertas-deep" aria-hidden />
+        <span className="label-spesimen text-tinta-faint">atau pakai akun sendiri</span>
+        <span className="h-0.5 flex-1 rounded-full bg-kertas-deep" aria-hidden />
       </div>
 
-      <Card className="shadow-lg border-0 bg-white/90 backdrop-blur-sm">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-lg">Masuk ke INQUIS</CardTitle>
-          <CardDescription>Gunakan email dan password yang terdaftar</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
-            {/* Email */}
-            <div className="space-y-1.5">
-              <label htmlFor="email" className="text-sm font-semibold text-gray-700">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                placeholder="nama@sekolah.ac.id"
-                className="w-full rounded-xl border-2 border-input bg-background px-4 py-3 text-sm
-                           placeholder:text-muted-foreground focus:border-primary focus:outline-none
-                           disabled:opacity-50 transition-colors"
-                disabled={isSubmitting}
-                {...register("email")}
-              />
-              {errors.email && (
-                <p className="text-xs text-destructive" role="alert">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
+      <form onSubmit={handleSubmit(kirim)} className="flex flex-col gap-3.5" noValidate>
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="email" className="label-spesimen text-tinta-soft">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            placeholder="nama@sekolah.id"
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? "galat-email" : undefined}
+            className={kelasKolom}
+            {...register("email")}
+          />
+          {errors.email && (
+            <p id="galat-email" className="text-mikro font-semibold text-tanah-hi">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
 
-            {/* Password */}
-            <div className="space-y-1.5">
-              <label htmlFor="password" className="text-sm font-semibold text-gray-700">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
-                  placeholder="••••••••"
-                  className="w-full rounded-xl border-2 border-input bg-background px-4 py-3 pr-12 text-sm
-                             placeholder:text-muted-foreground focus:border-primary focus:outline-none
-                             disabled:opacity-50 transition-colors"
-                  disabled={isSubmitting}
-                  {...register("password")}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-muted-foreground
-                             hover:text-foreground transition-colors min-h-0 min-w-0"
-                  tabIndex={-1}
-                  aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-xs text-destructive" role="alert">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            {/* Server error */}
-            {serverError && (
-              <div
-                role="alert"
-                className="rounded-xl bg-destructive/10 px-4 py-3 text-sm font-medium text-destructive"
-              >
-                {serverError}
-              </div>
-            )}
-
-            {/* Submit */}
-            <Button
-              type="submit"
-              className="w-full rounded-xl"
-              size="lg"
-              disabled={isSubmitting}
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="password" className="label-spesimen text-tinta-soft">
+            Kata sandi
+          </label>
+          <div className="relative">
+            <input
+              id="password"
+              type={lihat ? "text" : "password"}
+              autoComplete="current-password"
+              placeholder="••••••"
+              aria-invalid={Boolean(errors.password)}
+              aria-describedby={errors.password ? "galat-sandi" : undefined}
+              className={cn(kelasKolom, "pr-12")}
+              {...register("password")}
+            />
+            <button
+              type="button"
+              onClick={() => setLihat((v) => !v)}
+              aria-label={lihat ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+              className="absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-tinta-soft transition-colors duration-cepat hover:bg-kertas-hi hover:text-tinta"
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Masuk...
-                </>
-              ) : (
-                <>
-                  <LogIn className="h-4 w-4" />
-                  Masuk
-                </>
-              )}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+              {lihat ? <EyeOff className="h-4 w-4" aria-hidden /> : <Eye className="h-4 w-4" aria-hidden />}
+            </button>
+          </div>
+          {errors.password && (
+            <p id="galat-sandi" className="text-mikro font-semibold text-tanah-hi">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        {galat && (
+          <p role="alert" className="rounded-tile border-2 border-tanah/40 bg-tanah-lo/25 px-3.5 py-2.5 text-kecil text-tanah-hi">
+            {galat}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className={cn(
+            "target-sentuh mt-1 inline-flex items-center justify-center gap-2 rounded-full border-2 px-6",
+            "font-display text-besar font-extrabold transition-all duration-cepat ease-pegas",
+            isSubmitting
+              ? "cursor-default border-kertas-deep bg-kertas text-tinta-faint"
+              : "border-daun-hi bg-daun text-kertas-lo shadow-angkat hover:-translate-y-0.5 hover:bg-daun-hi active:translate-y-0.5 active:shadow-tekan"
+          )}
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+              Sedang masuk…
+            </>
+          ) : (
+            "Masuk"
+          )}
+        </button>
+      </form>
     </div>
   );
 }

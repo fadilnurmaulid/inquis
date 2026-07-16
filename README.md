@@ -1,333 +1,92 @@
-# INQUIS
+# INQUIS — Little Pattern Explorer
 
-> **Inquiry-Based Interactive Scientific Learning Platform for Early Childhood Education**
+Media pembelajaran digital berbasis *mathematical inquiry* terintegrasi pendidikan karakter peduli lingkungan, untuk anak usia 5–7 tahun.
 
-<p align="center">
-
-A modern inquiry-based digital learning platform designed to cultivate **Scientific Thinking** and **Environmental Awareness** in children aged **5–7 years** through interactive exploration of nature, playful learning, and evidence-based pedagogy.
-
-Built for **Lomba Inovasi Digital Mahasiswa (LIDM) 2026**.
-
-</p>
+Anak bertanya, mencoba, lalu tahu. Dua puluh aktivitas matematika yang dimainkan — bukan dibaca.
 
 ---
 
-## Overview
-
-INQUIS is an educational web application that introduces children to the fundamentals of scientific thinking and environmental care using an Inquiry Learning approach.
-
-Instead of emphasizing memorization, INQUIS encourages children to:
-
-- Observe
-- Ask questions
-- Predict outcomes
-- Explore solutions
-- Draw conclusions
-
-through engaging mathematical patterns and everyday phenomena.
-
-The platform also provides parents and teachers with learning analytics to monitor children's cognitive development and inquiry skills.
-
----
-
-## Educational Objectives
-
-INQUIS aims to help children develop:
-
-- Scientific Thinking
-- Observation Skills
-- Pattern Recognition
-- Logical Reasoning
-- Prediction Skills
-- Problem Solving
-- Curiosity
-- Environmental Awareness
-
----
-
-## Learning Framework
-
-The learning model follows the Inquiry Learning Cycle:
-
-```text
-Observe
-      ↓
-Question
-      ↓
-Predict
-      ↓
-Explore
-      ↓
-Conclude
-```
-
-This framework is integrated into every learning activity throughout the platform.
-
----
-
-## Learning Worlds
-
-### 🌱 World 1 — Pattern Explorer
-
-Recognize patterns and make predictions.
-
-Children learn to identify mathematical relationships through playful activities.
-
----
-
-### 🍎 World 2 — Sorting Explorer
-
-Develop classification and logical reasoning skills.
-
-Children group objects based on observable characteristics.
-
----
-
-### 🌤 World 3 — Prediction Explorer
-
-Understand simple cause-and-effect relationships.
-
-Children make predictions based on everyday scenarios.
-
----
-
-### 🔬 World 4 — Little Scientist
-
-Integrate previous skills into complete scientific inquiry activities.
-
-Children solve contextual problems using observation, reasoning, and evidence.
-
----
-
-## Features
-
-### Child Experience
-
-- Inquiry-based learning activities
-- Progressive learning worlds
-- Interactive gameplay
-- Achievement system
-- Progress tracking
-- Child-friendly interface
-- Animated feedback
-
-### Parent Dashboard
-
-- Learning progress
-- Achievement overview
-- Recommended activities
-- Child development summary
-
-### Teacher Dashboard
-
-- Classroom overview
-- Student analytics
-- Progress monitoring
-- Learning insights
-
----
-
-## Technology Stack
-
-### Frontend
-
-- Next.js 15 (App Router)
-- React
-- TypeScript
-- Tailwind CSS
-- Framer Motion
-
-### Backend
-
-- Supabase
-- Prisma ORM
-- PostgreSQL
-
-### Authentication
-
-- Supabase Auth
-
-### Deployment
-
-- Vercel
-
----
-
-## Architecture
-
-```text
-app/
-components/
-lib/
-prisma/
-public/
-.kiro/
-```
-
-The project follows a modular architecture with clear separation between:
-
-- UI Components
-- Business Logic
-- Database Access
-- Authentication
-- Learning Services
-
----
-
-## Project Structure
-
-```text
-INQUIS
-├── app/
-├── components/
-├── lib/
-├── prisma/
-├── public/
-├── .kiro/
-├── package.json
-└── README.md
-```
-
----
-
-## Local Development
-
-Clone the repository.
-
-```bash
-git clone <repository-url>
-```
-
-Install dependencies.
+## Mulai
 
 ```bash
 npm install
-```
-
-Configure environment variables.
-
-```bash
-cp .env.example .env.local
-```
-
-Run Prisma.
-
-```bash
-npx prisma generate
+npx prisma generate        # WAJIB — skema berubah, baca CATATAN_VERIFIKASI.md bagian 5
 npx prisma db push
-```
-
-Start the development server.
-
-```bash
+npm run db:seed
+npm run demo:sync          # membuat akun uji coba di Supabase Auth
 npm run dev
 ```
 
+Buka `http://localhost:3000`, lalu tekan **Coba sekarang**.
+
+Akun uji coba (kata sandi `Demo2026!`):
+- `rara@inquis.app` — Dunia 1 tuntas, sekarang di Dunia 2
+- `bima@inquis.app` — baru mulai
+
 ---
 
-## Environment Variables
+## Isi
 
-Example:
+| | |
+|---|---|
+| **4 dunia** | Pola · Pemilahan · Prediksi · Ilmuwan Cilik |
+| **20 aktivitas** | 5 per dunia |
+| **10 mesin permainan** | Tiap dunia punya cara mainnya sendiri |
+| **8 tahap inkuiri** | Wajib, ditegakkan tipe data — tidak bisa dilompati |
 
-```env
-DATABASE_URL=
-DIRECT_URL=
+---
 
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
+## Struktur
 
-SUPABASE_SERVICE_ROLE_KEY=
+```
+app/
+  (child)/play/          Area anak — perlu masuk, kemajuan tersimpan
+  demo/                  Mode coba — tanpa masuk, tidak tersimpan
+components/
+  game/                  Mesin aktivitas + 10 papan permainan
+  illustrations/         65 spesimen SVG (pengganti emoji)
+  brand/                 Logo
+  dashboard/             Kartu dunia, peta, capaian, navigasi
+  shared/                Latar alam, layar muat
+lib/
+  game/types.ts          Model data — 8 tahap wajib di sini
+  game/content.ts        20 aktivitas, data murni
+  services/              Prisma, autentikasi, kemajuan, penilaian
+tools/
+  verify.mjs             Pemeriksa statis (jalan tanpa npm install)
+  cek-isi.mjs            Pemeriksa isi 20 aktivitas
 ```
 
 ---
 
-## Demo
+## Perintah
 
-The application includes demonstration accounts for evaluation purposes.
+```bash
+npm run dev           # jalankan
+npm run build         # bangun produksi
+npm run type-check    # periksa tipe
+npm run lint          # periksa gaya kode
+npm test              # uji unit
+npm run test:e2e      # uji ujung-ke-ujung
 
-Demo users allow reviewers to experience the platform without creating new accounts.
-
----
-
-## Educational Principles
-
-INQUIS is designed around several educational principles:
-
-- Inquiry Learning
-- Scientific Thinking
-- Mathematical Inquiry
-- Active Learning
-- Play-Based Learning
-- Environmental Awareness
-- Child-Centered Learning
+node tools/verify.mjs   # pemeriksa statis, tanpa dependensi
+node tools/cek-isi.mjs  # pemeriksa isi, tanpa dependensi
+```
 
 ---
 
-## Development Status
+## Dokumen
 
-Current status:
-
-- Foundation completed
-- Authentication completed
-- Dashboard completed
-- Learning worlds implemented
-- Parent dashboard implemented
-- Teacher dashboard implemented
-- Responsive layout completed
-- Production deployment completed
+- **MODUL_AJAR.md** — modul ajar lengkap (identitas, tujuan, kegiatan, asesmen, LKPD, glosarium, pustaka)
+- **RINGKASAN_PERUBAHAN.md** — apa yang berubah, bug yang diperbaiki, gameplay baru
+- **CATATAN_VERIFIKASI.md** — **baca sebelum menjalankan apa pun.** Berisi peringatan migrasi basis data
 
 ---
 
-## Roadmap
+## Cara menambah aktivitas
 
-Future improvements may include:
+1. Tambahkan objek `Aktivitas` di `lib/game/content.ts`.
+2. TypeScript akan menolak kalau ada satu saja dari 8 tahap yang belum diisi.
+3. `node tools/cek-isi.mjs` akan menolak kalau jawabannya tidak konsisten dengan datanya.
 
-- Adaptive learning
-- AI-assisted learning recommendations
-- Classroom management enhancements
-- Additional learning worlds
-- Gamification improvements
-- Offline support
-
----
-
-## Contributing
-
-This repository is currently maintained as part of the LIDM 2026 project.
-
-Contributions, discussions, and educational feedback are welcome.
-
----
-
-## License
-
-This project is intended for educational and research purposes.
-
-Please refer to the project license for usage details.
-
----
-
-## Authors
-
-Developed by the **INQUIS Team** for **Lomba Inovasi Digital Mahasiswa (LIDM) 2026**.
-
----
-
-## Acknowledgements
-
-Special thanks to:
-
-- Direktorat Pembelajaran dan Kemahasiswaan
-- Lomba Inovasi Digital Mahasiswa (LIDM)
-- Next.js
-- Supabase
-- Prisma
-- Vercel
-
----
-
-<p align="center">
-
-Made with ❤️ to inspire young scientists through inquiry-based learning.
-
-</p>
+Konten adalah data, bukan komponen. Tidak perlu menyentuh React untuk menambah aktivitas.

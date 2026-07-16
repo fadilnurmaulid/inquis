@@ -60,8 +60,6 @@ export async function requireRole(allowedRoles: UserRole[]): Promise<AuthUser> {
   if (!allowedRoles.includes(user.role)) {
     const redirectMap: Record<UserRole, string> = {
       CHILD: "/play/home",
-      TEACHER: "/teacher/dashboard",
-      PARENT: "/parent/dashboard",
       ADMIN: "/admin",
     };
     redirect(redirectMap[user.role]);
@@ -99,8 +97,6 @@ export async function loginWithEmail(
   const user = await getCurrentUser();
   const redirectMap: Record<UserRole, string> = {
     CHILD: "/play/home",
-    TEACHER: "/teacher/dashboard",
-    PARENT: "/parent/dashboard",
     ADMIN: "/admin",
   };
 
@@ -128,19 +124,5 @@ export async function getChildProfile(userId: string) {
   return prisma.child.findFirst({
     where: { user: { id: userId } },
     select: { id: true, name: true, displayName: true, avatarUrl: true },
-  });
-}
-
-export async function getTeacherProfile(userId: string) {
-  return prisma.teacher.findFirst({
-    where: { user: { id: userId } },
-    select: { id: true, name: true, school: true },
-  });
-}
-
-export async function getParentProfile(userId: string) {
-  return prisma.parent.findFirst({
-    where: { user: { id: userId } },
-    select: { id: true, name: true },
   });
 }

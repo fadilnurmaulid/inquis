@@ -1,198 +1,174 @@
 "use client";
 
 /**
- * WorldCard — DASH-004
- * Displays a single learning world with title, status, progress, and lock state.
- * Follows ui-guidelines.md: icon-based, large touch targets, immediate feedback.
+ * Kartu dunia — dan kerangka muatnya.
+ *
+ * Keduanya sengaja tinggal di satu berkas dan berbagi konstanta yang
+ * sama: KULIT, LINGKAR, TINGGI_JUDUL, TINGGI_KETERANGAN. Sebelumnya
+ * kerangka muat ditulis di berkas terpisah dengan ukuran yang ditebak
+ * sendiri, jadi tiap kali kartunya berubah, kerangkanya tertinggal dan
+ * halaman melompat begitu data datang. Selama keduanya membaca
+ * konstanta yang sama, mereka tidak bisa lagi berbeda.
  */
 
-import { motion } from "framer-motion";
-import { Lock, CheckCircle, Play, Star, Trophy, Sparkles } from "lucide-react";
-import { EmojiAsset } from "@/components/shared/emoji-asset";
-import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
+import { Check, Lock } from "lucide-react";
+import { Specimen } from "@/components/illustrations/specimens";
 import type { WorldProgressSummary } from "@/lib/services/dashboard.service";
+import { WORLDS } from "@/types";
+import { cn } from "@/lib/utils";
 
-interface WorldCardProps {
-  world: WorldProgressSummary;
-  onClick?: () => void;
-  isRecommended?: boolean;
-}
+/* Dipakai kartu maupun kerangkanya. Jangan dipisah. */
+const KULIT =
+  "relative flex h-full w-full flex-col gap-3 overflow-hidden rounded-kartu border-2 border-kertas-deep bg-kertas-lo p-5";
+const LINGKAR = "flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2";
+const TINGGI_JUDUL = "min-h-[3.4rem]";
+const TINGGI_KETERANGAN = "min-h-[2.7rem]";
 
-const STATUS_CONFIG: Record<
-  string,
-  {
-    label: string;
-    icon: React.ElementType;
-    badgeClass: string;
-  }
-> = {
-  LOCKED: {
-    label: "Terkunci",
-    icon: Lock,
-    badgeClass: "bg-gray-200/80 text-gray-500",
-  },
-  UNLOCKED: {
-    label: "Siap Dimulai",
-    icon: Sparkles,
-    badgeClass: "bg-white/80 text-gray-700",
-  },
-  IN_PROGRESS: {
-    label: "Sedang Belajar",
-    icon: Play,
-    badgeClass: "bg-white/80 text-gray-700",
-  },
-  COMPLETED: {
-    label: "Selesai! 🎉",
-    icon: CheckCircle,
-    badgeClass: "bg-white/80 text-green-700",
-  },
-  MASTERED: {
-    label: "Dikuasai! 🏆",
-    icon: Trophy,
-    badgeClass: "bg-yellow-100/90 text-yellow-700",
-  },
-};
+/* ── Kartu ─────────────────────────────────────────────────────── */
 
-// World companion emoji — resolved to an SVG illustration by EmojiAsset
-// when available (components/illustrations/nature-icons.tsx).
-const WORLD_EMOJI: Record<string, string> = {
-  "world-1": "🦋",
-  "world-2": "🐢",
-  "world-3": "🔮",
-  "world-4": "🧪",
-};
+export function WorldCard({ data, urut = 0 }: { data: WorldProgressSummary; urut?: number }) {
+  const kurangiGerak = useReducedMotion();
+  const def = WORLDS.find((w) => w.id === data.worldId);
+  const terkunci = data.status === "LOCKED";
+  const tuntas = data.status === "COMPLETED";
+  const persen =
+    data.totalActivities > 0 ? Math.round((data.completedActivities / data.totalActivities) * 100) : 0;
 
-export function WorldCard({ world, onClick, isRecommended }: WorldCardProps) {
-  const config = STATUS_CONFIG[world.status] ?? STATUS_CONFIG.UNLOCKED;
-  const StatusIcon = config.icon;
-  const isLocked = world.status === "LOCKED";
-  const isCompleted = world.status === "COMPLETED";
-  const progressPercent =
-    world.totalActivities > 0
-      ? Math.round(
-          (world.completedActivities / world.totalActivities) * 100
-        )
-      : 0;
-  const worldEmoji = WORLD_EMOJI[world.worldId] ?? "🌟";
+  const isi = (
+    <>
+      <span
+        className="absolute inset-x-0 top-0 h-1.5"
+        style={{ backgroundColor: terkunci ? "#AEBCB1" : data.themeColor }}
+        aria-hidden
+      />
 
-  return (
-    <motion.button
-      onClick={isLocked ? undefined : onClick}
-      disabled={isLocked}
-      whileTap={isLocked ? {} : { scale: 0.96 }}
-      whileHover={isLocked ? {} : { scale: 1.03 }}
-      transition={{ type: "spring", stiffness: 400, damping: 22 }}
-      className={cn(
-        "relative flex w-full flex-col rounded-3xl p-5 text-left shadow-lg transition-shadow",
-        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/60",
-        isLocked && "cursor-not-allowed opacity-60",
-        !isLocked && "hover:shadow-xl active:shadow-md",
-        isRecommended && !isLocked && "ring-4 ring-white shadow-2xl"
-      )}
-      style={{
-        background: isLocked
-          ? "linear-gradient(135deg, #e5e7eb, #d1d5db)"
-          : `linear-gradient(135deg, ${world.themeColor}ee, ${world.themeColor}88)`,
-      }}
-      aria-label={`${world.titleBahasa}: ${config.label}`}
-      aria-disabled={isLocked}
-    >
-      {/* Recommended pulse ring */}
-      {isRecommended && !isLocked && (
+      <div className="flex items-start justify-between gap-3">
         <span
-          className="absolute -inset-1 animate-pulse-ring rounded-3xl bg-white/25"
-          aria-hidden
-        />
-      )}
+          className={cn(LINGKAR, terkunci ? "border-kertas-deep bg-kertas" : "bg-kertas")}
+          style={terkunci ? undefined : { borderColor: data.themeColor }}
+        >
+          {terkunci ? (
+            <Lock className="h-5 w-5 text-tinta-faint" aria-hidden />
+          ) : (
+            <span className={cn(!kurangiGerak && "animate-apung")}>
+              <Specimen id={def?.companionSpecimen ?? "tunas"} size={32} label={data.companionName} />
+            </span>
+          )}
+        </span>
 
-      {/* Top row: world number + status badge */}
-      <div className="mb-3 flex items-start justify-between gap-2">
-        <div className="flex items-center gap-2">
-          {/* World number */}
+        {tuntas && (
           <span
-            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/25 font-display text-lg font-bold text-white"
+            className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-kertas-lo bg-daun"
             aria-hidden
           >
-            {world.worldNumber}
+            <Check className="h-3.5 w-3.5 text-kertas-lo" strokeWidth={3.5} />
           </span>
-          {/* World companion emoji */}
-          <EmojiAsset emoji={worldEmoji} textClassName="text-2xl" size={28} />
-        </div>
-
-        {/* Status badge */}
-        <span
-          className={cn(
-            "flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold",
-            config.badgeClass
-          )}
-        >
-          <StatusIcon className="h-3.5 w-3.5" aria-hidden />
-          {config.label}
-        </span>
+        )}
       </div>
 
-      {/* World title */}
-      <h3
-        className={cn(
-          "font-display text-xl font-bold leading-tight",
-          isLocked ? "text-gray-500" : "text-white"
-        )}
-      >
-        {world.titleBahasa}
-      </h3>
-      <p
-        className={cn(
-          "mt-0.5 text-xs font-normal",
-          isLocked ? "text-gray-400/70" : "text-white/60"
-        )}
-      >
-        {world.title}
+      <div className={cn("flex flex-col gap-0.5", TINGGI_JUDUL)}>
+        <p className="label-spesimen" style={{ color: terkunci ? "#AEBCB1" : data.themeColor }}>
+          Dunia {data.worldNumber}
+        </p>
+        <h3
+          className={cn(
+            "font-display text-besar font-extrabold leading-tight",
+            terkunci ? "text-tinta-faint" : "text-tinta"
+          )}
+        >
+          {data.titleBahasa}
+        </h3>
+      </div>
+
+      <p className={cn("text-mikro leading-relaxed text-tinta-soft", TINGGI_KETERANGAN)}>
+        {terkunci ? "Selesaikan dunia sebelumnya untuk membuka yang ini." : data.description}
       </p>
 
-      {/* Companion name */}
-      {!isLocked && (
-        <p className="mt-1 text-xs font-semibold text-white/70">
-          Bersama {world.companionName}
-        </p>
-      )}
-
-      {/* Progress bar */}
-      {!isLocked && (
-        <div className="mt-auto pt-4">
-          <div className="mb-1.5 flex items-center justify-between">
-            <span className="text-xs text-white/80">
-              {world.completedActivities}/{world.totalActivities} aktivitas
-            </span>
-            {isCompleted && (
-              <div className="flex gap-0.5" aria-label="Semua bintang diraih">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className="h-3.5 w-3.5 fill-yellow-300 text-yellow-300"
-                    aria-hidden
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-white/25">
-            <motion.div
-              className="h-full rounded-full bg-white"
-              initial={{ width: 0 }}
-              animate={{ width: `${progressPercent}%` }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
-            />
-          </div>
+      <div className="mt-auto flex flex-col gap-1.5">
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="label-spesimen text-tinta-faint">
+            {data.completedActivities}/{data.totalActivities} aktivitas
+          </span>
+          <span className="font-label text-mikro font-bold tabular-nums text-tinta-soft">{persen}%</span>
         </div>
-      )}
+        <span className="block h-2 overflow-hidden rounded-full bg-kertas-hi">
+          <motion.span
+            className="block h-full rounded-full"
+            style={{ backgroundColor: terkunci ? "#AEBCB1" : data.themeColor }}
+            initial={kurangiGerak ? false : { width: 0 }}
+            animate={{ width: `${persen}%` }}
+            transition={{ duration: 0.7, delay: 0.1 + urut * 0.06, ease: [0.22, 1, 0.36, 1] }}
+          />
+        </span>
+      </div>
+    </>
+  );
 
-      {/* Lock overlay */}
-      {isLocked && (
-        <div className="mt-auto flex items-center gap-1.5 pt-4 text-gray-400">
-          <Lock className="h-4 w-4" aria-hidden />
-          <span className="text-sm">Selesaikan dunia sebelumnya dulu</span>
+  if (terkunci) {
+    return (
+      <li className="flex">
+        <div className={cn(KULIT, "opacity-70 shadow-tile")} aria-disabled>
+          {isi}
+          <span className="sr-only">Dunia {data.worldNumber} masih terkunci.</span>
         </div>
-      )}
-    </motion.button>
+      </li>
+    );
+  }
+
+  return (
+    <li className="flex">
+      <Link
+        href={`/play/world/${data.worldId}`}
+        aria-label={`Buka Dunia ${data.worldNumber}: ${data.titleBahasa}. ${data.completedActivities} dari ${data.totalActivities} aktivitas selesai.`}
+        className={cn(
+          KULIT,
+          "shadow-kertas transition-all duration-cepat ease-pegas",
+          "hover:-translate-y-1 hover:shadow-angkat active:translate-y-0 active:shadow-tekan"
+        )}
+      >
+        {isi}
+      </Link>
+    </li>
+  );
+}
+
+/* ── Kerangka muat ─────────────────────────────────────────────── */
+
+/**
+ * Bentuknya sama persis dengan kartu di atas: kulit yang sama, lingkaran
+ * yang sama, tinggi judul dan keterangan yang sama, bilah kemajuan di
+ * tempat yang sama. Yang berbeda hanya isinya — bidang berdenyut.
+ */
+export function WorldCardSkeleton() {
+  return (
+    <li className="flex">
+      <div className={cn(KULIT, "shadow-tile")} aria-hidden>
+        <span className="absolute inset-x-0 top-0 h-1.5 bg-kertas-hi" />
+
+        <div className="flex items-start justify-between gap-3">
+          <span className={cn(LINGKAR, "animate-pulse border-kertas-deep bg-kertas-hi")} />
+        </div>
+
+        <div className={cn("flex flex-col justify-center gap-1.5", TINGGI_JUDUL)}>
+          <span className="block h-2.5 w-16 animate-pulse rounded-full bg-kertas-hi" />
+          <span className="block h-4 w-4/5 animate-pulse rounded-full bg-kertas-hi" />
+        </div>
+
+        <div className={cn("flex flex-col justify-start gap-1.5", TINGGI_KETERANGAN)}>
+          <span className="block h-2.5 w-full animate-pulse rounded-full bg-kertas-hi" />
+          <span className="block h-2.5 w-3/5 animate-pulse rounded-full bg-kertas-hi" />
+        </div>
+
+        <div className="mt-auto flex flex-col gap-1.5">
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="block h-2.5 w-20 animate-pulse rounded-full bg-kertas-hi" />
+            <span className="block h-2.5 w-7 animate-pulse rounded-full bg-kertas-hi" />
+          </div>
+          <span className="block h-2 rounded-full bg-kertas-hi" />
+        </div>
+      </div>
+    </li>
   );
 }

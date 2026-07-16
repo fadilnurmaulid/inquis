@@ -1,17 +1,25 @@
 /**
- * Demo account credentials for LIDM 2026 demonstration.
- * Password must match Supabase Auth users (see scripts/sync-demo-auth.ts).
+ * Akun anak untuk uji coba.
+ *
+ * Hanya anak. Akun guru dan orang tua sudah dihapus bersama dasbornya —
+ * produk ini dipakai anak, dan setiap layar yang bukan untuk anak hanya
+ * menambah tempat bug bersembunyi.
+ *
+ * Kata sandinya harus sama dengan pengguna di Supabase Auth
+ * (lihat scripts/sync-demo-auth.ts).
  */
+
+import type { SpecimenId } from "@/components/illustrations/specimens";
 
 export const DEMO_PASSWORD = "Demo2026!";
 
 export interface DemoAccount {
-  role: "CHILD" | "TEACHER" | "PARENT";
+  role: "CHILD";
   email: string;
   password: string;
   label: string;
   description: string;
-  emoji: string;
+  spesimen: SpecimenId;
   redirectTo: string;
 }
 
@@ -20,37 +28,19 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
     role: "CHILD",
     email: "bima@inquis.app",
     password: DEMO_PASSWORD,
-    label: "Anak · Pemula",
-    description: "Belum mulai belajar, ideal untuk demo alur baru",
-    emoji: "🌱",
+    label: "Bima",
+    description: "Baru mulai. Semua dunia masih tertutup kecuali yang pertama.",
+    spesimen: "tunas",
     redirectTo: "/play/home",
   },
   {
     role: "CHILD",
     email: "rara@inquis.app",
     password: DEMO_PASSWORD,
-    label: "Anak · Rara",
-    description: "Dunia 1 selesai, sedang di Dunia 2",
-    emoji: "⭐",
+    label: "Rara",
+    description: "Dunia 1 sudah tuntas, sekarang di Dunia 2.",
+    spesimen: "bunga-matahari",
     redirectTo: "/play/home",
-  },
-  {
-    role: "TEACHER",
-    email: "demo.teacher@inquis.app",
-    password: DEMO_PASSWORD,
-    label: "Guru · Bu Sari",
-    description: "Kelas 1A dengan 4 siswa dan data kemajuan",
-    emoji: "👩‍🏫",
-    redirectTo: "/teacher/dashboard",
-  },
-  {
-    role: "PARENT",
-    email: "demo.parent@inquis.app",
-    password: DEMO_PASSWORD,
-    label: "Orang Tua · Pak Budi",
-    description: "Pantau kemajuan Rara",
-    emoji: "👨‍👩‍👧",
-    redirectTo: "/parent/dashboard",
   },
 ];
 

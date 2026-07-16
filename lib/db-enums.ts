@@ -29,9 +29,7 @@ export const ScaffoldLevel = {
 export type ScaffoldLevel = (typeof ScaffoldLevel)[keyof typeof ScaffoldLevel];
 
 export const Role = {
-  CHILD:   "CHILD",
-  TEACHER: "TEACHER",
-  PARENT:  "PARENT",
-  ADMIN:   "ADMIN",
+  CHILD: "CHILD",
+  ADMIN: "ADMIN",
 } as const;
 export type Role = (typeof Role)[keyof typeof Role];

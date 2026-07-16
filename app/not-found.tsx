@@ -1,48 +1,42 @@
 /**
- * 404 Not Found — child-friendly, never exposes technical details.
+ * Halaman tidak ditemukan — 404
  */
 
-import Link from "next/link";
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Home } from "lucide-react";
+import { Specimen } from "@/components/illustrations/specimens";
+import { LatarAlam } from "@/components/shared/latar-alam";
 
-export const metadata: Metadata = { title: "Halaman Tidak Ditemukan" };
+export const metadata: Metadata = { title: "Halaman tidak ditemukan" };
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gradient-to-br from-sky-50 to-blue-100 p-8 text-center">
-      {/* Illustration */}
-      <div className="flex h-28 w-28 items-center justify-center rounded-full bg-white/70 text-6xl shadow-sm">
-        🔭
-      </div>
+    <>
+      <LatarAlam ragam="tenang" />
+      <main className="flex min-h-screen items-center justify-center px-4">
+        <div className="flex w-full max-w-sm flex-col items-center gap-4 rounded-kartu border-2 border-kertas-deep bg-kertas-lo p-8 text-center shadow-kertas">
+          <span className="flex h-16 w-16 animate-apung items-center justify-center rounded-full border-2 border-kertas-deep bg-kertas">
+            <Specimen id="kaca-pembesar" size={36} />
+          </span>
 
-      <div className="space-y-3">
-        <h1 className="font-display text-3xl font-bold text-gray-800">
-          Ups! Halaman Tidak Ditemukan
-        </h1>
-        <p className="mx-auto max-w-sm text-gray-500 leading-relaxed">
-          Halaman ini seperti pola yang hilang, tidak ada di sini!
-          Yuk kembali ke petualangan belajarmu.
-        </p>
-      </div>
+          <div>
+            <p className="label-spesimen mb-1.5 text-tinta-faint">404</p>
+            <h1 className="font-display text-judul font-extrabold text-tinta">Tidak ada apa-apa di sini</h1>
+            <p className="mt-1.5 text-kecil leading-relaxed text-tinta-mid">
+              Halaman yang kamu cari sudah pindah atau memang belum pernah ada.
+            </p>
+          </div>
 
-      <div className="flex flex-wrap justify-center gap-3">
-        <Link
-          href="/"
-          className="inline-flex min-h-[48px] items-center gap-2 rounded-2xl bg-primary px-6 py-3
-                     font-bold text-white shadow-md transition-all hover:scale-105 hover:bg-primary/90 active:scale-95"
-        >
-          🏠 Kembali ke Beranda
-        </Link>
-        <Link
-          href="/play/home"
-          className="inline-flex min-h-[48px] items-center gap-2 rounded-2xl border-2 border-primary/30
-                     bg-white px-6 py-3 font-bold text-primary transition-all hover:scale-105 hover:bg-primary/5 active:scale-95"
-        >
-          🗺️ Peta Dunia
-        </Link>
-      </div>
-
-      <p className="text-xs text-gray-400">INQUIS · LIDM 2026</p>
-    </main>
+          <Link
+            href="/"
+            className="target-sentuh mt-1 inline-flex items-center gap-2 rounded-full border-2 border-daun-hi bg-daun px-7 font-display text-besar font-extrabold text-kertas-lo shadow-angkat transition-all duration-cepat ease-pegas hover:-translate-y-0.5 hover:bg-daun-hi active:translate-y-0.5 active:shadow-tekan"
+          >
+            <Home className="h-4 w-4" aria-hidden />
+            Ke beranda
+          </Link>
+        </div>
+      </main>
+    </>
   );
 }

@@ -48,13 +48,18 @@ test.describe("Route protection", () => {
     await expect(page).toHaveURL(/\/login/);
   });
 
-  test("redirects unauthenticated user from /teacher to login", async ({ page }) => {
-    await page.goto(`${BASE}/teacher/dashboard`);
+  test("redirects unauthenticated user from /admin to login", async ({ page }) => {
+    await page.goto(`${BASE}/admin`);
     await expect(page).toHaveURL(/\/login/);
   });
 
-  test("redirects unauthenticated user from /parent to login", async ({ page }) => {
-    await page.goto(`${BASE}/parent/dashboard`);
-    await expect(page).toHaveURL(/\/login/);
+  test("demo mode is reachable without logging in", async ({ page }) => {
+    await page.goto(`${BASE}/demo/peta`);
+    await expect(page).toHaveURL(/\/demo\/peta/);
+  });
+
+  test("demo activity is playable without logging in", async ({ page }) => {
+    await page.goto(`${BASE}/demo/main/activity-1-1`);
+    await expect(page).toHaveURL(/\/demo\/main\/activity-1-1/);
   });
 });

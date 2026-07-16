@@ -1,77 +1,60 @@
 "use client";
 
 /**
- * Play route error boundary — child-friendly error UI.
+ * Layar galat area anak.
+ *
+ * Ditulis untuk anak umur enam: kalimat pendek, tanpa istilah teknis,
+ * tanpa menyalahkan dia. Selalu ada dua jalan keluar yang bisa diketuk.
  */
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { RefreshCw, Home } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ChildNav } from "@/components/dashboard/child-nav";
+import { RotateCcw, Map } from "lucide-react";
+import { Specimen } from "@/components/illustrations/specimens";
 
-interface PlayErrorProps {
+export default function PlayError({
+  error,
+  reset,
+}: {
   error: Error & { digest?: string };
   reset: () => void;
-}
-
-export default function PlayError({ error, reset }: PlayErrorProps) {
+}) {
   useEffect(() => {
-    console.error("[PlayError]", error.digest ?? error.message);
+    console.error("[play]", error);
   }, [error]);
 
   return (
-    <>
-      <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50 px-4 pb-24 text-center">
-        <motion.div
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          className="text-7xl"
-          aria-hidden
-        >
-          😅
-        </motion.div>
+    <main className="flex min-h-screen items-center justify-center px-4">
+      <div className="flex w-full max-w-sm flex-col items-center gap-4 rounded-kartu border-2 border-kertas-deep bg-kertas-lo p-8 text-center shadow-kertas">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-tanah/30 bg-tanah-lo/25">
+          <Specimen id="daun-kering" size={36} />
+        </span>
 
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="space-y-2 max-w-xs"
-        >
-          <h2 className="font-display text-2xl font-bold text-gray-800">
-            Ups, Ada Masalah!
-          </h2>
-          <p className="text-gray-500">
-            Peta dunia tidak bisa dimuat. Coba lagi ya, kamu pasti bisa! 💪
+        <div>
+          <h1 className="font-display text-judul font-extrabold text-tinta">Ada yang tersangkut</h1>
+          <p className="mt-1.5 text-kecil leading-relaxed text-tinta-mid">
+            Bukan salahmu. Halaman ini gagal terbuka. Coba muat ulang, atau kembali ke peta.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-          className="flex flex-col gap-3 w-full max-w-xs"
-        >
-          <Button
+        <div className="flex flex-col items-center gap-2.5 pt-1">
+          <button
+            type="button"
             onClick={reset}
-            variant="childPrimary"
-            size="lg"
-            className="w-full rounded-2xl"
+            className="target-sentuh inline-flex items-center gap-2 rounded-full border-2 border-daun-hi bg-daun px-7 font-display text-besar font-extrabold text-kertas-lo shadow-angkat transition-all duration-cepat ease-pegas hover:-translate-y-0.5 hover:bg-daun-hi active:translate-y-0.5 active:shadow-tekan"
           >
-            <RefreshCw className="h-4 w-4" />
-            Coba Lagi
-          </Button>
-          <Button asChild variant="outline" size="lg" className="w-full rounded-2xl">
-            <Link href="/">
-              <Home className="h-4 w-4" />
-              Beranda
-            </Link>
-          </Button>
-        </motion.div>
-      </main>
-      <ChildNav />
-    </>
+            <RotateCcw className="h-4 w-4" aria-hidden />
+            Coba lagi
+          </button>
+          <Link
+            href="/play/home"
+            className="target-sentuh inline-flex items-center gap-1.5 rounded-full border-2 border-kertas-deep bg-kertas-lo px-4 font-display text-kecil font-bold text-tinta-mid shadow-tile transition-all duration-cepat ease-pegas hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-tekan"
+          >
+            <Map className="h-4 w-4" aria-hidden />
+            Kembali ke peta
+          </Link>
+        </div>
+      </div>
+    </main>
   );
 }

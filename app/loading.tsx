@@ -1,24 +1,20 @@
 /**
- * Global route loading fallback — never shows a blank page.
- * Animated INQUIS brand mark with pulse ring.
+ * Layar muat global — supaya tidak pernah ada halaman kosong.
  */
 
-import { InquisLogoMark } from "@/components/shared/inquis-logo-mark";
+import { LogoMark } from "@/components/brand/logo";
 
 export default function Loading() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-gradient-to-br from-sky-50 to-blue-100">
-      {/* Animated INQUIS logo mark */}
+    <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-kertas" aria-busy>
       <div className="relative">
-        <div className="absolute inset-0 animate-pulse-ring rounded-full bg-primary/30" />
-        <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-inquis-sky to-inquis-ocean shadow-2xl shadow-primary/30">
-          <InquisLogoMark size={38} />
-        </div>
+        <span className="absolute inset-0 animate-denyut-cincin rounded-full border-2 border-daun" aria-hidden />
+        <span className="relative flex h-20 w-20 items-center justify-center rounded-full border-2 border-kertas-deep bg-kertas-lo shadow-kertas">
+          <LogoMark size={40} decorative />
+        </span>
       </div>
-      <div className="space-y-1 text-center">
-        <p className="font-display text-base font-semibold text-gray-700">INQUIS</p>
-        <p className="text-sm text-gray-400">Memuat...</p>
-      </div>
+      <p className="label-spesimen text-tinta-soft">Sedang memuat</p>
+      <span className="sr-only">Halaman sedang dimuat.</span>
     </div>
   );
 }

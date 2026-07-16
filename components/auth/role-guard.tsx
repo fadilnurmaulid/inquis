@@ -24,8 +24,6 @@ export async function RoleGuard({ children, allowedRoles, fallback }: RoleGuardP
 
     const redirectMap: Record<UserRole, string> = {
       CHILD: "/play/home",
-      TEACHER: "/teacher/dashboard",
-      PARENT: "/parent/dashboard",
       ADMIN: "/admin",
     };
     redirect(redirectMap[user.role]);

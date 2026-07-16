@@ -1,60 +1,36 @@
-/**
- * WorldMap — DASH-003
- * Displays all four learning worlds with progress, lock state, and navigation.
- * Sequential unlock enforced visually (BR-LF-002, BR-DASH-002).
- */
-
 "use client";
 
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { WorldCard } from "./world-card";
-import type { WorldProgressSummary, ActivitySummary } from "@/lib/services/dashboard.service";
+/**
+ * Peta dunia — dan kerangka muatnya.
+ *
+ * Sama seperti WorldCard: peta dan kerangkanya tinggal di satu berkas
+ * dan berbagi konstanta KISI. Dulu keduanya ditulis terpisah dengan
+ * jumlah kolom yang ditebak sendiri, jadi tata letak melompat begitu
+ * data datang. Sekarang tidak bisa.
+ */
 
-interface WorldMapProps {
-  worlds: WorldProgressSummary[];
-  nextRecommended: ActivitySummary | null;
-  activeSession: ActivitySummary | null;
+import { WorldCard, WorldCardSkeleton } from "@/components/dashboard/world-card";
+import type { WorldProgressSummary } from "@/lib/services/dashboard.service";
+
+/** Satu-satunya sumber kebenaran tata kisi. Dibaca peta dan kerangkanya. */
+const KISI = "grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2";
+
+export function WorldMap({ worlds }: { worlds: WorldProgressSummary[] }) {
+  return (
+    <ul className={KISI} aria-label="Peta dunia">
+      {worlds.map((w, i) => (
+        <WorldCard key={w.worldId} data={w} urut={i} />
+      ))}
+    </ul>
+  );
 }
 
-export function WorldMap({ worlds, nextRecommended, activeSession }: WorldMapProps) {
-  const router = useRouter();
-
-  function handleWorldClick(worldId: string) {
-    router.push(`/play/world/${worldId}`);
-  }
-
-  // Which world should be highlighted as recommended
-  const recommendedWorldId =
-    activeSession?.worldId ?? nextRecommended?.worldId ?? null;
-
+export function WorldMapSkeleton({ jumlah = 4 }: { jumlah?: number }) {
   return (
-    <section aria-label="Peta Dunia Belajar" className="w-full">
-      <motion.div
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-        initial="hidden"
-        animate="visible"
-        variants={{
-          hidden: {},
-          visible: { transition: { staggerChildren: 0.1 } },
-        }}
-      >
-        {worlds.map((world) => (
-          <motion.div
-            key={world.worldId}
-            variants={{
-              hidden: { opacity: 0, y: 24 },
-              visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 260, damping: 20 } },
-            }}
-          >
-            <WorldCard
-              world={world}
-              isRecommended={world.worldId === recommendedWorldId}
-              onClick={() => handleWorldClick(world.worldId)}
-            />
-          </motion.div>
-        ))}
-      </motion.div>
-    </section>
+    <ul className={KISI} aria-hidden>
+      {Array.from({ length: jumlah }).map((_, i) => (
+        <WorldCardSkeleton key={i} />
+      ))}
+    </ul>
   );
 }

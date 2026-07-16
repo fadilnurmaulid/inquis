@@ -1,35 +1,61 @@
 /**
- * Play route loading skeleton — matches exact layout to avoid shift.
+ * Kerangka muat beranda anak.
+ *
+ * Bentuknya mengikuti app/(child)/play/home/page.tsx baris demi baris:
+ * sapaan, kartu lanjut, peta dunia, deret capaian. Kerangka yang tidak
+ * seukuran halamannya justru bikin tata letak melompat — lebih buruk
+ * daripada layar kosong.
  */
 
-import { WorldMapSkeleton } from "@/components/dashboard/world-map-skeleton";
+import { WorldMapSkeleton } from "@/components/dashboard/world-map";
 
 export default function PlayLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50/50 to-indigo-50 pb-24">
-      {/* Header skeleton */}
-      <div className="sticky top-0 z-30 bg-gradient-to-b from-sky-100/80 to-transparent px-4 pb-2 pt-6 lg:px-8">
-        <div className="mx-auto flex max-w-lg items-center justify-between lg:max-w-5xl">
-          <div className="space-y-1.5">
-            <div className="h-3.5 w-12 animate-pulse rounded-full bg-gray-200" />
-            <div className="h-7 w-32 animate-pulse rounded-xl bg-gray-200" />
-          </div>
-          <div className="h-12 w-16 animate-pulse rounded-2xl bg-white/60" />
+    <main className="mx-auto w-full max-w-3xl px-4 pb-28 pt-6 sm:px-6" aria-busy>
+      <span className="sr-only">Sedang memuat peta duniamu…</span>
+
+      {/* Sapaan */}
+      <header className="mb-6 flex items-center gap-3.5" aria-hidden>
+        <span className="h-14 w-14 shrink-0 animate-pulse rounded-full border-2 border-kertas-deep bg-kertas-hi" />
+        <div className="min-w-0 flex-1 space-y-2">
+          <span className="block h-2.5 w-24 animate-pulse rounded-full bg-kertas-hi" />
+          <span className="block h-5 w-40 animate-pulse rounded-full bg-kertas-hi" />
         </div>
+        <span className="h-[3.25rem] w-16 shrink-0 animate-pulse rounded-tile border-2 border-kertas-deep bg-kertas-hi" />
+      </header>
+
+      {/* Kartu lanjut */}
+      <div className="mb-6 flex items-center gap-4 rounded-kartu border-2 border-kertas-deep bg-kertas-lo p-5 shadow-tile" aria-hidden>
+        <span className="h-16 w-16 shrink-0 animate-pulse rounded-full border-2 border-kertas-deep bg-kertas-hi" />
+        <div className="min-w-0 flex-1 space-y-2">
+          <span className="block h-2.5 w-32 animate-pulse rounded-full bg-kertas-hi" />
+          <span className="block h-5 w-3/4 animate-pulse rounded-full bg-kertas-hi" />
+          <span className="block h-2.5 w-28 animate-pulse rounded-full bg-kertas-hi" />
+        </div>
+        <span className="h-11 w-11 shrink-0 animate-pulse rounded-full bg-kertas-hi" />
       </div>
 
-      {/* Content skeleton */}
-      <div className="mx-auto max-w-lg space-y-4 px-4 pt-2 lg:max-w-5xl lg:px-8">
-        {/* Companion skeleton */}
-        <div className="flex items-center gap-4 rounded-3xl bg-white/60 p-4">
-          <div className="h-16 w-16 animate-pulse rounded-2xl bg-gray-200" />
-          <div className="flex-1 space-y-2">
-            <div className="h-4 w-24 animate-pulse rounded-full bg-gray-200" />
-            <div className="h-3.5 w-48 animate-pulse rounded-full bg-gray-100" />
-          </div>
-        </div>
+      {/* Peta dunia */}
+      <section className="mb-6">
+        <span className="mb-3 block h-2.5 w-48 animate-pulse rounded-full bg-kertas-hi" aria-hidden />
         <WorldMapSkeleton />
-      </div>
-    </div>
+      </section>
+
+      {/* Deret capaian */}
+      <section className="kartu-kertas p-5" aria-hidden>
+        <div className="mb-3 flex items-baseline justify-between gap-3">
+          <span className="block h-2.5 w-20 animate-pulse rounded-full bg-kertas-hi" />
+          <span className="block h-3 w-8 animate-pulse rounded-full bg-kertas-hi" />
+        </div>
+        <div className="flex gap-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="flex w-[5.25rem] shrink-0 flex-col items-center gap-1.5">
+              <span className="h-14 w-14 animate-pulse rounded-full border-2 border-kertas-deep bg-kertas-hi" />
+              <span className="block h-2.5 w-14 animate-pulse rounded-full bg-kertas-hi" />
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
   );
 }

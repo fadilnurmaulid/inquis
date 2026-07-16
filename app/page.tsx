@@ -1,120 +1,189 @@
 /**
- * Landing page — root route
- * Evaluator entry point per lidm-2026.md FR-LIDM-001.
- * Communicates innovation claim within 30 seconds (AC-LIDM-001).
+ * Halaman depan — /
+ *
+ * Satu tugas: membuat orang mengerti apa ini dalam sepuluh detik, lalu
+ * memberi mereka satu tombol. Tidak ada jalur guru, tidak ada jalur
+ * orang tua, tidak ada pita lomba. Hanya anak dan pekerjaannya.
  */
 
-import Link from "next/link";
 import type { Metadata } from "next";
-import { InquisLogoMark } from "@/components/shared/inquis-logo-mark";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Logo } from "@/components/brand/logo";
+import { Specimen } from "@/components/illustrations/specimens";
+import { LatarAlam } from "@/components/shared/latar-alam";
+import { SEMUA_AKTIVITAS } from "@/lib/game/content";
+import { NAMA_TAHAP, TAHAP_INKUIRI } from "@/lib/game/types";
+import { WORLDS } from "@/types";
 
 export const metadata: Metadata = {
-  title: "INQUIS · Belajar Sains & Peduli Lingkungan",
+  title: "INQUIS · Jurnal lapangan anak",
   description:
-    "Platform pembelajaran inkuiri berbasis sains untuk anak usia 5–7 tahun. Kembangkan kemampuan berpikir ilmiah dan kepedulian pada lingkungan melalui eksplorasi yang menyenangkan.",
+    "Dua puluh aktivitas matematika untuk anak 5–7 tahun. Setiap aktivitas berangkat dari satu pertanyaan dan berakhir dengan satu tindakan kecil untuk lingkungan.",
 };
 
-const STATS = [
-  { n: "4", label: "Dunia Belajar" },
-  { n: "20", label: "Aktivitas Inkuiri" },
-  { n: "5", label: "Keterampilan Sains" },
-];
+const CATATAN_TAHAP: Record<(typeof TAHAP_INKUIRI)[number], string> = {
+  tujuan: "Apa yang akan dia bisa setelah ini.",
+  pemantik: "Satu pertanyaan yang belum ada jawabannya.",
+  eksplorasi: "Menyentuh dulu. Belum ada benar-salah.",
+  prediksi: "Menebak, dan berani salah.",
+  eksperimen: "Membuktikan sendiri lewat permainan.",
+  refleksi: "Menceritakan caranya berpikir tadi.",
+  penguatan: "Baru di sini matematikanya diberi nama.",
+  karakter: "Satu hal kecil untuk dilakukan hari ini.",
+};
 
-const INQUIRY_SKILLS = [
-  { emoji: "👀", label: "Amati" },
-  { emoji: "❓", label: "Tanya" },
-  { emoji: "🔮", label: "Prediksi" },
-  { emoji: "🔬", label: "Jelajahi" },
-  { emoji: "💡", label: "Simpulkan" },
-];
-
-export default function LandingPage() {
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100 p-6 text-center">
-      {/* Hero */}
-      <div className="mb-8 space-y-4">
-        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-inquis-sky to-inquis-ocean shadow-2xl shadow-inquis-sky/40">
-          <InquisLogoMark size={44} />
-        </div>
-        <div>
-          <h1 className="font-display text-5xl font-bold text-gray-900 tracking-tight">INQUIS</h1>
-          <p className="mt-1 text-xl font-bold text-inquis-ocean">Belajar Sains, Peduli Bumi</p>
-        </div>
-        <p className="mx-auto max-w-lg text-base leading-relaxed text-gray-600">
-          Platform pembelajaran inkuiri untuk anak usia{" "}
-          <strong className="text-gray-800">5–7 tahun</strong>. Kembangkan kemampuan
-          berpikir ilmiah dan kepedulian terhadap lingkungan melalui eksplorasi yang
-          menyenangkan dan terstruktur.
-        </p>
-      </div>
+    <>
+      <LatarAlam />
 
-      {/* Stats */}
-      <div className="mb-8 flex flex-wrap justify-center gap-4">
-        {STATS.map((s) => (
-          <div
-            key={s.label}
-            className="rounded-2xl border border-white/80 bg-white/70 px-5 py-3 text-center shadow-sm backdrop-blur-sm"
+      <header className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-4 py-5 sm:px-6">
+        <Logo size={34} />
+        <nav className="flex items-center gap-2">
+          <Link
+            href="/about"
+            className="target-sentuh inline-flex items-center rounded-full px-3 font-display text-kecil font-bold text-tinta-mid transition-colors duration-cepat hover:text-tinta"
           >
-            <p className="font-display text-3xl font-bold text-inquis-sky">{s.n}</p>
-            <p className="text-xs font-semibold text-gray-500">{s.label}</p>
+            Tentang
+          </Link>
+          <Link
+            href="/login"
+            className="target-sentuh inline-flex items-center rounded-full border-2 border-kertas-deep bg-kertas-lo px-4 font-display text-kecil font-bold text-tinta shadow-tile transition-all duration-cepat ease-pegas hover:-translate-y-0.5 hover:border-tinta-faint active:translate-y-0.5 active:shadow-tekan"
+          >
+            Masuk
+          </Link>
+        </nav>
+      </header>
+
+      <main className="mx-auto w-full max-w-5xl px-4 pb-20 sm:px-6">
+        {/* ── Bagian pembuka ── */}
+        <section className="flex flex-col items-center gap-5 py-10 text-center sm:py-16">
+          <p className="label-spesimen rounded-full border-2 border-kertas-deep bg-kertas-lo px-3 py-1 text-tinta-soft">
+            Usia 5–7 tahun
+          </p>
+
+          <h1 className="max-w-3xl font-display text-raksasa font-extrabold leading-tight text-tinta teks-seimbang">
+            Anak bertanya, mencoba, lalu tahu.
+          </h1>
+
+          <p className="max-w-xl text-besar leading-relaxed text-tinta-mid teks-seimbang">
+            {SEMUA_AKTIVITAS.length} aktivitas matematika yang dimainkan, bukan dibaca. Masing-masing berangkat
+            dari satu pertanyaan tentang alam, dan berakhir dengan satu hal kecil yang bisa dikerjakan hari itu
+            juga.
+          </p>
+
+          <div className="flex flex-col items-center gap-3 pt-1 sm:flex-row">
+            <Link
+              href="/demo"
+              className="target-sentuh group inline-flex items-center gap-2 rounded-full border-2 border-daun-hi bg-daun px-8 font-display text-besar font-extrabold text-kertas-lo shadow-angkat transition-all duration-cepat ease-pegas hover:-translate-y-0.5 hover:bg-daun-hi active:translate-y-0.5 active:shadow-tekan"
+            >
+              Coba sekarang
+              <ArrowRight className="h-5 w-5 transition-transform duration-cepat group-hover:translate-x-0.5" aria-hidden />
+            </Link>
+            <p className="text-kecil text-tinta-soft">Tanpa daftar. Langsung main.</p>
           </div>
-        ))}
-      </div>
+        </section>
 
-      {/* Inquiry cycle preview */}
-      <div className="mb-8 flex flex-wrap justify-center gap-2">
-        {INQUIRY_SKILLS.map((s) => (
-          <span
-            key={s.label}
-            className="flex items-center gap-1.5 rounded-full border border-primary/20 bg-white/70 px-3 py-1.5 text-sm font-semibold text-gray-700 shadow-sm"
-          >
-            <span aria-hidden>{s.emoji}</span>
-            {s.label}
+        {/* ── Empat dunia ── */}
+        <section className="py-10">
+          <div className="mb-5 flex flex-col gap-1.5">
+            <p className="label-spesimen text-tinta-soft">Empat dunia</p>
+            <h2 className="font-display text-judul font-extrabold text-tinta">
+              Tiap dunia punya cara mainnya sendiri
+            </h2>
+          </div>
+
+          <ul className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {WORLDS.map((w) => (
+              <li key={w.id} className="flex">
+                <article
+                  className="flex w-full flex-col gap-3 rounded-kartu border-2 border-kertas-deep bg-kertas-lo p-5 shadow-kertas"
+                  style={{ borderTopColor: w.themeColor, borderTopWidth: 5 }}
+                >
+                  <span
+                    className="flex h-14 w-14 items-center justify-center rounded-full border-2 bg-kertas"
+                    style={{ borderColor: w.themeColor }}
+                  >
+                    <Specimen id={w.companionSpecimen} size={32} label={w.companionName} />
+                  </span>
+                  <div>
+                    <p className="label-spesimen" style={{ color: w.themeColor }}>
+                      Dunia {w.number}
+                    </p>
+                    <h3 className="font-display text-besar font-extrabold leading-tight text-tinta">
+                      {w.titleBahasa}
+                    </h3>
+                  </div>
+                  <p className="flex-1 text-kecil leading-relaxed text-tinta-mid">{w.description}</p>
+                  <p className="label-spesimen text-tinta-faint">{w.activityCount} aktivitas</p>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* ── Delapan tahap ── */}
+        <section className="py-10">
+          <div className="mb-5 flex flex-col gap-1.5">
+            <p className="label-spesimen text-tinta-soft">Isi satu aktivitas</p>
+            <h2 className="font-display text-judul font-extrabold text-tinta">Delapan tahap, selalu berurutan</h2>
+            <p className="max-w-2xl text-badan leading-relaxed text-tinta-mid teks-seimbang">
+              Anak tidak diberi rumus lebih dulu. Dia mengamati, menebak, membuktikan — baru namanya diberi
+              tahu. Urutan ini tidak bisa dilompati, di aktivitas mana pun.
+            </p>
+          </div>
+
+          <ol className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {TAHAP_INKUIRI.map((t, i) => (
+              <li key={t} className="flex">
+                <div className="flex w-full flex-col gap-1.5 rounded-tile border-2 border-kertas-deep bg-kertas-lo p-4 shadow-tile">
+                  <span className="label-spesimen text-tinta-faint">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="font-display text-badan font-bold text-tinta">{NAMA_TAHAP[t]}</span>
+                  <span className="text-mikro leading-relaxed text-tinta-soft">{CATATAN_TAHAP[t]}</span>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        {/* ── Ajakan penutup ── */}
+        <section className="mt-6 flex flex-col items-center gap-4 rounded-kartu border-2 border-kertas-deep bg-kertas-lo p-8 text-center shadow-kertas">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-daun/40 bg-daun-lo/30">
+            <Specimen id="tunas" size={32} />
           </span>
-        ))}
-      </div>
+          <h2 className="max-w-lg font-display text-judul font-extrabold text-tinta teks-seimbang">
+            Cara tercepat menilainya: mainkan satu aktivitas.
+          </h2>
+          <p className="max-w-md text-kecil leading-relaxed text-tinta-mid">
+            Sekitar lima menit. Tidak perlu akun.
+          </p>
+          <Link
+            href="/demo"
+            className="target-sentuh inline-flex items-center gap-2 rounded-full border-2 border-daun-hi bg-daun px-7 font-display text-besar font-extrabold text-kertas-lo shadow-angkat transition-all duration-cepat ease-pegas hover:-translate-y-0.5 hover:bg-daun-hi active:translate-y-0.5 active:shadow-tekan"
+          >
+            Buka aktivitas
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
+        </section>
+      </main>
 
-      {/* Primary CTA — Demo Mode */}
-      <Link
-        href="/demo"
-        className="mb-4 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-inquis-grass to-emerald-500 px-10 py-5 text-xl font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-200 hover:scale-105 hover:shadow-2xl active:scale-95"
-      >
-        🎮 Coba Mode Demo · LIDM 2026
-      </Link>
-
-      {/* Role CTAs */}
-      <div className="mb-6 flex flex-wrap justify-center gap-3">
-        <Link
-          href="/login?role=child"
-          className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl bg-primary/90 px-6 py-3 font-bold text-white shadow-md transition-all hover:scale-105 hover:bg-primary active:scale-95"
-        >
-          🧒 Masuk sebagai Anak
-        </Link>
-        <Link
-          href="/login?role=teacher"
-          className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl border border-primary/30 bg-white/70 px-6 py-3 font-bold text-primary shadow-sm transition-all hover:scale-105 hover:bg-white active:scale-95"
-        >
-          👩‍🏫 Guru
-        </Link>
-        <Link
-          href="/login?role=parent"
-          className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl border border-inquis-sun/40 bg-inquis-sun/10 px-6 py-3 font-bold text-amber-800 shadow-sm transition-all hover:scale-105 active:scale-95"
-        >
-          👨‍👩‍👧 Orang Tua
-        </Link>
-      </div>
-
-      <Link
-        href="/about"
-        className="mb-6 text-sm font-semibold text-primary hover:underline"
-      >
-        📖 Pelajari Metode Inkuiri →
-      </Link>
-
-      {/* Tagline */}
-      <p className="text-xs text-gray-400">
-        INQUIS · Lomba Inovasi Digital Mahasiswa 2026 · Inovasi Pembelajaran Digital
-      </p>
-    </main>
+      <footer className="border-t-2 border-kertas-deep/60">
+        <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-between gap-3 px-4 py-6 sm:flex-row sm:px-6">
+          <Logo size={26} tagline="" />
+          <nav className="flex items-center gap-4 text-kecil text-tinta-mid">
+            <Link href="/about" className="transition-colors duration-cepat hover:text-tinta">
+              Tentang
+            </Link>
+            <Link href="/demo" className="transition-colors duration-cepat hover:text-tinta">
+              Coba
+            </Link>
+            <Link href="/login" className="transition-colors duration-cepat hover:text-tinta">
+              Masuk
+            </Link>
+          </nav>
+        </div>
+      </footer>
+    </>
   );
 }

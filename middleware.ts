@@ -14,8 +14,6 @@ const AUTH_ROUTES = ["/login"];
 // Protected route prefixes and their required roles
 const PROTECTED_ROUTES: Record<string, string[]> = {
   "/play": ["CHILD"],
-  "/teacher": ["TEACHER", "ADMIN"],
-  "/parent": ["PARENT", "ADMIN"],
   "/admin": ["ADMIN"],
 };
 
@@ -52,8 +50,6 @@ export async function middleware(request: NextRequest) {
         // Redirect to appropriate home based on actual role
         const redirectMap: Record<string, string> = {
           CHILD: "/play/home",
-          TEACHER: "/teacher/dashboard",
-          PARENT: "/parent/dashboard",
           ADMIN: "/admin",
         };
         const destination = redirectMap[userRole ?? ""] ?? "/";

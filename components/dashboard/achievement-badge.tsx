@@ -1,100 +1,69 @@
 "use client";
 
 /**
- * AchievementBadge — DASH-008
- * Milestone display for child progress. Visual, encouraging, earned vs. unearned.
+ * Deretan capaian.
+ *
+ * Yang belum didapat tetap ditampilkan, dalam keadaan pudar — supaya
+ * anak tahu apa yang menunggunya, bukan sekadar melihat ruang kosong.
  */
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { Specimen } from "@/components/illustrations/specimens";
+import type { Achievement } from "@/lib/achievements";
 import { cn } from "@/lib/utils";
 
-import type { Achievement } from "@/lib/achievements";
-export { ACHIEVEMENTS, computeAchievements } from "@/lib/achievements";
+export function AchievementBadge({ data, urut = 0 }: { data: Achievement; urut?: number }) {
+  const kurangiGerak = useReducedMotion();
 
-interface AchievementBadgeProps {
-  achievement: Achievement;
-  size?: "sm" | "md";
-  showDescription?: boolean;
-}
-
-export function AchievementBadge({
-  achievement,
-  size = "md",
-  showDescription = false,
-}: AchievementBadgeProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
+    <motion.li
+      initial={kurangiGerak ? false : { opacity: 0, scale: 0.85 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ type: "spring", stiffness: 300, damping: 22 }}
-      className={cn(
-        "flex flex-col items-center gap-1.5 rounded-2xl border-2 p-3 text-center transition-all",
-        achievement.earned
-          ? "border-primary/30 bg-gradient-to-b from-primary/10 to-primary/5 shadow-sm"
-          : "border-gray-200 bg-gray-50 opacity-40 grayscale"
-      )}
-      title={achievement.description}
-      aria-label={`${achievement.title}${achievement.earned ? ", diraih!" : ", belum diraih"}`}
+      transition={{ delay: kurangiGerak ? 0 : urut * 0.05, type: "spring", stiffness: 420, damping: 24 }}
+      className="flex w-[5.25rem] shrink-0 flex-col items-center gap-1.5 text-center"
     >
       <span
+        title={data.earned ? data.title : `Belum didapat — ${data.description}`}
         className={cn(
-          size === "sm" ? "text-2xl" : "text-3xl",
-          achievement.earned && "animate-wiggle"
+          "flex h-14 w-14 items-center justify-center rounded-full border-2 transition-all duration-normal ease-pegas",
+          data.earned
+            ? "border-daun bg-daun-lo/40 shadow-tile"
+            : "border-dashed border-kertas-deep bg-kertas grayscale"
         )}
-        aria-hidden
       >
-        {achievement.emoji}
+        <span className={cn(!data.earned && "opacity-35")}>
+          <Specimen id={data.spesimen} size={30} />
+        </span>
       </span>
       <span
         className={cn(
-          "font-display font-bold text-gray-800",
-          size === "sm" ? "text-[10px] leading-tight" : "text-xs"
+          "text-mikro font-bold leading-tight",
+          data.earned ? "text-tinta" : "text-tinta-faint"
         )}
       >
-        {achievement.title}
+        {data.title}
       </span>
-      {showDescription && (
-        <span className="text-[10px] text-gray-500 leading-tight">
-          {achievement.description}
-        </span>
-      )}
-    </motion.div>
+      <span className="sr-only">{data.earned ? "Sudah didapat" : `Belum didapat. ${data.description}`}</span>
+    </motion.li>
   );
 }
 
-interface AchievementRowProps {
-  achievements: Achievement[];
-}
-
-export function AchievementRow({ achievements }: AchievementRowProps) {
-  const earned = achievements.filter((a) => a.earned);
+export function AchievementRow({ items }: { items: Achievement[] }) {
+  const dapat = items.filter((a) => a.earned).length;
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
-      aria-label="Pencapaianmu"
-      className="rounded-3xl bg-white/60 p-4 shadow-sm backdrop-blur-sm"
-    >
-      <h2 className="mb-3 font-display text-lg font-bold text-gray-800">
-        🏅 Pencapaian
-      </h2>
-      <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-        {achievements.map((a) => (
-          <AchievementBadge key={a.id} achievement={a} size="sm" />
-        ))}
+    <section className="kartu-kertas p-5">
+      <div className="mb-3 flex items-baseline justify-between gap-3">
+        <p className="label-spesimen text-tinta-soft">Capaian</p>
+        <p className="font-label text-kecil font-bold tabular-nums text-tinta-mid">
+          {dapat}/{items.length}
+        </p>
       </div>
-      <p className="mt-3 text-center text-xs text-gray-500">
-        {earned.length > 0 ? (
-          <>
-            {earned.length}/{achievements.length} pencapaian diraih ·{" "}
-            <span className="font-semibold text-primary">Terus semangat! 💪</span>
-          </>
-        ) : (
-          <>Selesaikan aktivitas pertamamu untuk meraih pencapaian pertama! 🌱</>
-        )}
-      </p>
-    </motion.section>
+      <ul className="tanpa-scrollbar flex gap-3 overflow-x-auto pb-1">
+        {items.map((a, i) => (
+          <AchievementBadge key={a.id} data={a} urut={i} />
+        ))}
+      </ul>
+    </section>
   );
 }

@@ -17,8 +17,6 @@ datasource db {
 
 enum Role {
   CHILD
-  TEACHER
-  PARENT
   ADMIN
 }
 
@@ -55,38 +53,9 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  teacher Teacher?
-  parent  Parent?
-  child   Child?
+  child Child?
 
   @@map("users")
-}
-
-model Teacher {
-  id        String   @id @default(cuid())
-  userId    String   @unique @map("user_id")
-  name      String
-  school    String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  classrooms Classroom[]
-
-  @@map("teachers")
-}
-
-model Parent {
-  id        String   @id @default(cuid())
-  userId    String   @unique @map("user_id")
-  name      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  children ParentChild[]
-
-  @@map("parents")
 }
 
 model Child {
@@ -100,56 +69,11 @@ model Child {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parents          ParentChild[]
-  classEnrollments ClassEnrollment[]
   worldProgress    WorldProgress[]
   activitySessions ActivitySession[]
   assessments      Assessment[]
 
   @@map("children")
-}
-
-// ─────────────────────────────────────────────
-// Classroom
-// ─────────────────────────────────────────────
-
-model Classroom {
-  id        String   @id @default(cuid())
-  teacherId String   @map("teacher_id")
-  name      String
-  code      String   @unique // invite code for linking children
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  teacher     Teacher           @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  enrollments ClassEnrollment[]
-
-  @@map("classrooms")
-}
-
-model ClassEnrollment {
-  id          String   @id @default(cuid())
-  classroomId String   @map("classroom_id")
-  childId     String   @map("child_id")
-  enrolledAt  DateTime @default(now()) @map("enrolled_at")
-
-  classroom Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-  child     Child     @relation(fields: [childId], references: [id], onDelete: Cascade)
-
-  @@unique([classroomId, childId])
-  @@map("class_enrollments")
-}
-
-model ParentChild {
-  id       String @id @default(cuid())
-  parentId String @map("parent_id")
-  childId  String @map("child_id")
-
-  parent Parent @relation(fields: [parentId], references: [id], onDelete: Cascade)
-  child  Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
-
-  @@unique([parentId, childId])
-  @@map("parent_children")
 }
 
 // ─────────────────────────────────────────────

@@ -16,18 +16,15 @@ import { DEMO_PASSWORD } from "../lib/demo/accounts";
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+// Harus sama persis dengan prisma/seed.ts dan lib/demo/accounts.ts.
 const DEMO_USERS = [
-  { email: "demo.teacher@inquis.app", role: "TEACHER", supabaseId: "demo-teacher-supabase-id" },
-  { email: "demo.parent@inquis.app", role: "PARENT", supabaseId: "demo-parent-supabase-id" },
   { email: "rara@inquis.app", role: "CHILD", supabaseId: "demo-child-rara" },
   { email: "bima@inquis.app", role: "CHILD", supabaseId: "demo-child-bima" },
-  { email: "siti@inquis.app", role: "CHILD", supabaseId: "demo-child-siti" },
-  { email: "andi@inquis.app", role: "CHILD", supabaseId: "demo-child-andi" },
 ];
 
 async function main() {
   if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
-    console.error("❌ Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
+    console.error("NEXT_PUBLIC_SUPABASE_URL atau SUPABASE_SERVICE_ROLE_KEY belum diisi.");
     process.exit(1);
   }
 
@@ -35,7 +32,7 @@ async function main() {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 
-  console.warn("🔄 Syncing demo auth users...");
+  console.warn("Menyelaraskan pengguna uji coba ke Supabase Auth...");
 
   for (const user of DEMO_USERS) {
   const { data: listData } = await supabase.auth.admin.listUsers();
@@ -62,7 +59,7 @@ async function main() {
 
     authUser = data.user;
 
-    console.log("✓ Created", user.email);
+    console.log("  dibuat  :", user.email);
   } else {
     await supabase.auth.admin.updateUserById(authUser.id, {
       password: DEMO_PASSWORD,
@@ -71,7 +68,7 @@ async function main() {
       },
     });
 
-    console.log("✓ Updated", user.email);
+    console.log("  diperbarui:", user.email);
   }
 
   // ============================
@@ -92,7 +89,7 @@ async function main() {
 
   await prisma.$disconnect();
 
-  console.warn("✅ Demo auth sync complete.");
+  console.warn("Selesai.");
   console.warn(`   Password for all demo accounts: ${DEMO_PASSWORD}`);
 }
 

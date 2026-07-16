@@ -1,44 +1,55 @@
 /**
- * Root Layout — FND-010
- * Initializes global providers, fonts, metadata, and styles.
- * All pages inherit from this layout (FR-006).
+ * Tata letak akar.
+ *
+ * Tiga huruf, masing-masing dengan tugas jelas:
+ *
+ *   Baloo 2          → judul dan tombol. Bulat, tebal, mudah dikenali
+ *                      mata usia 5–7.
+ *   Plus Jakarta Sans → teks isi. Buatan Tokotype, dirancang untuk
+ *                      bahasa Indonesia.
+ *   IBM Plex Mono    → label spesimen dan angka data. Suara "catatan
+ *                      lapangan" pada sistem desain ini.
+ *
+ * Variabelnya dibaca tailwind.config.ts lewat --font-baloo,
+ * --font-jakarta, dan --font-plex.
  */
 
 import type { Metadata, Viewport } from "next";
-import { Nunito, Fredoka } from "next/font/google";
+import { Baloo_2, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-// ── Fonts ──────────────────────────────────────────────────────────────────
-// Nunito: body text (readable, friendly, appropriate for educators)
-// Fredoka: display/headings (rounded, playful, child-facing)
-const nunito = Nunito({
+const baloo = Baloo_2({
   subsets: ["latin"],
-  variable: "--font-nunito",
+  variable: "--font-baloo",
+  display: "swap",
+  weight: ["500", "600", "700", "800"],
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
   display: "swap",
 });
 
-const fredoka = Fredoka({
+const plex = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-fredoka",
+  variable: "--font-plex",
   display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
 });
 
-// ── Metadata ───────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
   title: {
-    default: "INQUIS · Belajar Sains & Peduli Lingkungan",
-    template: "%s | INQUIS",
+    default: "INQUIS · Jurnal lapangan anak",
+    template: "%s · INQUIS",
   },
   description:
-    "Platform pembelajaran inkuiri berbasis sains untuk anak usia 5–7 tahun. " +
-    "Kembangkan kemampuan berpikir ilmiah dan kepedulian pada lingkungan melalui eksplorasi yang menyenangkan.",
-  keywords: ["INQUIS", "sains anak", "inkuiri", "lingkungan", "LIDM 2026", "pembelajaran digital"],
-  authors: [{ name: "INQUIS Team · LIDM 2026" }],
+    "Dua puluh aktivitas matematika untuk anak 5–7 tahun. Setiap aktivitas berangkat dari satu pertanyaan tentang alam dan berakhir dengan satu tindakan kecil untuk lingkungan.",
+  keywords: ["INQUIS", "matematika anak", "inkuiri", "pola", "lingkungan", "PAUD", "kelas 1"],
   openGraph: {
-    title: "INQUIS · Belajar Sains & Peduli Lingkungan",
+    title: "INQUIS · Jurnal lapangan anak",
     description:
-      "Platform pembelajaran inkuiri berbasis sains untuk anak usia 5–7 tahun, sekaligus menumbuhkan kepedulian lingkungan.",
+      "Anak bertanya, mencoba, lalu tahu. Dua puluh aktivitas matematika yang dimainkan, bukan dibaca.",
     type: "website",
     locale: "id_ID",
   },
@@ -48,19 +59,14 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   minimumScale: 1,
-  themeColor: "#60B8FF",
+  themeColor: "#EEF1E6",
 };
 
-// ── Root Layout ────────────────────────────────────────────────────────────
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="id" suppressHydrationWarning>
       <body
-        className={`${nunito.variable} ${fredoka.variable} font-sans antialiased`}
+        className={`${jakarta.variable} ${baloo.variable} ${plex.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         {children}

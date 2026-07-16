@@ -1,47 +1,40 @@
 /**
- * LoadingScreen — FND-014 / FR-011
- * Full-screen loading state with animated INQUIS identity.
- * Never shows a blank page (ui-guidelines.md).
+ * Layar muat yang bisa dipakai di mana saja.
+ *
+ * Dua ragam: "penuh" menutup layar, "ringkas" untuk di dalam kartu.
  */
 
+import { LogoMark } from "@/components/brand/logo";
 import { cn } from "@/lib/utils";
-import { InquisLogoMark } from "@/components/shared/inquis-logo-mark";
 
 interface LoadingScreenProps {
-  message?: string;
+  pesan?: string;
   className?: string;
-  /** compact = small inline spinner, full = full-screen overlay */
-  variant?: "full" | "compact";
+  ragam?: "penuh" | "ringkas";
 }
 
-export function LoadingScreen({
-  message = "Memuat...",
-  className,
-  variant = "full",
-}: LoadingScreenProps) {
-  if (variant === "compact") {
+export function LoadingScreen({ pesan = "Sedang memuat", className, ragam = "penuh" }: LoadingScreenProps) {
+  if (ragam === "ringkas") {
     return (
-      <div className={cn("flex items-center justify-center gap-2 py-8", className)}>
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-        <span className="text-sm text-muted-foreground">{message}</span>
+      <div className={cn("flex items-center justify-center gap-2.5 py-6", className)} aria-busy>
+        <span className="h-5 w-5 animate-spin rounded-full border-2 border-daun border-t-transparent" aria-hidden />
+        <span className="text-kecil text-tinta-soft">{pesan}</span>
       </div>
     );
   }
 
   return (
     <div
-      className={cn(
-        "flex min-h-[60vh] flex-col items-center justify-center gap-4",
-        className
-      )}
+      className={cn("flex min-h-[60vh] flex-col items-center justify-center gap-4", className)}
+      aria-busy
     >
-      <div className="relative h-16 w-16">
-        <div className="animate-pulse-ring absolute inset-0 rounded-full bg-primary/20" />
-        <div className="relative flex h-16 w-16 animate-float items-center justify-center rounded-full bg-primary shadow-lg">
-          <InquisLogoMark size={30} />
-        </div>
+      <div className="relative">
+        <span className="absolute inset-0 animate-denyut-cincin rounded-full border-2 border-daun" aria-hidden />
+        <span className="relative flex h-16 w-16 items-center justify-center rounded-full border-2 border-kertas-deep bg-kertas-lo shadow-kertas">
+          <LogoMark size={32} decorative />
+        </span>
       </div>
-      <p className="text-sm text-muted-foreground">{message}</p>
+      <p className="label-spesimen text-tinta-soft">{pesan}</p>
     </div>
   );
 }
