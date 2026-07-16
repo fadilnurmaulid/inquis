@@ -14,7 +14,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Specimen, SPECIMEN_LABEL } from "@/components/illustrations/specimens";
+import { Specimen } from "@/components/illustrations/specimens";
 import { BendaSeret, PapanDnd, ZonaLepas } from "@/components/game/dnd";
 import { Bingkai, LabelMeja, Meja, Raya, Tanda, useMain, type PropsMain } from "@/components/game/umum";
 import type { LabTakar, Timbang } from "@/lib/game/types";
