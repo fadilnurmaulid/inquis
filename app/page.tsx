@@ -68,9 +68,8 @@ export default function HomePage() {
           </h1>
 
           <p className="max-w-xl text-besar leading-relaxed text-tinta-mid teks-seimbang">
-            {SEMUA_AKTIVITAS.length} aktivitas matematika yang dimainkan, bukan dibaca. Masing-masing berangkat
-            dari satu pertanyaan tentang alam, dan berakhir dengan satu hal kecil yang bisa dikerjakan hari itu
-            juga.
+            {SEMUA_AKTIVITAS.length} permainan matematika dari alam. Setiap permainan mulai dengan satu
+            pertanyaan, dan berakhir dengan satu perbuatan baik.
           </p>
 
           <div className="flex flex-col items-center gap-3 pt-1 sm:flex-row">
@@ -129,8 +128,7 @@ export default function HomePage() {
             <p className="label-spesimen text-tinta-soft">Isi satu aktivitas</p>
             <h2 className="font-display text-judul font-extrabold text-tinta">Delapan tahap, selalu berurutan</h2>
             <p className="max-w-2xl text-badan leading-relaxed text-tinta-mid teks-seimbang">
-              Anak tidak diberi rumus lebih dulu. Dia mengamati, menebak, membuktikan — baru namanya diberi
-              tahu. Urutan ini tidak bisa dilompati, di aktivitas mana pun.
+              Anak mengamati, menebak, membuktikan — baru diberi tahu namanya.
             </p>
           </div>
 

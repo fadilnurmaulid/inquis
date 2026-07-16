@@ -44,9 +44,6 @@ export default function DemoPage() {
 
         <div className="mb-8 flex flex-col gap-2">
           <h1 className="font-display text-pekik font-extrabold text-tinta">Mau mulai dari mana?</h1>
-          <p className="max-w-xl text-badan leading-relaxed text-tinta-mid teks-seimbang">
-            Dua pilihan. Yang pertama untuk melihat-lihat, yang kedua untuk benar-benar belajar.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2">
@@ -62,17 +59,15 @@ export default function DemoPage() {
               </div>
             </div>
 
-            <ul className="flex flex-1 flex-col gap-1.5 text-kecil text-tinta-mid">
-              <li>Dua puluh aktivitas, semuanya terbuka.</li>
-              <li>Tidak perlu daftar atau mengisi apa pun.</li>
-              <li>Kemajuan tidak disimpan. Muat ulang, semuanya kosong lagi.</li>
-            </ul>
+            <p className="flex-1 text-kecil leading-relaxed text-tinta-mid">
+              20 permainan, semua terbuka. Tanpa daftar. Tidak tersimpan.
+            </p>
 
             <Link
               href="/demo/peta"
               className="target-sentuh mt-1 inline-flex items-center justify-center gap-2 rounded-full border-2 border-daun-hi bg-daun px-6 font-display text-besar font-extrabold text-kertas-lo shadow-angkat transition-all duration-cepat ease-pegas hover:-translate-y-0.5 hover:bg-daun-hi active:translate-y-0.5 active:shadow-tekan"
             >
-              Mulai coba
+              Main sekarang!
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </section>
@@ -117,8 +112,7 @@ export default function DemoPage() {
             ))}
           </ul>
           <p className="mt-3 text-kecil leading-relaxed text-tinta-mid">
-            Sepuluh jenis permainan, dibagi ke empat dunia. Tiap aktivitas berjalan lewat tahap yang sama:
-            amati, tebak, buktikan, lalu ceritakan caramu.
+            Sepuluh permainan, empat dunia. Selalu: amati, tebak, buktikan.
           </p>
         </section>
       </main>

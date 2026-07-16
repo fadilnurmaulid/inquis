@@ -184,3 +184,19 @@ npm install && npx prisma generate && npm run type-check && npm run lint && npm 
 ```
 
 Kalau ada galat, kirimkan keluarannya.
+
+---
+
+## 12. TINJAUAN PRODUK AKHIR (putaran terakhir)
+
+**Gameplay.** Papan "Cari yang beda" (1-3, 2-5) dulunya bisa tamat dengan satu ketukan beruntung — peluang 1/6 menang tanpa berpikir. Sekarang dua ketukan: pilih (kartu terangkat, bercincin oranye) lalu tegaskan lewat tombol "Yang ini beda!". Komitmen sebelum jawaban, konsisten dengan tahap prediksi. Ritme keempat dunia diperiksa: seret-isi (D1), pilah-multi (D2), jelajah→kunci→tebak (D3), takar-sampai-habis (D4) — tidak ada yang satu-klik-selesai lagi.
+
+**Bug refleksi.** Akar: `AnimatePresence mode="wait"` membuat layar refleksi menunggu animasi keluar layar eksperimen yang kadang tak pernah selesai (gestur seret + animasi bersarang). Dihapus total; perpindahan layar kini keyed remount murni. `layoutId` bersama lintas layar juga dihapus.
+
+**UX.** Umpan balik hasil digulirkan otomatis ke pandangan (di ponsel ia lahir di bawah papan, di luar layar). Mode demo diberi layar muat. Gerbang dunia di /demo/peta jadi kartu warna penuh dengan pendamping mengapung berjenjang.
+
+**Copywriting.** Seluruh teks mesin dipangkas ke panjang aplikasi anak; teks 20 aktivitas diukur programatik — pemantik rata-rata 91 huruf (dua kalimat dibacakan), tujuh penguatan terpanjang ditinjau satu per satu dan dipertahankan karena tiap kalimatnya membawa konsep (tahap penguatan memang dibacakan bersama orang dewasa).
+
+**Identitas.** `app/icon.svg`, `app/apple-icon.svg`, dan `app/manifest.ts` kini satu logo yang sama (I-pohon). Chrome meng-cache favicon: perlu hard refresh setelah build baru.
+
+**Verifikasi akhir:** 5/5 pemeriksa statis lulus, 20/20 aktivitas lulus asersi isi, 0 emoji, 0 jejak lomba, 0 impor putus.

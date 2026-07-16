@@ -1,6 +1,25 @@
 <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <rect width="64" height="64" rx="16" fill="#60B8FF"/>
-  <circle cx="27" cy="27" r="16" fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round"/>
-  <path d="M38 38L49 49" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round"/>
-  <path d="M27 18c5 1.3 7.5 6.3 6.3 11.3-4.4 0.6-8.8-1.9-9.4-6.9C23.5 20.2 24.8 18.4 27 18z" fill="#B8F0C8"/>
+  <!-- Ikon tab. Bentuknya sama dengan LogoMark di components/brand/logo.tsx,
+       digeser ke viewBox 64 dengan padding supaya tidak mepet saat mengecil
+       jadi 16 px. Latarnya kertas, bukan biru: warna itu sudah tidak ada
+       di sistem desain ini. -->
+  <rect width="64" height="64" rx="15" fill="#EEF1E6"/>
+  <rect x="1.25" y="1.25" width="61.5" height="61.5" rx="13.75" fill="none" stroke="#D3DBC4" stroke-width="2.5"/>
+
+  <g transform="translate(8 8) scale(1)">
+    <!-- Tajuk kiri — separuh palang atas huruf I -->
+    <path d="M24 19C15.6 19 9.4 13.6 10.4 5.6C18.8 5.1 24 10.4 24 19Z" fill="#3E8B54"/>
+    <!-- Tajuk kanan -->
+    <path d="M24 19C32.4 19 38.6 13.6 37.6 5.6C29.2 5.1 24 10.4 24 19Z" fill="#2C6B3F"/>
+    <!-- Urat daun -->
+    <path d="M23 17.6L12.6 7.4M25 17.6L35.4 7.4" stroke="#F7F8F2" stroke-opacity="0.55" stroke-width="1.3" stroke-linecap="round"/>
+    <!-- Batang -->
+    <rect x="21.7" y="16" width="4.6" height="22.5" rx="2.3" fill="#8C5A3C"/>
+    <!-- Tunas kecil di batang -->
+    <path d="M26.4 29.6C26.4 25.4 29 22.6 33 22.6C33.4 26.8 30.6 29.6 26.4 29.6Z" fill="#A8D8B4"/>
+    <!-- Garis tanah — palang bawah huruf I -->
+    <rect x="11.5" y="37.4" width="25" height="4.4" rx="2.2" fill="#41604D"/>
+    <!-- Biji di bawah tanah -->
+    <circle cx="24" cy="45.2" r="2" fill="#D9922E"/>
+  </g>
 </svg>

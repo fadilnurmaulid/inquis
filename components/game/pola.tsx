@@ -334,14 +334,25 @@ export function PapanBedaSendiri({ data, onSelesai }: PropsMain<BedaSendiri>) {
   const { petunjuk, salah, sudah, tandaiSalah, bukaPetunjuk, selesaikan } = useMain(onSelesai);
   const kurangiGerak = useReducedMotion();
   const [ditolak, setDitolak] = useState<number[]>([]);
+  // Dua ketukan, bukan satu: pilih dulu, lalu tegaskan. Dengan satu
+  // ketukan, tebakan asal di kisi enam sel menang seketika 1 dari 6
+  // kali — tanpa berpikir sama sekali. Komitmen kecil ini yang
+  // membedakan menebak dari memilih.
+  const [pilih, setPilih] = useState<number | null>(null);
 
   const ketuk = (i: number) => {
     if (sudah || ditolak.includes(i)) return;
-    if (i === data.indeksBeda) {
+    setPilih((prev) => (prev === i ? null : i));
+  };
+
+  const tegaskan = () => {
+    if (pilih === null || sudah) return;
+    if (pilih === data.indeksBeda) {
       selesaikan();
     } else {
       tandaiSalah();
-      setDitolak((prev) => [...prev, i]);
+      setDitolak((prev) => [...prev, pilih]);
+      setPilih(null);
     }
   };
 
@@ -360,6 +371,7 @@ export function PapanBedaSendiri({ data, onSelesai }: PropsMain<BedaSendiri>) {
           {data.kisi.map((s, i) => {
             const kena = sudah && i === data.indeksBeda;
             const tolak = ditolak.includes(i);
+            const dipilih = pilih === i && !sudah;
             return (
               <motion.button
                 key={i}
@@ -372,13 +384,16 @@ export function PapanBedaSendiri({ data, onSelesai }: PropsMain<BedaSendiri>) {
                 whileHover={sudah || tolak ? undefined : { y: -3, scale: 1.04 }}
                 whileTap={sudah || tolak ? undefined : { scale: 0.93 }}
                 aria-label={SPECIMEN_LABEL[s]}
+                aria-pressed={dipilih}
                 className={cn(
                   "relative flex aspect-square items-center justify-center rounded-tile border-2 transition-colors duration-cepat",
                   kena
                     ? "border-daun bg-daun-lo/60 shadow-angkat"
                     : tolak
                       ? "cursor-default border-kertas-deep bg-kertas"
-                      : "border-kertas-deep bg-kertas-lo shadow-tile hover:border-daun/60"
+                      : dipilih
+                        ? "-translate-y-1 border-matahari bg-matahari-lo/40 shadow-angkat"
+                        : "border-kertas-deep bg-kertas-lo shadow-tile hover:border-daun/60"
                 )}
               >
                 <Specimen id={s} size={40} label={SPECIMEN_LABEL[s]} />
@@ -391,6 +406,23 @@ export function PapanBedaSendiri({ data, onSelesai }: PropsMain<BedaSendiri>) {
             );
           })}
         </div>
+
+        {/* Tombol penegasan — muncul begitu ada yang dipilih. */}
+        {!sudah && pilih !== null && (
+          <motion.div
+            initial={kurangiGerak ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-4 flex justify-center"
+          >
+            <button
+              type="button"
+              onClick={tegaskan}
+              className="target-sentuh inline-flex items-center gap-2 rounded-full border-2 border-matahari-hi bg-matahari px-6 font-display text-badan font-extrabold text-kertas-lo shadow-angkat transition-all duration-cepat ease-pegas hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-tekan"
+            >
+              Yang ini beda!
+            </button>
+          </motion.div>
+        )}
 
         <AnimatePresence>
           {sudah && (

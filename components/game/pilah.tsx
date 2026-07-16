@@ -24,6 +24,10 @@ export function PapanPilahWadah({ data, onSelesai }: PropsMain<PilahWadah>) {
   const { petunjuk, salah, sudah, tandaiSalah, bukaPetunjuk, selesaikan } = useMain(onSelesai);
   const kurangiGerak = useReducedMotion();
 
+  const benda = useMemo(
+    () => acakTetap(data.benda, data.benda.map((b) => b.id).join("")),
+    [data.benda]
+  );
   const [tempat, setTempat] = useState<Record<string, string>>({});
   const [tolak, setTolak] = useState<string | null>(null);
 

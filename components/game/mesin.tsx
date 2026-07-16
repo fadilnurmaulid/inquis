@@ -25,10 +25,10 @@
  *    sesi — seluruh mesin lahir kembali, tanpa sisa keadaan.
  */
 
-import { useCallback, useMemo, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, Check, Map, RotateCcw } from "lucide-react";
 import { Specimen, SPECIMEN_LABEL, type SpecimenId } from "@/components/illustrations/specimens";
 import { Papan } from "@/components/game/papan";
@@ -181,8 +181,12 @@ function KartuPilihan({
         </span>
       )}
       {dipilih && (
+        // Cincin biasa, bukan layoutId bersama: layoutId yang dipakai dua
+        // layar berbeda ikut memicu kegagalan transisi yang sama.
         <motion.span
-          layoutId="cincin-pilihan"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 480, damping: 28 }}
           className="pointer-events-none absolute -inset-0.5 rounded-kartu border-2"
           style={{ borderColor: warna }}
           aria-hidden
@@ -297,6 +301,13 @@ function MesinDalam({
   const [refleksiId, setRefleksiId] = useState<string | null>(null);
   const [galat, setGalat] = useState<string | null>(null);
   const atas = useRef<HTMLDivElement>(null);
+  const umpanBalik = useRef<HTMLDivElement>(null);
+
+  // Di ponsel, umpan balik muncul di bawah papan — di luar layar.
+  // Anak yang tidak melihatnya mengira permainannya macet.
+  useEffect(() => {
+    if (hasil) umpanBalik.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [hasil]);
 
   const pindah = useCallback((l: Layar) => {
     setLayar(l);
@@ -310,9 +321,9 @@ function MesinDalam({
     () => ({
       pembuka: a.pemantik,
       eksplorasi: a.eksplorasi.ajakan,
-      prediksi: "Belum ada yang salah di sini. Tebak saja dulu — nanti kita buktikan bersama.",
-      eksperimen: "Sekarang buktikan tebakanmu.",
-      refleksi: "Ceritakan caramu tadi. Tidak ada jawaban yang salah.",
+      prediksi: "Tebak dulu, yuk. Nanti kita buktikan!",
+      eksperimen: "Ayo buktikan tebakanmu!",
+      refleksi: "Bagaimana caramu tadi?",
       penutup: a.karakter.aksi,
     }),
     [a]
@@ -371,19 +382,23 @@ function MesinDalam({
             <ArrowLeft className="h-4 w-4" aria-hidden />
             Kembali
           </Link>
-          <p className="label-spesimen text-right text-tinta-soft">
-            {namaDunia} · Aktivitas {a.nomor}
-          </p>
+          <p className="label-spesimen text-right text-tinta-soft">Aktivitas {a.nomor}</p>
         </div>
         <Penunjuk layar={layar} warna={warna} />
       </header>
 
-      <AnimatePresence mode="wait">
+      {/* Perpindahan layar TIDAK memakai AnimatePresence mode="wait".
+          Dulu memakainya, dan itulah akar layar refleksi kosong: dengan
+          mode="wait", layar baru menunggu animasi keluar layar lama
+          selesai — sedangkan layar eksperimen berisi gestur seret dan
+          animasi bersarang yang kadang tidak pernah melaporkan selesai.
+          Refleksi pun tidak pernah dipasang. Sekarang: layar lama
+          langsung dilepas, layar baru langsung dipasang dengan animasi
+          masuknya sendiri. Tidak ada yang bisa menghalanginya tampil. */}
         <motion.div
           key={layar}
           initial={kurangiGerak ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={kurangiGerak ? undefined : { opacity: 0, y: -8 }}
           transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col gap-4"
         >
@@ -394,21 +409,24 @@ function MesinDalam({
                 <h1 className="font-display text-pekik font-extrabold text-tinta teks-seimbang">{a.judul}</h1>
               </div>
 
-              <Jurnal label={NAMA_TAHAP.tujuan} warna={warna}>
-                <p className="text-badan leading-relaxed text-tinta-mid teks-seimbang">{a.tujuan}</p>
-              </Jurnal>
-
-              <Jurnal label={NAMA_TAHAP.pemantik} warna={warna} className="border-2" >
-                <p className="font-display text-besar font-bold leading-relaxed text-tinta teks-seimbang">
+              {/* Pemantik adalah bintangnya. Tujuan tetap ada — tahap 1 —
+                  tapi cukup satu baris kecil; anak enam tahun tidak membaca
+                  dua kartu paragraf sebelum boleh main. */}
+              <Jurnal label={NAMA_TAHAP.pemantik} warna={warna}>
+                <p className="font-display text-judul font-extrabold leading-snug text-tinta teks-seimbang">
                   {a.pemantik}
+                </p>
+                <p className="mt-3 border-t-2 border-dashed border-kertas-deep pt-2.5 text-mikro leading-relaxed text-tinta-soft">
+                  <span className="label-spesimen mr-1.5" style={{ color: warna }}>{NAMA_TAHAP.tujuan}</span>
+                  {a.tujuan}
                 </p>
               </Jurnal>
 
-              <Teman teman={teman} ucapan="Belum perlu dijawab sekarang. Kita cari tahu dulu." warna={warna} />
+              <Teman teman={teman} ucapan="Kita cari tahu sama-sama, yuk!" warna={warna} />
 
               <div className="flex justify-center pt-1">
                 <TombolUtama onKlik={() => pindah("eksplorasi")} warna={warna}>
-                  Ayo amati dulu
+                  Ayo lihat!
                 </TombolUtama>
               </div>
             </>
@@ -460,14 +478,12 @@ function MesinDalam({
                 })}
               </div>
 
-              <AnimatePresence mode="wait">
-                {terbuka !== null && (
+              {terbuka !== null && (
                   <motion.div
                     key={terbuka}
-                    initial={kurangiGerak ? false : { opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={kurangiGerak ? undefined : { opacity: 0, height: 0 }}
-                    className="overflow-hidden"
+                    initial={kurangiGerak ? false : { opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.18 }}
                   >
                     <div className="kartu-kertas flex items-start gap-3 p-4">
                       <Specimen id={a.eksplorasi.benda[terbuka].spesimen} size={30} />
@@ -477,18 +493,17 @@ function MesinDalam({
                     </div>
                   </motion.div>
                 )}
-              </AnimatePresence>
 
               <div className="flex flex-col items-center gap-2 pt-1">
                 <p className="label-spesimen text-tinta-soft">
-                  {diamati.length} dari {a.eksplorasi.benda.length} sudah diamati
+                  {diamati.length}/{a.eksplorasi.benda.length} diamati
                 </p>
                 <TombolUtama
                   onKlik={() => pindah("prediksi")}
                   warna={warna}
                   mati={diamati.length < a.eksplorasi.benda.length}
                 >
-                  {diamati.length < a.eksplorasi.benda.length ? "Ketuk semuanya dulu" : "Lanjut"}
+                  {diamati.length < a.eksplorasi.benda.length ? "Ketuk semua dulu" : "Lanjut!"}
                 </TombolUtama>
               </div>
             </>
@@ -520,7 +535,7 @@ function MesinDalam({
 
               <div className="flex justify-center pt-1">
                 <TombolUtama onKlik={() => pindah("eksperimen")} warna={warna} mati={!prediksiId}>
-                  {prediksiId ? "Kunci tebakanku" : "Pilih satu dulu"}
+                  {prediksiId ? "Ini tebakanku!" : "Pilih satu dulu"}
                 </TombolUtama>
               </div>
             </>
@@ -534,9 +549,9 @@ function MesinDalam({
             <div key="eksperimen-grup" className="flex flex-col gap-4">
               <Papan data={a.tantangan} onSelesai={setHasil} />
 
-              <AnimatePresence>
-                {hasil && (
+              {hasil && (
                   <motion.div
+                    ref={umpanBalik}
                     initial={kurangiGerak ? false : { opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ type: "spring", stiffness: 320, damping: 26 }}
@@ -558,14 +573,13 @@ function MesinDalam({
                         <p className="flex-1 text-kecil leading-relaxed text-tinta-mid">
                           {prediksiTepat ? (
                             <>
-                              Tadi kamu menebak <strong className="text-tinta">{prediksi?.label}</strong>, dan
-                              percobaannya membenarkan. Tebakanmu bukan keberuntungan — kamu sudah mengamati dulu.
+                              Tebakanmu <strong className="text-tinta">{prediksi?.label}</strong> — dan benar!
+                              Kamu mengamati dulu, itu hebat.
                             </>
                           ) : (
                             <>
-                              Tadi kamu menebak <strong className="text-tinta">{prediksi?.label}</strong>, ternyata
-                              tidak begitu. Ini bagian paling berharga: tebakan yang meleset memberi tahu kita hal
-                              yang belum kita ketahui. Ilmuwan menyebutnya temuan.
+                              Tebakanmu <strong className="text-tinta">{prediksi?.label}</strong>, ternyata beda.
+                              Tidak apa-apa — sekarang kamu jadi tahu!
                             </>
                           )}
                         </p>
@@ -574,12 +588,11 @@ function MesinDalam({
 
                     <div className="flex justify-center">
                       <TombolUtama onKlik={() => pindah("refleksi")} warna={warna}>
-                        Lanjut
+                        Lanjut!
                       </TombolUtama>
                     </div>
                   </motion.div>
                 )}
-              </AnimatePresence>
             </div>
           )}
 
@@ -623,7 +636,7 @@ function MesinDalam({
                   warna={warna}
                   mati={!refleksiId || menyimpan}
                 >
-                  {menyimpan ? "Menyimpan…" : refleksiId ? "Simpan jawabanku" : "Pilih satu dulu"}
+                  {menyimpan ? "Menyimpan…" : refleksiId ? "Ini jawabanku!" : "Pilih satu dulu"}
                 </TombolUtama>
               </div>
             </>
@@ -642,9 +655,9 @@ function MesinDalam({
                 >
                   <Specimen id={teman.spesimen} size={38} label={teman.nama} />
                 </motion.span>
-                <h2 className="font-display text-judul font-extrabold text-tinta">Aktivitas selesai</h2>
+                <h2 className="font-display text-judul font-extrabold text-tinta">Hore, selesai!</h2>
                 {sudahPernah && (
-                  <p className="text-kecil text-tinta-soft">Aktivitas ini sudah pernah kamu kerjakan.</p>
+                  <p className="text-kecil text-tinta-soft">Kamu sudah pernah menyelesaikan ini.</p>
                 )}
               </div>
 
@@ -700,7 +713,6 @@ function MesinDalam({
             </>
           )}
         </motion.div>
-      </AnimatePresence>
     </div>
   );
 }
