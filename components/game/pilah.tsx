@@ -14,7 +14,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Specimen, SPECIMEN_LABEL } from "@/components/illustrations/specimens";
 import { BendaSeret, PapanDnd, ZonaLepas } from "@/components/game/dnd";
-import { acakTetap, Bingkai, LabelMeja, Meja, Raya, Tanda, useMain, type PropsMain } from "@/components/game/umum";
+import { Bingkai, LabelMeja, Meja, Raya, Tanda, useBakiAcak, useMain, type PropsMain } from "@/components/game/umum";
 import type { PilahWadah, UrutDeret } from "@/lib/game/types";
 import { cn } from "@/lib/utils";
 
@@ -24,10 +24,7 @@ export function PapanPilahWadah({ data, onSelesai }: PropsMain<PilahWadah>) {
   const { petunjuk, salah, sudah, tandaiSalah, bukaPetunjuk, selesaikan } = useMain(onSelesai);
   const kurangiGerak = useReducedMotion();
 
-  const benda = useMemo(
-    () => acakTetap(data.benda, data.benda.map((b) => b.id).join("")),
-    [data.benda]
-  );
+  const benda = useBakiAcak(data.benda, data.benda.map((b) => b.id).join("|"));
   const [tempat, setTempat] = useState<Record<string, string>>({});
   const [tolak, setTolak] = useState<string | null>(null);
 
@@ -173,10 +170,7 @@ export function PapanUrutDeret({ data, onSelesai }: PropsMain<UrutDeret>) {
     return (data.arah === "besar-kecil" ? urut.reverse() : urut).map((b) => b.id);
   }, [data.benda, data.arah]);
 
-  const baki = useMemo(
-    () => acakTetap(data.benda, data.ciri + data.benda.length),
-    [data.benda, data.ciri]
-  );
+  const baki = useBakiAcak(data.benda, data.ciri + data.benda.length);
 
   const [slot, setSlot] = useState<(string | null)[]>(() => data.benda.map(() => null));
   const [salahDi, setSalahDi] = useState<number[]>([]);

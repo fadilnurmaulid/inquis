@@ -68,7 +68,7 @@ const DUNIA_1: Aktivitas[] = [
       ],
     },
     penguatan:
-      "Bagian yang berulang tadi namanya satuan pola. Di sini satuannya dua daun: hijau lalu kering. Kalau satuan pola sudah ketemu, kamu bisa menebak apa pun yang datang berikutnya — tanpa perlu melihatnya lebih dulu.",
+      "Bagian yang berulang tadi namanya satuan pola. Di sini satuannya dua daun: hijau lalu kering. Kalau satuan pola sudah ketemu, kamu bisa menebak apa pun yang datang berikutnya, tanpa perlu melihatnya lebih dulu.",
     karakter: {
       judul: "Daun kering bukan sampah",
       aksi: "Kalau menyapu halaman hari ini, kumpulkan daun keringnya di satu pojok tanah. Dalam beberapa minggu daun itu berubah jadi pupuk untuk tanaman di sekitarnya.",
@@ -134,7 +134,7 @@ const DUNIA_1: Aktivitas[] = [
       ],
     },
     penguatan:
-      "Satuan pola di sini panjangnya tiga: sakura, sakura, matahari. Panjang satuan tidak selalu dua. Begitu kamu tahu panjangnya, kamu bisa mengisi lubang di mana pun — bahkan yang jauh di kanan.",
+      "Satuan pola di sini panjangnya tiga: sakura, sakura, matahari. Panjang satuan tidak selalu dua. Begitu kamu tahu panjangnya, kamu bisa mengisi lubang di mana pun, bahkan yang jauh di kanan.",
     karakter: {
       judul: "Bunga memberi makan lebah",
       aksi: "Kalau ada bunga di halaman atau pot di rumah, biarkan mekar sampai layu sendiri. Selama mekar, lebah dan kupu-kupu makan dari situ.",
@@ -183,7 +183,7 @@ const DUNIA_1: Aktivitas[] = [
         "jejak-hewan",
       ],
       indeksBeda: 4,
-      alasan: "Delapan jejak punya bantalan bulat dan empat jari kecil. Satu jejak punya tumit panjang dan lima jari berbaris — itu jejak kaki manusia.",
+      alasan: "Delapan jejak punya bantalan bulat dan empat jari kecil. Satu jejak punya tumit panjang dan lima jari berbaris, itu jejak kaki manusia.",
       petunjuk: [
         "Jangan lihat semuanya sekaligus. Periksa satu baris dulu, lalu baris berikutnya.",
         "Delapan jejak bentuknya sama persis. Satu tidak.",
@@ -202,7 +202,7 @@ const DUNIA_1: Aktivitas[] = [
       "Kamu baru saja memakai aturan kelompok. Semua jejak hewan punya ciri yang sama; satu jejak melanggar ciri itu, jadi dia bukan anggota kelompok. Menemukan yang melanggar aturan adalah cara ilmuwan menguji apakah aturannya benar.",
     karakter: {
       judul: "Amati tanpa mengganggu",
-      aksi: "Kalau menemukan jejak hewan di kebun atau taman, cukup amati dan hitung jarinya. Jangan diikuti sampai ke sarangnya — hewan liar butuh rumah yang tidak terusik.",
+      aksi: "Kalau menemukan jejak hewan di kebun atau taman, cukup amati dan hitung jarinya. Jangan diikuti sampai ke sarangnya, hewan liar butuh rumah yang tidak terusik.",
     },
   },
 
@@ -434,7 +434,7 @@ const DUNIA_2: Aktivitas[] = [
       petunjuk: [
         "Tanya pertama: pernah hidup atau tidak? Kalau pernah, dia ke kompos.",
         "Untuk yang tidak pernah hidup, tanya kedua: bisa dilebur atau dilumatkan jadi barang baru?",
-        "Kardus dan koran dari kayu, kaleng dari logam — ketiganya bisa dipakai ulang. Yang terlalu kecil atau tercampur biasanya tidak bisa.",
+        "Kardus dan koran dari kayu, kaleng dari logam, ketiganya bisa dipakai ulang. Yang terlalu kecil atau tercampur biasanya tidak bisa.",
       ],
     },
     refleksi: {
@@ -449,7 +449,7 @@ const DUNIA_2: Aktivitas[] = [
       "Dua pertanyaan menghasilkan tiga kelompok. Pertanyaan pertama membelah semuanya jadi dua, pertanyaan kedua membelah salah satu bagian lagi. Bertanya secara berurutan seperti ini membuat pemilahan yang rumit jadi mudah.",
     karakter: {
       judul: "Keranjang yang paling sedikit",
-      aksi: "Perhatikan keranjang 'sisa lain' — itu yang berakhir di tempat pembuangan. Minggu ini, coba kurangi isinya satu barang saja, misalnya bawa botol minum sendiri.",
+      aksi: "Perhatikan keranjang 'sisa lain', itu yang berakhir di tempat pembuangan. Minggu ini, coba kurangi isinya satu barang saja, misalnya bawa botol minum sendiri.",
     },
   },
 
@@ -575,7 +575,7 @@ const DUNIA_2: Aktivitas[] = [
       "Kelompok yang baik dibuat dari ciri yang penting, bukan ciri yang kelihatan. Warna dan ukuran mudah dilihat, tapi yang menentukan rumah seekor hewan adalah cara ia bernapas dan mencari makan.",
     karakter: {
       judul: "Rumah mereka bukan tempat sampah",
-      aksi: "Sampah yang hanyut di selokan akhirnya sampai ke sungai dan laut — rumah ikan dan kura-kura. Pungut satu sampah dari selokan depan rumah, kalau aman diambil.",
+      aksi: "Sampah yang hanyut di selokan akhirnya sampai ke sungai dan laut, rumah ikan dan kura-kura. Pungut satu sampah dari selokan depan rumah, kalau aman diambil.",
     },
   },
 
@@ -611,7 +611,7 @@ const DUNIA_2: Aktivitas[] = [
       perintah: "Ketuk satu-satunya yang bukan makhluk hidup.",
       kisi: ["tunas", "siput", "kupu-kupu", "cacing", "burung", "batu", "rumput", "lebah", "semak"],
       indeksBeda: 5,
-      alasan: "Semua yang lain butuh makan, tumbuh, dan berkembang biak. Batu tidak melakukan satu pun dari ketiganya — dia bisa terlihat lebih besar hanya kalau ada yang menempel padanya.",
+      alasan: "Semua yang lain butuh makan, tumbuh, dan berkembang biak. Batu tidak melakukan satu pun dari ketiganya, dia bisa terlihat lebih besar hanya kalau ada yang menempel padanya.",
       petunjuk: [
         "Periksa satu per satu. Tanya tiga hal: makan? tumbuh? punya keturunan?",
         "Delapan benda menjawab ya untuk ketiganya.",
@@ -773,7 +773,7 @@ const DUNIA_3: Aktivitas[] = [
     nomor: 3,
     judul: "Sungai dan Penghuninya",
     keterampilan: "predict",
-    tujuan: "Kamu akan menemukan batas — titik ketika penambahan kecil membuat perubahan besar.",
+    tujuan: "Kamu akan menemukan batas, titik ketika penambahan kecil membuat perubahan besar.",
     pemantik: "Satu bungkus plastik di sungai mungkin tidak terasa. Mulai dari berapa bungkus, ikannya mulai terganggu?",
     eksplorasi: {
       ajakan: "Ketuk isi sungai ini.",
@@ -829,7 +829,7 @@ const DUNIA_3: Aktivitas[] = [
       ],
     },
     penguatan:
-      "Perubahan tidak selalu rata. Dari 0 ke 2 sampah, sungai masih jernih. Dari 6 ke 7, semuanya berubah. Titik seperti itu namanya ambang batas — dan kita biasanya baru menyadarinya setelah terlewat.",
+      "Perubahan tidak selalu rata. Dari 0 ke 2 sampah, sungai masih jernih. Dari 6 ke 7, semuanya berubah. Titik seperti itu namanya ambang batas, dan kita biasanya baru menyadarinya setelah terlewat.",
     karakter: {
       judul: "Kamu salah satu dari yang delapan",
       aksi: "Sampah di sungai datang dari banyak orang, sedikit-sedikit. Berkurangnya juga begitu. Hari ini, bawa pulang bungkus jajanmu sendiri dan buang di tempat sampah rumah.",
@@ -889,10 +889,10 @@ const DUNIA_3: Aktivitas[] = [
       ],
     },
     penguatan:
-      "Menambah 2 berulang kali sama dengan mengalikan dengan 2. Karena tambahannya selalu sama, lompatannya di penggaris berjarak sama juga — itulah kenapa kamu bisa melompat langsung ke hari ke-6 tanpa melewati hari ke-4 dan ke-5.",
+      "Menambah 2 berulang kali sama dengan mengalikan dengan 2. Karena tambahannya selalu sama, lompatannya di penggaris berjarak sama juga, itulah kenapa kamu bisa melompat langsung ke hari ke-6 tanpa melewati hari ke-4 dan ke-5.",
     karakter: {
       judul: "Tanam yang bisa kamu makan",
-      aksi: "Rendam segenggam kacang hijau semalam, lalu taruh di kapas basah. Ukur tiap hari. Dalam seminggu kamu punya kecambah — dan data pertamamu.",
+      aksi: "Rendam segenggam kacang hijau semalam, lalu taruh di kapas basah. Ukur tiap hari. Dalam seminggu kamu punya kecambah, dan data pertamamu.",
     },
   },
 
@@ -911,7 +911,7 @@ const DUNIA_3: Aktivitas[] = [
         { spesimen: "matahari", label: "Matahari", catatan: "Daun memakai cahaya untuk membuat makanan sendiri." },
         { spesimen: "tetes-air", label: "Air", catatan: "Bahan yang diolah daun bersama cahaya." },
         { spesimen: "daun-hijau", label: "Daun", catatan: "Dapurnya tanaman. Di sinilah cahaya dan air diolah." },
-        { spesimen: "tanaman-layu", label: "Tanaman layu", catatan: "Tanda ada yang kurang — tapi belum tentu tahu yang mana." },
+        { spesimen: "tanaman-layu", label: "Tanaman layu", catatan: "Tanda ada yang kurang, tapi belum tentu tahu yang mana." },
       ],
     },
     prediksi: {
@@ -950,7 +950,7 @@ const DUNIA_3: Aktivitas[] = [
       petunjuk: [
         "Tahan satu tuas di tempat, geser tuas yang lain. Itu cara ilmuwan menguji satu hal.",
         "Coba nol-kan salah satu tuas. Perhatikan: yang satunya jadi tidak berpengaruh sama sekali.",
-        "Untuk subur, keduanya harus di daerah tengah — bukan ujung.",
+        "Untuk subur, keduanya harus di daerah tengah, bukan ujung.",
       ],
     },
     refleksi: {
@@ -962,7 +962,7 @@ const DUNIA_3: Aktivitas[] = [
       ],
     },
     penguatan:
-      "Kalau salah satu bahan nol, hasilnya nol — sebanyak apa pun bahan yang lain. Dan untuk menguji dua hal, ubah satu saja setiap kali. Kalau dua-duanya digeser bersamaan, kamu tidak akan tahu mana yang menyebabkan perubahan.",
+      "Kalau salah satu bahan nol, hasilnya nol, sebanyak apa pun bahan yang lain. Dan untuk menguji dua hal, ubah satu saja setiap kali. Kalau dua-duanya digeser bersamaan, kamu tidak akan tahu mana yang menyebabkan perubahan.",
     karakter: {
       judul: "Cari tempat yang pas",
       aksi: "Sebelum menaruh pot, perhatikan halaman selama sehari: bagian mana yang kena matahari pagi tapi teduh saat siang? Di situ tempat terbaiknya.",
@@ -1033,7 +1033,7 @@ const DUNIA_4: Aktivitas[] = [
       ],
     },
     penguatan:
-      "Yang menentukan hasil bukan bahan yang paling banyak, tapi bahan yang paling cepat habis. Air Budi cukup untuk 3 pot, tapi cangkangnya hanya untuk 2 — jadi jadinya 2. Sisa 1 liter air tidak berguna tanpa cangkang.",
+      "Yang menentukan hasil bukan bahan yang paling banyak, tapi bahan yang paling cepat habis. Air Budi cukup untuk 3 pot, tapi cangkangnya hanya untuk 2, jadi jadinya 2. Sisa 1 liter air tidak berguna tanpa cangkang.",
     karakter: {
       judul: "Air cucian beras jangan dibuang",
       aksi: "Besok saat mencuci beras, tampung airnya di ember. Siramkan ke tanaman. Gratis, dan tanamannya suka.",
@@ -1088,7 +1088,7 @@ const DUNIA_4: Aktivitas[] = [
       ],
     },
     penguatan:
-      "Sama berat tidak sama dengan sama banyak. 4 benda bisa setara dengan 8 benda kalau yang satu dua kali lebih berat. Timbangan yang lurus adalah tanda 'sama dengan' — sisi kiri dan kanan bernilai sama, walau bentuknya berbeda.",
+      "Sama berat tidak sama dengan sama banyak. 4 benda bisa setara dengan 8 benda kalau yang satu dua kali lebih berat. Timbangan yang lurus adalah tanda 'sama dengan', sisi kiri dan kanan bernilai sama, walau bentuknya berbeda.",
     karakter: {
       judul: "Kompos butuh takaran",
       aksi: "Kompos yang baik butuh bagian cokelat (daun kering) lebih banyak daripada bagian hijau (sisa sayur). Kalau bau, tambahkan daun kering.",
@@ -1287,13 +1287,13 @@ const DUNIA_4: Aktivitas[] = [
     refleksi: {
       pertanyaan: "Kalau mau menambah satu bedeng lagi, apa yang paling kamu butuhkan?",
       pilihan: [
-        { id: "r1", label: "Bibit — itu yang paling cepat habis", spesimen: "tunas" },
+        { id: "r1", label: "Bibit, itu yang paling cepat habis", spesimen: "tunas" },
         { id: "r2", label: "Kompos", spesimen: "kompos" },
         { id: "r3", label: "Air, biar aman", spesimen: "ember" },
       ],
     },
     penguatan:
-      "Angkanya berubah, caranya tetap: bagi tiap bahan dengan kebutuhannya, ambil yang paling kecil. Kamu juga jadi tahu apa yang harus ditambah kalau mau lebih banyak — bukan bahan yang berlebih, tapi bahan yang paling cepat habis.",
+      "Angkanya berubah, caranya tetap: bagi tiap bahan dengan kebutuhannya, ambil yang paling kecil. Kamu juga jadi tahu apa yang harus ditambah kalau mau lebih banyak, bukan bahan yang berlebih, tapi bahan yang paling cepat habis.",
     karakter: {
       judul: "Kebun kecil, mulai dari sini",
       aksi: "Satu bedeng cukup untuk mulai. Ajak dua teman, minta izin gurumu, dan pilih pojok halaman yang kena matahari pagi.",

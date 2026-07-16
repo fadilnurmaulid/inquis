@@ -93,7 +93,7 @@ function Penunjuk({ layar, warna }: { layar: Layar; warna: string }) {
               >
                 <span className="sr-only">
                   {NAMA_TAHAP[t]}
-                  {kini ? " — sedang berjalan" : lewat ? " — selesai" : ""}
+                  {kini ? ", sedang berjalan" : lewat ? ", selesai" : ""}
                 </span>
               </span>
             </li>
@@ -575,13 +575,13 @@ function MesinDalam({
                         <p className="flex-1 text-kecil leading-relaxed text-tinta-mid">
                           {prediksiTepat ? (
                             <>
-                              Tebakanmu <strong className="text-tinta">{prediksi?.label}</strong> — dan benar!
+                              Tebakanmu <strong className="text-tinta">{prediksi?.label}</strong>, dan benar!
                               Kamu mengamati dulu, itu hebat.
                             </>
                           ) : (
                             <>
                               Tebakanmu <strong className="text-tinta">{prediksi?.label}</strong>, ternyata beda.
-                              Tidak apa-apa — sekarang kamu jadi tahu!
+                              Tidak apa-apa. Sekarang kamu jadi tahu!
                             </>
                           )}
                         </p>

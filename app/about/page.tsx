@@ -82,7 +82,7 @@ export default function AboutPage() {
           </h1>
           <p className="text-besar leading-relaxed text-tinta-mid teks-seimbang">
             INQUIS bukan lembar kerja yang dipindah ke layar. Anak tidak diberi aturan lalu disuruh
-            melatihnya. Dia mengamati, menebak, membuktikan — dan baru setelah itu diberi tahu nama
+            melatihnya. Dia mengamati, menebak, membuktikan, dan baru setelah itu diberi tahu nama
             matematikanya.
           </p>
         </section>
@@ -148,7 +148,7 @@ export default function AboutPage() {
             </h2>
             <p className="text-badan leading-relaxed text-tinta-mid teks-seimbang">
               Tiap dunia punya mesin permainannya sendiri. Dunia 4 tidak sekadar “lebih sulit” dari
-              Dunia 1 — cara mainnya memang lain.
+              Dunia 1. Cara mainnya memang lain.
             </p>
           </div>
 
@@ -222,7 +222,7 @@ export default function AboutPage() {
           <p className="text-badan leading-relaxed text-tinta-mid teks-seimbang">
             Gampang menempelkan pesan lingkungan di akhir soal yang sebenarnya tentang apel dan jeruk.
             Di sini yang dihitung memang bahan kompos: tiga cangkang telur, satu liter air cucian
-            beras, dua ratus gram daun kering. Anak menemukan bahwa satu bahan habis lebih dulu — dan
+            beras, dua ratus gram daun kering. Anak menemukan bahwa satu bahan habis lebih dulu, dan
             itulah pembagian. Matematikanya tidak bisa dipisahkan dari bahannya.
           </p>
         </section>

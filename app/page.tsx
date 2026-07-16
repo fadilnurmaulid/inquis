@@ -128,7 +128,7 @@ export default function HomePage() {
             <p className="label-spesimen text-tinta-soft">Isi satu aktivitas</p>
             <h2 className="font-display text-judul font-extrabold text-tinta">Delapan tahap, selalu berurutan</h2>
             <p className="max-w-2xl text-badan leading-relaxed text-tinta-mid teks-seimbang">
-              Anak mengamati, menebak, membuktikan — baru diberi tahu namanya.
+              Anak mengamati, menebak, membuktikan. Baru setelah itu diberi tahu namanya.
             </p>
           </div>
 

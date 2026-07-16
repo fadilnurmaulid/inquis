@@ -16,7 +16,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { RotateCcw } from "lucide-react";
 import { Specimen, SPECIMEN_LABEL, type SpecimenId } from "@/components/illustrations/specimens";
 import { BendaSeret, PapanDnd, ZonaLepas } from "@/components/game/dnd";
-import { Bingkai, LabelMeja, Meja, Raya, Tanda, useMain, type PropsMain } from "@/components/game/umum";
+import { Bingkai, LabelMeja, Meja, Raya, Tanda, useBakiAcak, useMain, type PropsMain } from "@/components/game/umum";
 import type { BedaSendiri, IngatPola, PolaIsi, PolaSusun } from "@/lib/game/types";
 import { cn } from "@/lib/utils";
 
@@ -75,6 +75,8 @@ export function PapanPolaIsi({ data, onSelesai }: PropsMain<PolaIsi>) {
   );
   const [isian, setIsian] = useState<Record<number, SpecimenId>>({});
   const [salahDi, setSalahDi] = useState<number[]>([]);
+  // Urutan data tidak boleh bocor jadi petunjuk; posisi awal berubah tiap main.
+  const baki = useBakiAcak(data.baki, data.deret.join("|"));
 
   const onLepas = useCallback(
     (itemId: string, zonaId: string) => {
@@ -180,7 +182,7 @@ export function PapanPolaIsi({ data, onSelesai }: PropsMain<PolaIsi>) {
           <div className="mt-5 border-t-2 border-dashed border-kertas-deep pt-4">
             <LabelMeja>Baki</LabelMeja>
             <div className="flex flex-wrap justify-center gap-2.5">
-              {data.baki.map((s) => (
+              {baki.map((s) => (
                 <BendaSeret key={s} id={`baki:${s}`} label={SPECIMEN_LABEL[s]} className={UBIN} disabled={sudah}>
                   <Ubin id={s} />
                 </BendaSeret>
@@ -200,6 +202,7 @@ export function PapanPolaSusun({ data, onSelesai }: PropsMain<PolaSusun>) {
   const kurangiGerak = useReducedMotion();
   const [slot, setSlot] = useState<(SpecimenId | null)[]>(() => data.jawaban.map(() => null));
   const [salahDi, setSalahDi] = useState<number[]>([]);
+  const baki = useBakiAcak(data.baki, data.contoh.join("|"));
 
   const onLepas = useCallback(
     (itemId: string, zonaId: string) => {
@@ -309,7 +312,7 @@ export function PapanPolaSusun({ data, onSelesai }: PropsMain<PolaSusun>) {
           <div className="mt-5 border-t-2 border-dashed border-kertas-deep pt-4">
             <LabelMeja>Baki manik</LabelMeja>
             <div className="flex flex-wrap justify-center gap-2.5">
-              {data.baki.map((s) => (
+              {baki.map((s) => (
                 <BendaSeret key={s} id={`baki:${s}`} label={SPECIMEN_LABEL[s]} className={UBIN} disabled={sudah}>
                   <Ubin id={s} />
                 </BendaSeret>
@@ -446,6 +449,7 @@ type FaseIngat = "siap" | "lihat" | "susun";
 
 export function PapanIngatPola({ data, onSelesai }: PropsMain<IngatPola>) {
   const { petunjuk, salah, sudah, tandaiSalah, bukaPetunjuk, selesaikan } = useMain(onSelesai);
+  const baki = useBakiAcak(data.baki, data.urutan.join("|"));
   const kurangiGerak = useReducedMotion();
   const [fase, setFase] = useState<FaseIngat>("siap");
   const [sorot, setSorot] = useState(-1);
@@ -603,7 +607,7 @@ export function PapanIngatPola({ data, onSelesai }: PropsMain<IngatPola>) {
               <div className="mt-5 border-t-2 border-dashed border-kertas-deep pt-4">
                 <LabelMeja>Pilih kartunya</LabelMeja>
                 <div className="flex flex-wrap justify-center gap-2.5">
-                  {data.baki.map((s) => (
+                  {baki.map((s) => (
                     <BendaSeret key={s} id={`baki:${s}`} label={SPECIMEN_LABEL[s]} className={UBIN} disabled={sudah}>
                       <Ubin id={s} />
                     </BendaSeret>

@@ -173,7 +173,7 @@ export function PapanLabSimulasi({ data, onSelesai }: PropsMain<LabSimulasi>) {
             Keadaan ditemukan: {terlihat.current.size} dari {data.keadaan.length}
           </span>
         ) : (
-          <span className="label-spesimen text-nila">Tuas dikunci — sekarang tebak</span>
+          <span className="label-spesimen text-nila">Tuas dikunci. Ayo tebak!</span>
         )
       }
     >
@@ -473,7 +473,7 @@ export function PapanGarisBilangan({ data, onSelesai }: PropsMain<GarisBilangan>
           )}
           {pernahSalah && !sudah && (
             <p className="text-center text-kecil text-tinta-mid">
-              Belum pas. Lihat lagi jarak antar-titik hijau di garis — jaraknya selalu sama.
+              Belum pas. Lihat lagi jarak antar-titik hijau di garis. Jaraknya selalu sama.
             </p>
           )}
         </div>

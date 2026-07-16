@@ -23,7 +23,7 @@ export function AchievementBadge({ data, urut = 0 }: { data: Achievement; urut?:
       className="flex w-[5.25rem] shrink-0 flex-col items-center gap-1.5 text-center"
     >
       <span
-        title={data.earned ? data.title : `Belum didapat — ${data.description}`}
+        title={data.earned ? data.title : `Belum didapat: ${data.description}`}
         className={cn(
           "flex h-14 w-14 items-center justify-center rounded-full border-2 transition-all duration-normal ease-pegas",
           data.earned

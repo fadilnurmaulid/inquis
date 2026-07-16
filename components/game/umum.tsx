@@ -14,7 +14,7 @@
  * animasi seret adalah sumber bug layar kosong yang lama.
  */
 
-import { useCallback, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -265,3 +265,21 @@ export function acakTetap<T>(arr: readonly T[], benih: string): T[] {
   }
   return out;
 }
+
+/**
+ * Baki yang diacak tiap permainan, tanpa galat hidrasi.
+ *
+ * Render pertama memakai acakan berbenih (sama di server dan peramban,
+ * jadi hidrasi aman), lalu satu kali diacak sungguhan setelah terpasang.
+ * Hasilnya: posisi awal benda berbeda tiap kali main, urutan data tidak
+ * pernah bocor jadi petunjuk, dan jawaban benar tidak tersentuh.
+ */
+export function useBakiAcak<T>(daftar: readonly T[], benih: string): T[] {
+  const awal = useMemo(() => acakTetap(daftar, benih), [daftar, benih]);
+  const [urut, setUrut] = useState<T[]>(awal);
+  useEffect(() => {
+    setUrut(acakTetap(awal, String(Math.random())));
+  }, [awal]);
+  return urut;
+}
+

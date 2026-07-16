@@ -182,7 +182,7 @@ export function BendaSeret({
       }}
       onClick={() => pilih(id)}
       disabled={mati}
-      aria-label={aktif ? `${label} — terpilih. Sekarang pilih tempatnya.` : label}
+      aria-label={aktif ? `${label} terpilih. Sekarang pilih tempatnya.` : label}
       aria-pressed={aktif}
       className={cn(
         "relative flex touch-none items-center justify-center rounded-tile border-2 bg-kertas-lo",
