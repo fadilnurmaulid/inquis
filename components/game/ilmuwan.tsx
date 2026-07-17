@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 /* ═══ 9 · Lab takar ════════════════════════════════════════════ */
 
 export function PapanLabTakar({ data, onSelesai }: PropsMain<LabTakar>) {
-  const { petunjuk, salah, sudah, tandaiSalah, bukaPetunjuk, selesaikan } = useMain(onSelesai);
+  const { petunjuk, salah, sudah, tandaiSalah, bukaPetunjuk, selesaikan, jadwalkan } = useMain(onSelesai);
   const kurangiGerak = useReducedMotion();
 
   const butuh = useMemo(
@@ -54,7 +54,7 @@ export function PapanLabTakar({ data, onSelesai }: PropsMain<LabTakar>) {
         tandaiSalah();
         setTolak(id);
         setPesan(`Bahan ini tinggal ${stok[id]}. Satu ${data.unitNama} butuh ${butuh[id]}.`);
-        window.setTimeout(() => setTolak(null), 700);
+        jadwalkan(() => setTolak(null), 700);
         return;
       }
       setPesan(null);

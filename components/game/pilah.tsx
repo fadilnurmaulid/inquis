@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 /* ═══ 5 · Pilah ke wadah ═══════════════════════════════════════ */
 
 export function PapanPilahWadah({ data, onSelesai }: PropsMain<PilahWadah>) {
-  const { petunjuk, salah, sudah, tandaiSalah, bukaPetunjuk, selesaikan } = useMain(onSelesai);
+  const { petunjuk, salah, sudah, tandaiSalah, bukaPetunjuk, selesaikan, jadwalkan } = useMain(onSelesai);
   const kurangiGerak = useReducedMotion();
 
   const benda = useBakiAcak(data.benda, data.benda.map((b) => b.id).join("|"));
@@ -38,10 +38,10 @@ export function PapanPilahWadah({ data, onSelesai }: PropsMain<PilahWadah>) {
       } else {
         tandaiSalah();
         setTolak(itemId);
-        window.setTimeout(() => setTolak(null), 700);
+        jadwalkan(() => setTolak(null), 700);
       }
     },
-    [sudah, tempat, data.benda, tandaiSalah]
+    [sudah, tempat, data.benda, tandaiSalah, jadwalkan]
   );
 
   useEffect(() => {
@@ -233,8 +233,10 @@ export function PapanUrutDeret({ data, onSelesai }: PropsMain<UrutDeret>) {
             </span>
           </div>
 
-          <div className="tanpa-scrollbar flex justify-center overflow-x-auto pb-1">
-            <div className="flex items-start gap-2 sm:gap-2.5">
+          {/* Melipat, bukan menggulung: lihat catatan panjang di
+              components/game/pola.tsx. `justify-center` + `overflow-x-auto`
+              membuat isi yang meluber ke kiri mustahil dijangkau. */}
+          <div className="flex flex-wrap items-start justify-center gap-2 sm:gap-2.5">
               {slot.map((isi, i) => {
                 const b = isi ? cari(isi) : undefined;
                 const keliru = salahDi.includes(i);
@@ -267,7 +269,6 @@ export function PapanUrutDeret({ data, onSelesai }: PropsMain<UrutDeret>) {
                   </div>
                 );
               })}
-            </div>
           </div>
 
           <div className="mt-5 border-t-2 border-dashed border-kertas-deep pt-4">

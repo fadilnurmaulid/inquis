@@ -154,7 +154,7 @@ export default async function WorldPage({ params }: PageProps) {
                   {terkunci ? (
                     <Lock className="h-4 w-4 text-tinta-faint" aria-hidden />
                   ) : keadaan === "completed" ? (
-                    <Check className="h-5 w-5" style={{ color: world.themeColor }} strokeWidth={3} aria-hidden />
+                    <Check className="h-5 w-5" style={{ color: world.themeColor }} strokeWidth={3.5} aria-hidden />
                   ) : (
                     <span className="font-label text-besar font-bold" style={{ color: world.themeColor }}>
                       {a.nomor}

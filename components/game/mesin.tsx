@@ -162,8 +162,10 @@ function KartuPilihan({
       type="button"
       onClick={onKlik}
       disabled={mati}
-      whileHover={mati ? undefined : { y: -3 }}
-      whileTap={mati ? undefined : { scale: 0.97 }}
+      whileHover={mati ? undefined : { y: -4 }}
+      whileTap={mati ? undefined : { scale: 0.95 }}
+      animate={dipilih ? { y: -4 } : { y: 0 }}
+      transition={{ type: "spring", stiffness: 420, damping: 26 }}
       aria-pressed={dipilih}
       className={cn(
         "relative flex min-h-[7.5rem] flex-col items-center justify-center gap-2 rounded-kartu border-2 p-3 text-center",
@@ -439,7 +441,7 @@ function MesinDalam({
             <>
               <Teman teman={teman} ucapan={ucapan.eksplorasi} warna={warna} />
 
-              <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-4">
+              <div className="grid grid-cols-2 items-stretch gap-2.5 sm:grid-cols-4 sm:gap-3">
                 {a.eksplorasi.benda.map((b, i) => {
                   const sudah = diamati.includes(i);
                   return (

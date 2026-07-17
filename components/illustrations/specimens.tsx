@@ -48,7 +48,67 @@ const C = {
 /* ── Bentuk dasar yang dipakai berulang ────────────────────────── */
 
 /** Daun berujung runcing, dipakai oleh semua varian daun. */
-function Daun({ isi, urat = C.urat, miring = 0 }: { isi: string; urat?: string; miring?: number }) {
+/**
+ * Daun. Tiga siluet, bukan satu siluet tiga warna.
+ *
+ * Ini pernah salah dan salahnya serius. Dulu kelima varian daun memakai
+ * bentuk yang persis sama dan hanya dibedakan warna isinya. Di aktivitas
+ * 1-1, polanya "daun hijau, daun kering, daun hijau, daun kering" jadi
+ * dua ubin bersiluet identik pada ukuran 44 piksel. Anak enam tahun
+ * kesulitan, dan anak buta warna merah-hijau tidak punya peluang sama
+ * sekali: hijau lawan kuning justru sumbu yang paling sering tertukar.
+ *
+ * Sekarang bentuknya ikut berbeda, jadi warna hanya penegas, bukan
+ * satu-satunya pembeda:
+ *
+ *   "segar"  tepi mulus, urat penuh, berdiri tegak
+ *   "kering"  tepi bergerigi, menggulung, urat patah
+ *   "muda"    lebih kecil dan membulat, urat sedikit
+ *
+ * Kebetulan itu juga benar secara botani: daun kering memang menggulung
+ * dan tepinya pecah.
+ */
+function Daun({
+  isi,
+  urat = C.urat,
+  miring = 0,
+  bentuk = "segar",
+}: {
+  isi: string;
+  urat?: string;
+  miring?: number;
+  bentuk?: "segar" | "kering" | "muda";
+}) {
+  if (bentuk === "kering") {
+    return (
+      <g transform={`rotate(${miring} 20 20)`}>
+        {/* Tepi bergerigi dan badan menggulung ke satu sisi. */}
+        <path
+          d="M20 4C26 8 30 12 30.5 17C31 22 27 25 24 28.5C22 31 21 34 20 36.5C18.5 33 15.5 30 13 27C10 23.5 8.5 19 10.5 14.5C12 11 16 7 20 4Z"
+          fill={isi}
+        />
+        <path
+          d="M30.5 17C28 17.5 26.5 15.5 24.5 16.5M24 28.5C22.5 27 22.5 24.5 20.5 24M10.5 14.5C13 15.5 14 18 16.5 17.5"
+          stroke={isi}
+          strokeWidth="2.6"
+          strokeLinecap="round"
+        />
+        {/* Urat patah-patah, bukan garis penuh. */}
+        <path d="M20 8V17M20 20.5V29" stroke={urat} strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M20 14L15.5 11M20 23L25 20" stroke={urat} strokeWidth="1.1" strokeLinecap="round" />
+      </g>
+    );
+  }
+
+  if (bentuk === "muda") {
+    return (
+      <g transform={`rotate(${miring} 20 20)`}>
+        <path d="M20 9C28 14 29 23 20 32C11 23 12 14 20 9Z" fill={isi} />
+        <path d="M20 13V29" stroke={urat} strokeWidth="1.4" strokeLinecap="round" />
+      </g>
+    );
+  }
+
   return (
     <g transform={`rotate(${miring} 20 20)`}>
       <path d="M20 4C31 10.5 32.5 23 20 36C7.5 23 9 10.5 20 4Z" fill={isi} />
@@ -84,9 +144,9 @@ const SPECIMEN_ART = {
   /* Daun & tumbuhan */
   "daun-hijau": () => <Daun isi={C.hijau} />,
   "daun-hijau-tua": () => <Daun isi={C.hijauTua} />,
-  "daun-muda": () => <Daun isi={C.hijauMuda} urat="rgba(30,51,38,0.2)" />,
-  "daun-kering": () => <Daun isi={C.kuning} miring={-14} />,
-  "daun-gugur": () => <Daun isi={C.tanah} miring={22} />,
+  "daun-muda": () => <Daun isi={C.hijauMuda} urat="rgba(30,51,38,0.28)" bentuk="muda" />,
+  "daun-kering": () => <Daun isi={C.kuning} miring={-8} bentuk="kering" />,
+  "daun-gugur": () => <Daun isi={C.tanah} miring={26} bentuk="kering" />,
   "daun-maple": () => (
     <g>
       <path

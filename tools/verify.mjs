@@ -242,14 +242,35 @@ for (const file of files) {
   });
 }
 
+/* ── Baris tergulung yang memotong isinya sendiri ─────────────── */
+//
+// `justify-center` pada wadah `overflow-x-auto` adalah bug CSS yang
+// terkenal: begitu isinya lebih lebar daripada wadahnya, bagian yang
+// meluber ke sisi KIRI tidak bisa dijangkau scroll sama sekali. Isi itu
+// tertutup permanen. Ini pernah terjadi sungguhan di papan Lengkapi
+// Pola: deret 9 ubin selebar 676px dipaksa masuk ruang 328px di ponsel,
+// dan ubin-ubin pertamanya mustahil dilihat. Untuk anak yang bahkan tidak
+// tahu ada isi tersembunyi, itu bukan sekadar jelek, itu permainan yang
+// tidak bisa diselesaikan. Pakai `flex-wrap`, jangan digulung.
+for (const file of files) {
+  const src = readFileSync(file, "utf8");
+  src.split("\n").forEach((l, i) => {
+    // Hanya baris yang benar-benar memasang kelas. Komentar blok JSX yang
+    // menjelaskan bug ini justru ikut tertangkap kalau guardnya cuma "//".
+    if (l.includes("className") && l.includes("overflow-x-auto") && l.includes("justify-center"))
+      add(rel(file), `baris ${i + 1}: "justify-center" + "overflow-x-auto" memotong isi di sisi kiri; pakai flex-wrap`, "clip");
+  });
+}
+
 /* ── laporan ──────────────────────────────────────────────────── */
-const KINDS = ["syntax", "import", "route", "emoji", "banned"];
+const KINDS = ["syntax", "import", "route", "emoji", "banned", "clip"];
 const LABEL = {
   syntax: "Galat sintaks",
   import: "Import bermasalah",
   route: "Rute tidak ada",
   emoji: "Emoji tersisa",
   banned: "String terlarang",
+  clip: "Baris tergulung terpotong",
 };
 
 console.log(`\nMemeriksa ${files.length} file di ${SRC_DIRS.join(", ")}\n`);

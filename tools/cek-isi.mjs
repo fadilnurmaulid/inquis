@@ -175,6 +175,35 @@ for (const a of A) {
   cek(`${a.id} aksi karakter menyuruh berbuat`, KERJA.test(a.karakter.aksi), a.karakter.aksi.slice(0, 60));
 }
 
+/* ── Objek permainan bisa dibedakan ──────────────────────────── */
+const SILUET = {
+  "daun-hijau": "daun-segar",
+  "daun-hijau-tua": "daun-segar",
+  "daun-muda": "daun-muda",
+  "daun-kering": "daun-kering",
+  "daun-gugur": "daun-kering",
+};
+for (const a of A) {
+  const t = a.tantangan;
+  let s = [];
+  if (t.kind === "pola-isi") s = [...t.deret.filter((d) => d !== "?"), ...t.baki];
+  else if (t.kind === "pola-susun") s = [...t.contoh, ...t.baki];
+  else if (t.kind === "beda-sendiri") s = [...t.kisi];
+  else if (t.kind === "ingat-pola") s = [...t.baki];
+  else if (t.kind === "pilah-wadah") s = t.benda.map((b) => b.spesimen);
+  else if (t.kind === "urut-deret") s = t.benda.map((b) => b.spesimen);
+  for (const daftar of [[...new Set(s)], [...new Set(a.eksplorasi.benda.map((b) => b.spesimen))]]) {
+    const grup = {};
+    daftar.forEach((id) => {
+      const k = SILUET[id];
+      if (k) (grup[k] = grup[k] ?? []).push(id);
+    });
+    Object.entries(grup).forEach(([k, ids]) =>
+      cek(`${a.id} tidak menaruh dua benda bersiluet sama`, ids.length === 1, `${ids.join(" + ")} sama-sama "${k}"`)
+    );
+  }
+}
+
 console.log(
   gagal === 0
     ? `\n  LULUS — ${A.length} aktivitas, semua asersi isi terpenuhi.\n  Catatan: ini bukan pengganti "npm test". Jalankan uji sungguhan setelah npm install.\n`

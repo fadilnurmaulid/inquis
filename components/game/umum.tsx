@@ -42,34 +42,75 @@ export interface PropsMain<T> {
  * `onSelesai` hanya dipanggil sekali betapa pun ributnya sebuah papan.
  */
 export function useMain(onSelesai: (h: HasilMain) => void) {
-  const [percobaan, setPercobaan] = useState(0);
   const [petunjuk, setPetunjuk] = useState(0);
   const [salah, setSalah] = useState(false);
   const [sudah, setSudah] = useState(false);
+
+  // Hitungan percobaan disimpan di ref, bukan state: tidak ada satu pun
+  // yang menggambarnya, dan menyimpannya sebagai state dulu memaksa
+  // `selesaikan` membaca nilainya lewat updater — tempat efek samping
+  // tidak boleh ada. React memanggil updater dua kali di mode ketat,
+  // jadi timer di dalamnya terpasang dua kali dan `onSelesai` ikut
+  // terpanggil dua kali. Ref menghilangkan seluruh masalah itu.
+  const percobaan = useRef(0);
   const terkirim = useRef(false);
+  const timer = useRef<number[]>([]);
+
+  // Semua timer dibatalkan saat papan dilepas. Tanpa ini, papan yang
+  // ditinggal di tengah animasi (anak menekan "Main lagi", atau induk
+  // berpindah layar) masih memanggil onSelesai ke induk yang sudah tidak
+  // ada lagi.
+  useEffect(() => {
+    const daftar = timer.current;
+    return () => daftar.forEach((t) => window.clearTimeout(t));
+  }, []);
+
+  const jadwalkan = useCallback((fn: () => void, ms: number) => {
+    const t = window.setTimeout(fn, ms);
+    timer.current.push(t);
+  }, []);
 
   const tandaiSalah = useCallback(() => {
-    setPercobaan((n) => n + 1);
+    percobaan.current += 1;
     setSalah(true);
-    window.setTimeout(() => setSalah(false), 620);
-  }, []);
+    jadwalkan(() => setSalah(false), 620);
+  }, [jadwalkan]);
 
   const bukaPetunjuk = useCallback(() => setPetunjuk((n) => Math.min(n + 1, 3)), []);
 
   const selesaikan = useCallback(() => {
     if (terkirim.current) return;
     terkirim.current = true;
-    setSudah(true);
-    setPercobaan((n) => {
-      const total = n + 1;
-      // Ditunda satu bingkai supaya animasi berhasil sempat mulai
-      // sebelum induk menggambar umpan baliknya.
-      window.setTimeout(() => onSelesai({ benar: n === 0 && petunjuk === 0, percobaan: total, petunjuk }), 620);
-      return total;
-    });
-  }, [onSelesai, petunjuk]);
 
-  return { percobaan, petunjuk, salah, sudah, tandaiSalah, bukaPetunjuk, selesaikan };
+    const salahSebelumnya = percobaan.current;
+    percobaan.current += 1;
+    setSudah(true);
+
+    // Ditunda supaya animasi berhasil dan konfetinya sempat terlihat
+    // sebelum induk menggambar umpan balik di bawah papan.
+    jadwalkan(
+      () =>
+        onSelesai({
+          benar: salahSebelumnya === 0 && petunjuk === 0,
+          percobaan: percobaan.current,
+          petunjuk,
+        }),
+      620
+    );
+  }, [onSelesai, petunjuk, jadwalkan]);
+
+  return {
+    percobaan: percobaan.current,
+    petunjuk,
+    salah,
+    sudah,
+    tandaiSalah,
+    bukaPetunjuk,
+    selesaikan,
+    /** Timer yang otomatis dibatalkan saat papan dilepas. Pakai ini,
+     *  jangan window.setTimeout langsung. */
+    jadwalkan,
+  };
 }
 
 /* ── Bingkai papan ─────────────────────────────────────────────── */
@@ -226,7 +267,10 @@ export function Meja({ children, className }: { children: ReactNode; className?:
   return (
     <div
       className={cn(
-        "relative rounded-kartu border-2 border-kertas-deep bg-kertas-lo/70 p-4 shadow-kertas sm:p-6",
+        // p-5 di ponsel, bukan p-4: ubin 68px yang diseret membesar 14%
+        // (whileDrag scale 1.14), jadi ia butuh sekitar 5px ekstra tiap sisi
+        // agar tidak tampak menabrak dinding kartunya sendiri.
+        "relative rounded-kartu border-2 border-kertas-deep bg-kertas-lo/70 p-5 shadow-kertas sm:p-6",
         className
       )}
     >

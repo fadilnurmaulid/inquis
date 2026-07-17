@@ -3,15 +3,19 @@
 /**
  * Navigasi bawah untuk anak.
  *
- * Tiga tempat, ikon di depan, tanpa menu bertingkat. Warnanya kertas
- * dan tinta seperti sisa produk — bukan lagi kaca putih buram yang
- * berdiri sendiri di atas latar hijau.
+ * Dua tempat, ikon di depan, tanpa menu bertingkat.
+ *
+ * Dulu ada tombol senyap di sini. Dibuang: tidak ada satu pun bagian
+ * aplikasi yang memutar suara, jadi tombol itu tidak mengendalikan apa
+ * pun. Kontrol yang tidak melakukan apa-apa lebih buruk daripada tidak
+ * ada kontrol sama sekali. Kalau nanti suara benar-benar dipasang,
+ * AudioProvider masih terpasang di app/(child)/layout.tsx dan tombolnya
+ * tinggal dikembalikan.
  */
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, User, Volume2, VolumeX } from "lucide-react";
-import { useAudio } from "@/components/providers/audio-provider";
+import { Home, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Tempat {
@@ -31,7 +35,6 @@ const TOMBOL =
 
 export function ChildNav() {
   const pathname = usePathname();
-  const { isMuted, toggleMute } = useAudio();
 
   const aktif = (t: Tempat) => (t.persis ? pathname === t.href : pathname.startsWith(t.href));
 
@@ -40,7 +43,7 @@ export function ChildNav() {
       aria-label="Navigasi utama"
       className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-kertas-deep bg-kertas-lo/95 backdrop-blur-sm"
     >
-      <div className="mx-auto flex max-w-md items-center justify-around px-4 py-1.5">
+      <div className="mx-auto flex max-w-md items-center justify-center gap-6 px-4 py-1.5">
         {TEMPAT.map((t) => {
           const Ikon = t.icon;
           const ini = aktif(t);
@@ -57,16 +60,6 @@ export function ChildNav() {
           );
         })}
 
-        <button
-          type="button"
-          onClick={toggleMute}
-          aria-label={isMuted ? "Nyalakan suara" : "Matikan suara"}
-          aria-pressed={isMuted}
-          className={cn(TOMBOL, isMuted ? "bg-tanah-lo/40 text-tanah-hi" : "text-tinta-soft hover:bg-kertas-hi hover:text-tinta")}
-        >
-          {isMuted ? <VolumeX className="h-6 w-6" aria-hidden /> : <Volume2 className="h-6 w-6" aria-hidden />}
-          <span className="text-[0.625rem] font-bold leading-none">{isMuted ? "Senyap" : "Suara"}</span>
-        </button>
       </div>
     </nav>
   );

@@ -459,3 +459,55 @@ describe("Karakter peduli lingkungan", () => {
     });
   });
 });
+
+describe("Objek permainan bisa dibedakan anak", () => {
+  /**
+   * Spesimen yang berbagi siluet yang sama persis. Warna TIDAK dihitung
+   * sebagai pembeda: anak enam tahun melihat bentuk dulu, dan anak buta
+   * warna merah-hijau tidak melihat bedanya sama sekali.
+   *
+   * Uji ini lahir dari bug sungguhan. Dulu kelima varian daun memakai satu
+   * bentuk dan hanya beda warna isi, jadi aktivitas 1-1 menampilkan pola
+   * "hijau, kuning, hijau, kuning" sebagai empat ubin bersiluet identik.
+   */
+  const SILUET: Record<string, string> = {
+    "daun-hijau": "daun-segar",
+    "daun-hijau-tua": "daun-segar",
+    "daun-muda": "daun-muda",
+    "daun-kering": "daun-kering",
+    "daun-gugur": "daun-kering",
+  };
+
+  function tampilBersama(a: Aktivitas): { papan: string[]; jelajah: string[] } {
+    const t = a.tantangan;
+    let s: string[] = [];
+    if (t.kind === "pola-isi") s = [...t.deret.filter((d) => d !== "?"), ...t.baki];
+    else if (t.kind === "pola-susun") s = [...t.contoh, ...t.baki];
+    else if (t.kind === "beda-sendiri") s = [...t.kisi];
+    else if (t.kind === "ingat-pola") s = [...t.baki];
+    else if (t.kind === "pilah-wadah") s = t.benda.map((b) => b.spesimen);
+    else if (t.kind === "urut-deret") s = t.benda.map((b) => b.spesimen);
+    return {
+      papan: [...new Set(s)],
+      jelajah: [...new Set(a.eksplorasi.benda.map((b) => b.spesimen))],
+    };
+  }
+
+  it("tidak menaruh dua benda bersiluet sama berdampingan", () => {
+    const bentrok: string[] = [];
+    SEMUA_AKTIVITAS.forEach((a) => {
+      const { papan, jelajah } = tampilBersama(a);
+      ([["papan", papan], ["eksplorasi", jelajah]] as const).forEach(([di, daftar]) => {
+        const grup: Record<string, string[]> = {};
+        daftar.forEach((id) => {
+          const k = SILUET[id];
+          if (k) (grup[k] = grup[k] ?? []).push(id);
+        });
+        Object.entries(grup).forEach(([k, ids]) => {
+          if (ids.length > 1) bentrok.push(`${a.id} (${di}): ${ids.join(" + ")} sama-sama bersiluet "${k}"`);
+        });
+      });
+    });
+    expect(bentrok).toEqual([]);
+  });
+});

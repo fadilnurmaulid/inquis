@@ -22,7 +22,10 @@ import { cn } from "@/lib/utils";
 
 /* ── Ubin bersama ──────────────────────────────────────────────── */
 
-const UBIN = "h-[4.25rem] w-[4.25rem] sm:h-20 sm:w-20";
+// 64px di ponsel: dengan Meja p-5 (40px) dan jarak 8px, empat ubin pas
+// dalam satu baris di layar 360px tanpa sisa yang menggantung sendirian.
+// Tetap jauh di atas ambang sasaran sentuh 44px.
+const UBIN = "h-16 w-16 sm:h-20 sm:w-20";
 
 function Ubin({ id, kecil = false }: { id: SpecimenId; kecil?: boolean }) {
   return <Specimen id={id} size={kecil ? 34 : 44} label={SPECIMEN_LABEL[id]} />;
@@ -133,9 +136,16 @@ export function PapanPolaIsi({ data, onSelesai }: PropsMain<PolaIsi>) {
         <Meja>
           <Raya jalan={sudah} />
 
-          {/* Deret pola. Rata tengah dan boleh melipat di layar sempit. */}
-          <div className="tanpa-scrollbar -mx-1 flex justify-center overflow-x-auto px-1 pb-1">
-            <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Deret pola. MELIPAT, bukan menggulung.
+              Dulu barisnya `justify-center overflow-x-auto`, dan itu bug
+              CSS yang terkenal: begitu isi meluber, bagian yang keluar di
+              sisi KIRI tidak bisa dijangkau scroll sama sekali. Deret 9
+              ubin (aktivitas 1-2 dan 3-2) selebar 676px dipaksa masuk ruang
+              328px di ponsel, jadi ubin-ubin pertama benar-benar tertutup
+              permanen. Melipat ke beberapa baris membuat semuanya terlihat
+              sekaligus, dan itu jauh lebih baik untuk anak yang tidak tahu
+              bahwa ada isi tersembunyi di samping. */}
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
               {data.deret.map((d, i) => {
                 if (d !== "?") return <UbinTetap key={i} id={d} urut={i} />;
                 const isi = isian[i];
@@ -176,7 +186,6 @@ export function PapanPolaIsi({ data, onSelesai }: PropsMain<PolaIsi>) {
                   </ZonaLepas>
                 );
               })}
-            </div>
           </div>
 
           <div className="mt-5 border-t-2 border-dashed border-kertas-deep pt-4">
@@ -266,8 +275,7 @@ export function PapanPolaSusun({ data, onSelesai }: PropsMain<PolaSusun>) {
 
           <p className="mt-4 text-center font-display text-kecil font-bold text-daun-hi">Lanjutkan dari sini</p>
 
-          <div className="tanpa-scrollbar mt-2 flex justify-center overflow-x-auto px-1 pb-1">
-            <div className="flex items-center gap-2 sm:gap-2.5">
+          <div className="mt-2 flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
               {slot.map((isi, i) => {
                 const keliru = salahDi.includes(i);
                 return (
@@ -306,7 +314,6 @@ export function PapanPolaSusun({ data, onSelesai }: PropsMain<PolaSusun>) {
                   </ZonaLepas>
                 );
               })}
-            </div>
           </div>
 
           <div className="mt-5 border-t-2 border-dashed border-kertas-deep pt-4">
@@ -458,16 +465,23 @@ export function PapanIngatPola({ data, onSelesai }: PropsMain<IngatPola>) {
   const [ulangan, setUlangan] = useState(0);
 
   // Memutar urutan satu per satu, lalu menyerahkan giliran ke anak.
+  //
+  // Timeout terakhir HARUS ikut dibatalkan, bukan cuma intervalnya. Dulu
+  // hanya intervalnya yang dibersihkan: anak yang menekan "Ulangi
+  // susunan" tepat di kartu terakhir membuat timeout lama tetap hidup,
+  // lalu ia memotong pemutaran yang baru saja dimulai dan melompat ke
+  // fase susun. Terlihat seperti permainan yang rusak sendiri.
   useEffect(() => {
     if (fase !== "lihat") return;
     const ms = kurangiGerak ? data.msPerKartu * 1.6 : data.msPerKartu;
     let i = 0;
+    let tutup: number | undefined;
     setSorot(0);
     const jam = window.setInterval(() => {
       i += 1;
       if (i >= data.urutan.length) {
         window.clearInterval(jam);
-        window.setTimeout(() => {
+        tutup = window.setTimeout(() => {
           setSorot(-1);
           setFase("susun");
         }, ms);
@@ -475,7 +489,10 @@ export function PapanIngatPola({ data, onSelesai }: PropsMain<IngatPola>) {
         setSorot(i);
       }
     }, ms);
-    return () => window.clearInterval(jam);
+    return () => {
+      window.clearInterval(jam);
+      if (tutup !== undefined) window.clearTimeout(tutup);
+    };
   }, [fase, data.urutan.length, data.msPerKartu, kurangiGerak, ulangan]);
 
   const onLepas = useCallback(
